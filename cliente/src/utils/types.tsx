@@ -6,7 +6,7 @@ export type Resultado = {
     id: number;
     superficie: number;
     categoria: string;
-    estado: number;
+    estado: number | string;
     DatosCategoria: {
       valor_m2: number;
       UT: number;
@@ -15,24 +15,24 @@ export type Resultado = {
       PorcentajeAplicado: number;
     };
   }[];
-  ResultadosFDU?: {
+  ResultadosFDU: {
     sup_4: {
       valor_m2: number;
-      fdu: number;
+      fdu: string;
       categoria: string;
       valorMxUt: number;
       subtotal: number;
     };
     sup_8: {
       valor_m2: number;
-      fdu: number;
+      fdu: string;
       categoria: string;
       valorMxUt: number;
       subtotal: number;
     };
     sup_12: {
       valor_m2: number;
-      fdu: number;
+      fdu: string;
       categoria: string;
       valorMxUt: number;
       subtotal: number;

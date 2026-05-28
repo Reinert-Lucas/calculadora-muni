@@ -5,86 +5,138 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
     <>
       {resultados && (
         <>
-          <h1>Total General</h1>
-          <span>${resultados.TotalGeneral.toFixed(2)}</span>
-          <section>
-            <h2>Total de m2</h2>
-            <span>{resultados.TotalM2.toFixed(2)} m2</span>
-            <h2>Categoria Determinada</h2>
-            <span>{resultados.CategoriaDeterminada}</span>
+          <h1 className="text-center mt-2">Total General</h1>
+          <p className="text-center fw-bold fs-4">
+            ${resultados.TotalGeneral.toFixed(2)}
+          </p>
+          <section className="detalle-categoria">
+            <article className="text-center">
+              <h5>Total de m2</h5>
+              <span>{resultados.TotalM2.toFixed(2)} m2</span>
+            </article>
+            <article className="text-center">
+              <h5>Categoria Determinada</h5>
+              <span>{resultados.CategoriaDeterminada}</span>
+            </article>
           </section>
-          <section>
-            {/* Una seccion por cada obra distinta cargada */}
-            <ul>
+          <section className="detalle-general">
+            <section className="detalle-fdu">
+              <h2>Resultados FDU</h2>
+              {resultados.ResultadosFDU.sup_12.subtotal > 0 ||
+              resultados.ResultadosFDU.sup_8.subtotal > 0 ||
+              resultados.ResultadosFDU.sup_4.subtotal > 0 ? (
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">SUP (m2)</th>
+                      <th scope="col">FDU</th>
+                      <th scope="col">Categoria</th>
+                      <th scope="col">Valor m2 x UT</th>
+                      <th scope="col">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        {resultados.ResultadosFDU.sup_4.valor_m2.toFixed(2)}
+                      </td>
+                      <td>{resultados.ResultadosFDU.sup_4.fdu}</td>
+                      <td>{resultados.ResultadosFDU.sup_4.categoria}</td>
+                      <td>
+                        {resultados.ResultadosFDU.sup_4.valorMxUt.toFixed(2)}
+                      </td>
+                      <td>
+                        {resultados.ResultadosFDU.sup_4.subtotal.toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        {resultados.ResultadosFDU.sup_8.valor_m2.toFixed(2)}
+                      </td>
+                      <td>{resultados.ResultadosFDU.sup_8.fdu}</td>
+                      <td>{resultados.ResultadosFDU.sup_8.categoria}</td>
+                      <td>
+                        {resultados.ResultadosFDU.sup_8.valorMxUt.toFixed(2)}
+                      </td>
+                      <td>
+                        {resultados.ResultadosFDU.sup_8.subtotal.toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        {resultados.ResultadosFDU.sup_12.valor_m2.toFixed(2)}
+                      </td>
+                      <td>{resultados.ResultadosFDU.sup_12.fdu}</td>
+                      <td>{resultados.ResultadosFDU.sup_12.categoria}</td>
+                      <td>
+                        {resultados.ResultadosFDU.sup_12.valorMxUt.toFixed(2)}
+                      </td>
+                      <td>
+                        {resultados.ResultadosFDU.sup_12.subtotal.toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={5} className="text-end">
+                        <strong>
+                          Total FDU:{" "}
+                          {resultados.ResultadosFDU.sup_12.subtotal +
+                            resultados.ResultadosFDU.sup_8.subtotal +
+                            resultados.ResultadosFDU.sup_4.subtotal}
+                        </strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              ) : (
+                <p>No se aplica FDU.</p>
+              )}
+            </section>
+            <ul className="lista-obras">
               {resultados.EstadoObras.map((obra) => (
-                <section>
-                  <section>
-                    <h2>Resultados FDU</h2>
-                    {resultados.ResultadosFDU && (
-                      <ul>
-                        <li>
-                          <strong>Sup 4:</strong> SUP:{" "}
-                          {resultados.ResultadosFDU.sup_4.valor_m2.toFixed(2)}{" "}
-                          m2 FDU:<span>4% aplicado</span>
-                          Categoria:{
-                            resultados.ResultadosFDU.sup_4.categoria
-                          }{" "}
-                          Valor:{" "}
-                          {resultados.ResultadosFDU.sup_4.valorMxUt.toFixed(2)}
-                          UTs Subtotal: $
-                          {resultados.ResultadosFDU.sup_4.subtotal.toFixed(2)}
-                        </li>
-                        <li>
-                          <strong>Sup 8:</strong> SUP:{" "}
-                          {resultados.ResultadosFDU.sup_8.valor_m2.toFixed(2)}{" "}
-                          m2 FDU:<span>8% aplicado</span>
-                          Categoria:{
-                            resultados.ResultadosFDU.sup_8.categoria
-                          }{" "}
-                          Valor:{" "}
-                          {resultados.ResultadosFDU.sup_8.valorMxUt.toFixed(2)}
-                          UTs Subtotal: $
-                          {resultados.ResultadosFDU.sup_8.subtotal.toFixed(2)}
-                        </li>
-                        <li>
-                          <strong>Sup 12:</strong> SUP:{" "}
-                          {resultados.ResultadosFDU.sup_12.valor_m2.toFixed(2)}{" "}
-                          m2 FDU:<span>12% aplicado</span>
-                          Categoria:{
-                            resultados.ResultadosFDU.sup_12.categoria
-                          }{" "}
-                          Valor:{" "}
-                          {resultados.ResultadosFDU.sup_12.valorMxUt.toFixed(2)}
-                          UTs Subtotal: $
-                          {resultados.ResultadosFDU.sup_12.subtotal.toFixed(2)}
-                        </li>
-                      </ul>
-                    )}
-                  </section>
+                <section className="detalle-obra">
                   <li key={obra.id}>
-                    <h3>Obra {obra.id}</h3>
-                    <span>Superficie: {obra.superficie} m2</span>
-                    <span>Categoria: {obra.categoria}</span>
-                    <span>Estado: {obra.estado}</span>
-                    <ul>
-                      <li>
-                        Valor m2 de la categoria:{" "}
-                        {obra.DatosCategoria.valor_m2.toFixed(2)}
-                      </li>
-                      <li>UT 2026: {obra.DatosCategoria.UT.toFixed(2)}</li>
-                      <li>
-                        Monto (valor m2 x UT):{" "}
-                        {obra.DatosCategoria.Monto.toFixed(2)}
-                      </li>
-                      <li>
-                        Subtotal (monto x superficie ingresada):{" "}
-                        {obra.DatosCategoria.Subtotal.toFixed(2)}
-                      </li>
-                      <li>
-                        % aplicado por estado de obra:{" "}
-                        {obra.DatosCategoria.PorcentajeAplicado.toFixed(2)}
-                      </li>
-                    </ul>
+                    <span className="obra-pill">
+                      Obra <strong>#{obra.id}</strong>
+                    </span>
+                    <span className="obra-pill">
+                      Superficie: <strong>{obra.superficie}m2</strong>
+                    </span>
+                    <span className="obra-pill">
+                      Categoria: <strong>{obra.categoria}</strong>
+                    </span>
+                    <span className="obra-pill">
+                      Estado: <strong>{obra.estado}</strong>
+                    </span>
+                    <section>
+                      Subtotal de la Seccion: $
+                      {obra.DatosCategoria.PorcentajeAplicado}
+                    </section>
+                    <table className="table">
+                      <tbody>
+                        <tr>
+                          <td>Valor m2 de la categoria</td>
+                          <td>{obra.DatosCategoria.valor_m2.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                          <td>Monto (valor m2 x UT)</td>
+                          <td>{obra.DatosCategoria.Monto.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                          <td>Subtotal (monto x superficie ingresada)</td>
+                          <td>{obra.DatosCategoria.Subtotal.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                          <td>UT 2026</td>
+                          <td>{obra.DatosCategoria.UT.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                          <td>% aplicado por estado de obra</td>
+                          <td>
+                            {obra.DatosCategoria.PorcentajeAplicado.toFixed(2)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </li>
                 </section>
               ))}

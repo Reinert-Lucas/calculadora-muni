@@ -1,6 +1,7 @@
 import {
   coef_unid_tributaria,
   valor_unid_tributaria,
+  categorias,
 } from "../constants/impuestos";
 import type { Obra, FDU, Resultado } from "./types";
 
@@ -49,10 +50,8 @@ export class Calculadora {
         (obra.metros_cuadrados *
           coeficiente *
           valor_unid_tributaria *
-          obra.estado) /
+          categorias[obra.estado].porcentaje) /
         100;
-      console.log("OBRA:", obra);
-      console.log("SUBTOTAL:", subtotal);
       return acc + subtotal;
     }, 0);
     // FDU
@@ -75,6 +74,7 @@ export class Calculadora {
         "La suma de las superficies FDU no puede exceder el total de metros cuadrados.",
       );
     }
+
     const Resultados: Resultado = {
       TotalGeneral: totalBase + totalFDU,
       TotalM2: total_m2,
@@ -83,7 +83,7 @@ export class Calculadora {
         id: obra.id,
         superficie: obra.metros_cuadrados,
         categoria: `Entre ${total_m2 <= 60 ? "1 y 60" : total_m2 > 60 && total_m2 < 150 ? "60 y 150" : total_m2 >= 150 && total_m2 < 350 ? "150 y 350" : "350 y más"} m2`,
-        estado: obra.estado,
+        estado: categorias[obra.estado].nombre,
         DatosCategoria: {
           valor_m2: coeficiente,
           UT: valor_unid_tributaria,
@@ -93,14 +93,14 @@ export class Calculadora {
             (obra.metros_cuadrados *
               coeficiente *
               valor_unid_tributaria *
-              obra.estado) /
+              categorias[obra.estado].porcentaje) /
             100,
         },
       })),
       ResultadosFDU: {
         sup_4: {
           valor_m2: fdu.sup_4,
-          fdu: 0.04,
+          fdu: "Sup. entre 9,01 y 18,00 - (4%)",
           categoria: `Entre ${fdu.sup_4 <= 60 ? "1 y 60" : fdu.sup_4 > 60 && fdu.sup_4 < 150 ? "60 y 150" : fdu.sup_4 >= 150 && fdu.sup_4 < 350 ? "150 y 350" : "350 y más"} m2`,
           valorMxUt:
             fdu.sup_4 != 0
@@ -113,7 +113,7 @@ export class Calculadora {
         },
         sup_8: {
           valor_m2: fdu.sup_8,
-          fdu: 0.08,
+          fdu: "Sup. entre 18,01 y 30,00 - (8%) ",
           categoria: `Entre ${fdu.sup_8 <= 60 ? "1 y 60" : fdu.sup_8 > 60 && fdu.sup_8 < 150 ? "60 y 150" : fdu.sup_8 >= 150 && fdu.sup_8 < 350 ? "150 y 350" : "350 y más"} m2`,
           valorMxUt:
             fdu.sup_8 != 0
@@ -126,7 +126,7 @@ export class Calculadora {
         },
         sup_12: {
           valor_m2: fdu.sup_12,
-          fdu: 0.12,
+          fdu: "Sup. sobre 30,00 - (12%)",
           categoria: `Entre ${fdu.sup_12 <= 60 ? "1 y 60" : fdu.sup_12 > 60 && fdu.sup_12 < 150 ? "60 y 150" : fdu.sup_12 >= 150 && fdu.sup_12 < 350 ? "150 y 350" : "350 y más"} m2`,
           valorMxUt:
             fdu.sup_12 != 0

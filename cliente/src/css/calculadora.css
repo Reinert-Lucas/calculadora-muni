@@ -1,12 +1,10 @@
-form {
-    max-width: 300px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.formulario-obras {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
-
-input {
+.formulario-obras input, select {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
@@ -14,21 +12,125 @@ input {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
-
-select {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+.formulario-obras label {
+    margin-top: 10px;
+    font-weight: bold;
 }
-button {
-    width: 100%;
+.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn) {
+    width: fit-content;
     padding: 10px;
     background-color: #4CAF50;
     color: white;
+    font-weight: bold;
     border: none;
     border-radius: 3px;
     cursor: pointer;
+}
+.botones-section {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin: 20px 0;
+    gap: 10px;
+}
+.agregar-seccion-btn {
+    width: fit-content;
+    padding: 10px;
+    background-color: #fff;
+    color: #4CAF50;
+    font-weight: bold;
+    border: 1px solid #4CAF50;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.fdu-toggle-section {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: #bbbbbb;
+    align-items: center;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+.fdu-toggle-section article {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.fdu-toggle-btn {
+    padding: 10px;
+    background-color: transparent;
+    color: #3c883f;
+    font-weight: bold;
+    border: 1px solid #3c883f;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.fdu-section {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.fdu-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.detalle-fdu {
+    background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 1rem 0;
+        z-index: 1000;
+}
+.detalle-categoria {
+    width: 100%;
+    background: #74dfff;
+    border: 1px solid #2ec4ff;
+    padding: 1rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.lista-obras {
+    list-style: none;
+    padding: 0;
+}
+/* Diseño de tarjeta flotante */
+.detalle-obra {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 1rem 0;
+    z-index: 1000;
+}
+.detalle-obra section {
+    background: #4CAF50;
+    border: 1px solid #3c883f;
+
+    color:#fff;
+    font-weight: bold;
+    padding: 10px;
+    margin: 1rem 0;
+    border-radius: 5px;
+}
+.obra-pill {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #000;
+    padding: 5px 10px;
+    margin: 5px;
+    border: 1px #39be65 dashed;
+    border-radius: 15px;
+    font-size: 0.9em;
 }

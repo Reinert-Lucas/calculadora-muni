@@ -23,9 +23,9 @@ function Form() {
   ]);
   const [Resultados, setResultados] = useState<Resultado | null>(null);
   const [fdu, setFdu] = useState({
-    sup_4: 0,
-    sup_8: 0,
-    sup_12: 0,
+    sup_4: "",
+    sup_8: "",
+    sup_12: "",
   });
   const [isVisible, setIsVisible] = useState(false);
   // Añadir nueva obra al Array
@@ -75,10 +75,11 @@ function Form() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="formulario-obras">
         {obras.map((obra, index) => (
           <div key={obra.id}>
-            <h3>Estado de obra {index + 1}</h3>
+            <h5>Estado de obra {index + 1}</h5>
+            <label>Metros cuadrados (m²)</label>
             <input
               type="number"
               placeholder="Metros cuadrados"
@@ -87,60 +88,114 @@ function Form() {
                 handleChange(index, "metros_cuadrados", e.target.value)
               }
             />
+            <label>Estado de obra</label>
             <select
               value={obra.estado}
               onChange={(e) => handleChange(index, "estado", e.target.value)}
             >
               <option value="" disabled>
-                Seleccione un estado
+                Seleccione un estado de obra
               </option>
-              <option value="0.5">Estado 1 - 0.5%</option>
-              <option value="1">Estado 2 - 1%</option>
+              <option value="0">Obra Nueva (0.5%)</option>
+              <option value="1">
+                Acorde al codigo - exist. sin permiso en construccion (1%)
+              </option>
+              <option value="2">
+                Acorde al codigo - exist. sin permiso en concluido (2%)
+              </option>
+              <option value="3">Antirreg. - concluida detectada (6%)</option>
+              <option value="4">Antirreg. - pv de obra concluida (5%)</option>
+              <option value="5">
+                Cuerpo cerrado sobre linea municipal (9%)
+              </option>
+              <option value="6">Balcones (6%)</option>
+              <option value="7">Marquesinas y/o aleros (4%)</option>
             </select>
-            <br />
-            <br />
+            <hr />
           </div>
         ))}
-        <button type="submit">Calcular total</button>
-        <br />
-        <br />
-        <button type="button" onClick={agregarSeccion}>
-          Cargar m2 con otro estado
-        </button>
-        <br />
-        <br />
+        <section className="botones-section">
+          <button type="submit">Calcular total</button>
+          <button
+            type="button"
+            onClick={agregarSeccion}
+            className="agregar-seccion-btn"
+          >
+            Cargar m2 con otro estado
+          </button>
+        </section>
         {isVisible && (
           <section className="fdu-section">
-            <h3>FDU</h3>
-            <input
-              type="number"
-              placeholder="Sup. entre 9,01 y 18,00 - FDU: 4%"
-              value={fdu.sup_4}
-              onChange={(e) =>
-                setFdu({ ...fdu, sup_4: Number(e.target.value) })
-              }
-            />
-            <input
-              type="number"
-              placeholder="Sup. entre 18,01 y 30,00 - FDU: 8%"
-              value={fdu.sup_8}
-              onChange={(e) =>
-                setFdu({ ...fdu, sup_8: Number(e.target.value) })
-              }
-            />
-            <input
-              type="number"
-              placeholder="Sup. sobre 30,00 - FDU: 12%"
-              value={fdu.sup_12}
-              onChange={(e) =>
-                setFdu({ ...fdu, sup_12: Number(e.target.value) })
-              }
-            />
+            <h5>FDU (Carga por Tramos)</h5>
+            <table className="table fdu-table">
+              <thead>
+                <tr>
+                  <th>Metros cuadrados (m²)</th>
+                  <th>FDU</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="number"
+                      value={fdu.sup_4}
+                      onChange={(e) =>
+                        setFdu({ ...fdu, sup_4: e.target.value })
+                      }
+                    />
+                  </td>
+                  <td>Sup. entre 9,01 y 18,00 - FDU: 4% </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="number"
+                      value={fdu.sup_8}
+                      onChange={(e) =>
+                        setFdu({ ...fdu, sup_8: e.target.value })
+                      }
+                    />
+                  </td>
+                  <td>Sup. entre 18,01 y 30,00 - FDU: 8% </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="number"
+                      value={fdu.sup_12}
+                      onChange={(e) =>
+                        setFdu({ ...fdu, sup_12: e.target.value })
+                      }
+                    />
+                  </td>
+                  <td>Sup. sobre 30,00 - FDU: 12% </td>
+                </tr>
+              </tbody>
+            </table>
+            <span className="text-muted fst-italic">
+              Fórmula: <strong>SUP × (FDU%) × (valor m² categoría × UT)</strong>
+              . Ej.: 1950 × 4% × 110000 = $ 8.580.000,00{" "}
+            </span>
           </section>
         )}
-        <button type="button" onClick={() => setIsVisible(!isVisible)}>
-          Agregar FDU
-        </button>
+        <section className="fdu-toggle-section">
+          <article>
+            <span className="fw-bold">
+              ¿Tu obra supera los 9 m? Calculá el FDU
+            </span>
+            <span className="text-muted fst-italic">
+              Podés sumarlo al Total General.
+            </span>
+          </article>
+          <button
+            type="button"
+            onClick={() => setIsVisible(!isVisible)}
+            className="fdu-toggle-btn"
+          >
+            Agregar FDU
+          </button>
+        </section>
       </form>
       {Resultados && <ResultadosDetalle resultados={Resultados} />}
     </>
