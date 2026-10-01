@@ -23,8 +23,8 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
             <section className="detalle-fdu">
               <h2>Resultados FDU</h2>
               {resultados.ResultadosFDU.sup_12.subtotal > 0 ||
-                resultados.ResultadosFDU.sup_8.subtotal > 0 ||
-                resultados.ResultadosFDU.sup_4.subtotal > 0 ? (
+              resultados.ResultadosFDU.sup_8.subtotal > 0 ||
+              resultados.ResultadosFDU.sup_4.subtotal > 0 ? (
                 <table className="table">
                   <thead>
                     <tr>
@@ -93,8 +93,8 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
             </section>
             <ul className="lista-obras">
               {resultados.EstadoObras.map((obra) => (
-                <div className="detalle-obra" key={obra.id}>
-                  <li>
+                <section className="detalle-obra">
+                  <li key={obra.id}>
                     <span className="obra-pill">
                       Obra <strong>#{obra.id}</strong>
                     </span>
@@ -138,7 +138,7 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
                       </tbody>
                     </table>
                   </li>
-                </div>
+                </section>
               ))}
             </ul>
           </section>

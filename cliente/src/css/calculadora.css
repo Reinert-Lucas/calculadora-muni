@@ -4,9 +4,7 @@
     flex-direction: column;
     justify-content: flex-start;
 }
-
-.formulario-obras input,
-select {
+.formulario-obras input, select {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
@@ -14,18 +12,10 @@ select {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
-
 .formulario-obras label {
     margin-top: 10px;
     font-weight: bold;
 }
-
-.formulario-obras .layer-icon {
-    width: 1.5em;
-    height: 1.2em;
-    margin: 0 .5rem;
-}
-
 .formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn) {
     width: fit-content;
     padding: 10px;
@@ -36,7 +26,6 @@ select {
     border-radius: 3px;
     cursor: pointer;
 }
-
 .botones-section {
     width: 100%;
     display: flex;
@@ -44,7 +33,6 @@ select {
     margin: 20px 0;
     gap: 10px;
 }
-
 .agregar-seccion-btn {
     width: fit-content;
     padding: 10px;
@@ -55,7 +43,6 @@ select {
     border-radius: 3px;
     cursor: pointer;
 }
-
 .fdu-toggle-section {
     width: 100%;
     display: flex;
@@ -67,13 +54,11 @@ select {
     border-radius: 5px;
     padding: 10px;
 }
-
 .fdu-toggle-section article {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
-
 .fdu-toggle-btn {
     padding: 10px;
     background-color: transparent;
@@ -83,7 +68,6 @@ select {
     border-radius: 3px;
     cursor: pointer;
 }
-
 .fdu-section {
     width: 100%;
     margin-top: 20px;
@@ -92,22 +76,19 @@ select {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-
 .fdu-table {
     width: 100%;
     border-collapse: collapse;
 }
-
 .detalle-fdu {
     background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 1rem 0;
-    z-index: 1000;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 1rem 0;
+        z-index: 1000;
 }
-
 .detalle-categoria {
     width: 100%;
     background: #74dfff;
@@ -119,34 +100,30 @@ select {
     align-items: center;
     margin-bottom: 20px;
 }
-
 .lista-obras {
     list-style: none;
     padding: 0;
 }
-
 /* Diseño de tarjeta flotante */
 .detalle-obra {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 20px;
     margin: 1rem 0;
     z-index: 1000;
 }
-
 .detalle-obra section {
     background: #4CAF50;
     border: 1px solid #3c883f;
 
-    color: #fff;
+    color:#fff;
     font-weight: bold;
     padding: 10px;
     margin: 1rem 0;
     border-radius: 5px;
 }
-
 .obra-pill {
     display: inline-block;
     background-color: #ffffff;

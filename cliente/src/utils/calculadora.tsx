@@ -71,7 +71,7 @@ export class Calculadora {
       (this.obtenerCoeficienteFDU(fdu.sup_12) * valor_unid_tributaria);
     if (fdu.sup_4 + fdu.sup_8 + fdu.sup_12 > total_m2) {
       throw new Error(
-        "La suma de las superficies FDU no puede exceder el total de metros cuadrados de la Obra.",
+        "La suma de las superficies FDU no puede exceder el total de metros cuadrados.",
       );
     }
 
@@ -135,8 +135,8 @@ export class Calculadora {
           subtotal:
             fdu &&
             fdu.sup_12 *
-            0.12 *
-            (this.obtenerCoeficienteFDU(fdu.sup_12) * valor_unid_tributaria),
+              0.12 *
+              (this.obtenerCoeficienteFDU(fdu.sup_12) * valor_unid_tributaria),
         },
       },
     };
