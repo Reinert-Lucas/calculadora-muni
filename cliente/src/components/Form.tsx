@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { Calculadora } from "../utils/calculadora";
 import ResultadosDetalle from "./ResultadosDetalle";
 import type { Resultado } from "../utils/types";
+import LayerIcon from "../imgs/layer-icon.png";
 
 type Obra = {
   id: number;
@@ -38,9 +39,9 @@ function Form() {
       prev.map((obra, i) =>
         i === index
           ? {
-              ...obra,
-              [field]: value,
-            }
+            ...obra,
+            [field]: value,
+          }
           : obra,
       ),
     );
@@ -64,13 +65,17 @@ function Form() {
       metros_cuadrados: Number(obra.metros_cuadrados),
       estado: Number(obra.estado),
     }));
-    setResultados(
-      calculadora.calcularTotal(obrasParseadas, {
-        sup_4: Number(fdu.sup_4),
-        sup_8: Number(fdu.sup_8),
-        sup_12: Number(fdu.sup_12),
-      }),
-    );
+    try {
+      setResultados(
+        calculadora.calcularTotal(obrasParseadas, {
+          sup_4: Number(fdu.sup_4),
+          sup_8: Number(fdu.sup_8),
+          sup_12: Number(fdu.sup_12),
+        }),
+      )
+    } catch (error) {
+      alert(error)
+    }
   }
 
   return (
@@ -78,7 +83,7 @@ function Form() {
       <form onSubmit={handleSubmit} className="formulario-obras">
         {obras.map((obra, index) => (
           <div key={obra.id}>
-            <h5>Estado de obra {index + 1}</h5>
+            <h5><img src={LayerIcon} alt="Estado de Obra" className="layer-icon" />Estado de obra {index + 1}</h5>
             <label>Metros cuadrados (m²)</label>
             <input
               type="number"
@@ -87,11 +92,13 @@ function Form() {
               onChange={(e) =>
                 handleChange(index, "metros_cuadrados", e.target.value)
               }
+              required
             />
             <label>Estado de obra</label>
             <select
               value={obra.estado}
               onChange={(e) => handleChange(index, "estado", e.target.value)}
+              required
             >
               <option value="" disabled>
                 Seleccione un estado de obra
