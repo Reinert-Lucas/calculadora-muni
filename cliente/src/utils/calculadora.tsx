@@ -1,5 +1,5 @@
 import { VALOR_UT, TRAMOS, FDU_TRAMOS, categorias } from "../constants/impuestos";
-import type { Obra, FDU, Resultado } from "./types";
+import type { Obra, FDU, Resultado, CostosAdicionales } from "./types";
 
 // Fórmula base: (m2 * coef * UT * %estado) / 100
 // Fórmula FDU:  sup * %FDU * (coef * UT)
@@ -31,9 +31,16 @@ function validar(obras: Obra[], fdu: FDU, totalM2: number) {
     );
 }
 
-export function calcularTotal(obras: Obra[], fdu: FDU): Resultado {
+export function calcularTotal(
+  obras: Obra[],
+  fdu: FDU,
+  costosAdicionales: CostosAdicionales = { colegio1: 0, colegio2: 0, honorarios: 0 },
+): Resultado {
   const totalM2 = obras.reduce((acc, o) => acc + o.metros_cuadrados, 0);
   validar(obras, fdu, totalM2);
+
+  if (Object.values(costosAdicionales).some((costo) => !Number.isFinite(costo) || costo < 0))
+    throw new ErrorCalculo("Los costos adicionales deben ser números positivos o cero.");
 
   // El coeficiente de las obras depende del total de m2 de todas ellas
   const tramo = obtenerTramo(totalM2);
@@ -73,11 +80,14 @@ export function calcularTotal(obras: Obra[], fdu: FDU): Resultado {
 
   const TotalBase = redondear(EstadoObras.reduce((a, o) => a + o.importe, 0));
   const TotalFDU = redondear(ResultadosFDU.reduce((a, f) => a + f.subtotal, 0));
+  const TotalAdicionales = redondear(Object.values(costosAdicionales).reduce((a, costo) => a + costo, 0));
 
   return {
-    TotalGeneral: redondear(TotalBase + TotalFDU),
+    TotalGeneral: redondear(TotalBase + TotalFDU + TotalAdicionales),
     TotalBase,
     TotalFDU,
+    TotalAdicionales,
+    CostosAdicionales: costosAdicionales,
     TotalM2: totalM2,
     CategoriaDeterminada: tramo.etiqueta,
     EstadoObras,

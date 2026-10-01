@@ -28,6 +28,24 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
       <h1 className="text-center mt-2 display-6" id="resultado-general">Total General</h1>
       <p className="text-center fw-bold text-success total-general">{formatoMoneda(resultados.TotalGeneral)}</p>
 
+      {resultados.TotalAdicionales > 0 && (
+        <section className="detalle-costos-adicionales">
+          <h2>Costos adicionales incluidos</h2>
+          <ul>
+            {resultados.CostosAdicionales.colegio1 > 0 && (
+              <li>Colegio 1: {formatoMoneda(resultados.CostosAdicionales.colegio1)}</li>
+            )}
+            {resultados.CostosAdicionales.colegio2 > 0 && (
+              <li>Colegio 2: {formatoMoneda(resultados.CostosAdicionales.colegio2)}</li>
+            )}
+            {resultados.CostosAdicionales.honorarios > 0 && (
+              <li>Honorarios: {formatoMoneda(resultados.CostosAdicionales.honorarios)}</li>
+            )}
+            <li><strong>Total adicional: {formatoMoneda(resultados.TotalAdicionales)}</strong></li>
+          </ul>
+        </section>
+      )}
+
       <div className="text-center mb-3">
         <button
           type="button"

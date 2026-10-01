@@ -13,6 +13,7 @@ import BorrarIcon from "../imgs/borrar-icon.png";
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
 
 const FDU_INICIAL = { sup_4: "", sup_8: "", sup_12: "" };
+const COSTOS_INICIALES = { colegio1: "", colegio2: "", honorarios: "" };
 
 // "" -> NaN (y no 0), para que la validación detecte campos vacíos
 const aNumero = (v: string) => (v.trim() === "" ? NaN : Number(v));
@@ -23,6 +24,7 @@ function Form() {
     { id: 1, metros_cuadrados: "", estado: "" },
   ]);
   const [fdu, setFdu] = useState(FDU_INICIAL);
+  const [costos, setCostos] = useState(COSTOS_INICIALES);
   const [mostrarFdu, setMostrarFdu] = useState(false);
   const [resultados, setResultados] = useState<Resultado | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +50,7 @@ function Form() {
       { id: 1, metros_cuadrados: "", estado: "" },
     ]);
     setFdu(FDU_INICIAL);
+    setCostos(COSTOS_INICIALES);
     setMostrarFdu(false);
     setResultados(null);
     setError(null);
@@ -67,6 +70,11 @@ function Form() {
           sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
           sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
           sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
+        },
+        {
+          colegio1: Number(costos.colegio1) || 0,
+          colegio2: Number(costos.colegio2) || 0,
+          honorarios: Number(costos.honorarios) || 0,
         },
       );
       setResultados(resultado);
@@ -207,6 +215,51 @@ function Form() {
           >
             {mostrarFdu ? "Quitar FDU" : "Agregar FDU"}
           </button>
+        </section>
+        <hr />
+        <section className="colegios-section">
+          <h5>
+            Costos de Colegios
+          </h5>
+          <label htmlFor="colegio-1-prc">Colegio 1</label>
+          <input
+            id="colegio-1-prc"
+            type="number"
+            min="0"
+            step="any"
+            inputMode="decimal"
+            placeholder="$000,00"
+            value={costos.colegio1}
+            onChange={(e) => setCostos({ ...costos, colegio1: e.target.value })}
+          />
+          <label htmlFor="colegio-2-prc">Colegio 2</label>
+          <input
+            id="colegio-2-prc"
+            type="number"
+            min="0"
+            step="any"
+            inputMode="decimal"
+            placeholder="$000,00"
+            value={costos.colegio2}
+            onChange={(e) => setCostos({ ...costos, colegio2: e.target.value })}
+          />
+        </section>
+        <hr />
+        <section className="honorarios-section">
+          <h5>
+            Honorarios del Profesional a Cargo
+          </h5>
+          <label htmlFor="honorarios">Honorarios</label>
+          <input
+            id="honorarios"
+            type="number"
+            min="0"
+            step="any"
+            inputMode="decimal"
+            placeholder="$000,00"
+            value={costos.honorarios}
+            onChange={(e) => setCostos({ ...costos, honorarios: e.target.value })}
+          />
         </section>
       </form>
 

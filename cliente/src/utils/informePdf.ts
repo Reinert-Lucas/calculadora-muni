@@ -109,6 +109,7 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         body: [
             ["Total m²", m2(r.TotalM2)],
             ["Categoría", r.CategoriaDeterminada],
+            ["Costos adicionales", pesos(r.TotalAdicionales)],
         ],
         columnStyles: {
             0: { fontStyle: "bold", fillColor: FONDO, cellWidth: anchoUtil / 2 },
@@ -213,6 +214,22 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         doc.setFontSize(9).setTextColor(...GRIS);
         doc.text("No se aplica FDU.", MARGEN, y + 2);
         y += 12;
+    }
+
+    if (r.TotalAdicionales > 0) {
+        subtitulo("Costos adicionales incluidos");
+        autoTable(doc, {
+            ...base,
+            startY: y,
+            body: [
+                ...(r.CostosAdicionales.colegio1 > 0 ? [["Colegio 1", pesos(r.CostosAdicionales.colegio1)]] : []),
+                ...(r.CostosAdicionales.colegio2 > 0 ? [["Colegio 2", pesos(r.CostosAdicionales.colegio2)]] : []),
+                ...(r.CostosAdicionales.honorarios > 0 ? [["Honorarios", pesos(r.CostosAdicionales.honorarios)]] : []),
+                [{ content: "TOTAL ADICIONAL", styles: { fontStyle: "bold" } }, { content: pesos(r.TotalAdicionales), styles: { fontStyle: "bold", halign: "right" } }],
+            ],
+            columnStyles: { 0: { cellWidth: anchoUtil / 2 } },
+        });
+        y = ultimaY() + 10;
     }
 
     // ---------- Total general ----------

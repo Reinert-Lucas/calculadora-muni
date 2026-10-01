@@ -18,6 +18,16 @@ describe("calcularTotal", () => {
         expect(r.TotalGeneral).toBe(128700);
     });
 
+    it("suma los costos de colegios y honorarios al total general", () => {
+        const r = calcularTotal(
+            [{ id: 1, metros_cuadrados: 100, estado: 0 }],
+            fduVacio,
+            { colegio1: 1000, colegio2: 2000, honorarios: 3000 },
+        );
+        expect(r.TotalAdicionales).toBe(6000);
+        expect(r.TotalGeneral).toBe(77500);
+    });
+
     it("límites de tramo: 60 -> coef 50, 150 -> coef 150", () => {
         expect(calcularTotal([{ id: 1, metros_cuadrados: 60, estado: 0 }], fduVacio).EstadoObras[0].valorM2).toBe(50);
         expect(calcularTotal([{ id: 1, metros_cuadrados: 150, estado: 0 }], fduVacio).EstadoObras[0].valorM2).toBe(150);
