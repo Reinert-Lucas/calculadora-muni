@@ -1,9 +1,8 @@
-import CalculadoraIcon from "../imgs/calculadora-icon.png";
-
+import { CalculatorIcon } from "lucide-react";
 export default function Header() {
   return (
     <div className="header-container">
-      <img src={CalculadoraIcon} alt="Calculadora" />
+      <CalculatorIcon size={48} />
       <h1>Calculadora de Derechos Municipales</h1>
     </div>
   );

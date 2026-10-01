@@ -2,12 +2,9 @@ import "../css/calculadora.css";
 import { useRef, useState, type FormEvent } from "react";
 import { calcularTotal, ErrorCalculo } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
+import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import type { Resultado } from "../utils/types";
-import LayerIcon from "../imgs/layer-icon.png";
-import CalculadoraIcon from "../imgs/calculadora-icon.png";
-import AddIcon from "../imgs/add-icon.png";
-import BorrarIcon from "../imgs/borrar-icon.png";
 
 // Estado del formulario: todo string porque viene de inputs
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
@@ -103,7 +100,7 @@ function Form() {
         {obras.map((obra, index) => (
           <div key={obra.id}>
             <h5>
-              <img src={LayerIcon} alt="Estado de Obra" className="layer-icon" />
+              <Layers2Icon size={18} className="layer-icon" color="#4CAF50" />
               Estado de obra {index + 1}
             </h5>
             <label htmlFor={`m2-${obra.id}`}>Metros cuadrados (m²)</label>
@@ -153,15 +150,15 @@ function Form() {
 
         <section className="botones-section">
           <button type="submit">
-            <img src={CalculadoraIcon} alt="Calcular" />
+            <CalculatorIcon size={18} className="btn-icon" />
             Calcular total
           </button>
           <button type="button" onClick={agregarSeccion} className="agregar-seccion-btn">
-            <img src={AddIcon} alt="Añadir m2" />
+            <PlusCircleIcon size={18} className="btn-icon" />
             Cargar m2 con otro estado
           </button>
           <button type="button" className="limpiar-btn" onClick={limpiarTodo}>
-            <img src={BorrarIcon} alt="Borrar" />
+            <EraserIcon size={18} />
             Limpiar Todo
           </button>
         </section>
