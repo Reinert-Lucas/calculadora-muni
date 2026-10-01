@@ -7,6 +7,7 @@ import type { Resultado } from "../utils/types";
 import LayerIcon from "../imgs/layer-icon.png";
 import CalculadoraIcon from "../imgs/calculadora-icon.png";
 import AddIcon from "../imgs/add-icon.png";
+import BorrarIcon from "../imgs/borrar-icon.png";
 
 // Estado del formulario: todo string porque viene de inputs
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
@@ -41,6 +42,17 @@ function Form() {
     setObras((prev) => prev.filter((o) => o.id !== id));
   }
 
+  function limpiarTodo() {
+    // Limpiar / Resetear datos de todos los campos del formulario (Incluidos los del FDU)
+    setObras([
+      { id: 1, metros_cuadrados: "", estado: "" },
+    ]);
+    setFdu(FDU_INICIAL);
+    setMostrarFdu(false);
+    setResultados(null);
+    setError(null);
+  }
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
@@ -63,6 +75,18 @@ function Form() {
       setResultados(null);
       setError(err instanceof ErrorCalculo ? err.message : "Ocurrió un error inesperado.");
     }
+    // Scrollear automáticamente a los resultados si se calculó correctamente
+    if (resultados) {
+      setTimeout(() => {
+        const resultadosSection = document.getElementById("resultado-general");
+        resultadosSection?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+    // Scroll en celulares: si el teclado virtual tapa los resultados, se hace scroll para que queden visibles
+    setTimeout(() => {
+      const resultadosSection = document.getElementById("resultado-general");
+      resultadosSection?.scrollIntoView({ behavior: "smooth" });
+    }, 500);
   }
 
   return (
@@ -128,36 +152,42 @@ function Form() {
             <img src={AddIcon} alt="Añadir m2" />
             Cargar m2 con otro estado
           </button>
+          <button type="button" className="limpiar-btn" onClick={limpiarTodo}>
+            <img src={BorrarIcon} alt="Borrar" />
+            Limpiar Todo
+          </button>
         </section>
 
         {mostrarFdu && (
           <section className="fdu-section">
             <h5>FDU (Carga por Tramos)</h5>
-            <table className="table fdu-table">
-              <thead>
-                <tr>
-                  <th>Metros cuadrados (m²)</th>
-                  <th>FDU</th>
-                </tr>
-              </thead>
-              <tbody>
-                {FDU_TRAMOS.map(({ clave, etiqueta }) => (
-                  <tr key={clave}>
-                    <td>
-                      <input
-                        type="number"
-                        min="0"
-                        step="any"
-                        aria-label={etiqueta}
-                        value={fdu[clave]}
-                        onChange={(e) => setFdu({ ...fdu, [clave]: e.target.value })}
-                      />
-                    </td>
-                    <td>{etiqueta}</td>
+            <div className="table-responsive">
+              <table className="table fdu-table">
+                <thead>
+                  <tr>
+                    <th>Metros cuadrados (m²)</th>
+                    <th>FDU</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {FDU_TRAMOS.map(({ clave, etiqueta }) => (
+                    <tr key={clave}>
+                      <td>
+                        <input
+                          type="number"
+                          min="0"
+                          step="any"
+                          aria-label={etiqueta}
+                          value={fdu[clave]}
+                          onChange={(e) => setFdu({ ...fdu, [clave]: e.target.value })}
+                        />
+                      </td>
+                      <td>{etiqueta}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <span className="text-muted fst-italic">
               Fórmula: <strong>SUP × (FDU%) × (valor m² categoría × UT)</strong>
             </span>

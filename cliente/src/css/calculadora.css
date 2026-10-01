@@ -31,7 +31,7 @@
     margin: 0 .5rem;
 }
 
-.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn) {
+.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn):not(.limpiar-btn) {
     width: fit-content;
     padding: 10px;
     background-color: #4CAF50;
@@ -198,7 +198,121 @@
     cursor: pointer;
 }
 
+.limpiar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #fff;
+    color: #979797;
+    font-weight: bold;
+    border: 1px solid #979797;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
 .descargar-pdf-btn:disabled {
     opacity: 0.6;
     cursor: wait;
+}
+
+/* 16px evita el zoom automático de iOS y 44px es el tamaño táctil recomendado */
+.formulario-obras input,
+.formulario-obras select {
+    font-size: 16px;
+    min-height: 44px;
+}
+
+.formulario-obras button {
+    min-height: 44px;
+}
+
+.botones-section {
+    flex-wrap: wrap;
+}
+
+.fdu-toggle-section {
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.detalle-categoria {
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.obra-pill {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.fdu-table input {
+    min-width: 90px;
+}
+
+@media (max-width: 576px) {
+
+    /* Botones principales a lo ancho */
+    .botones-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .formulario-obras .botones-section button {
+        width: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Bloque de FDU en columna */
+    .fdu-toggle-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .fdu-toggle-btn {
+        width: 100%;
+    }
+
+    .fdu-section {
+        padding: 8px;
+    }
+
+    .quitar-seccion-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    /* Resultados */
+    .detalle-categoria {
+        flex-direction: column;
+        padding: 0.75rem;
+    }
+
+    .detalle-fdu,
+    .detalle-obra {
+        padding: 12px;
+        margin: 0.75rem 0;
+    }
+
+    .detalle-fdu h2 {
+        font-size: 1.3rem;
+    }
+
+    .obra-importe,
+    .detalle-obra section {
+        font-size: 0.95rem;
+    }
+
+    .detalle-obra .table,
+    .detalle-fdu .table {
+        font-size: 0.85rem;
+    }
+
+    .descargar-pdf-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
 }

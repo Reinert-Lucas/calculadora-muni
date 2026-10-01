@@ -25,8 +25,8 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
 
   return (
     <>
-      <h1 className="text-center mt-2 display-6">Total General</h1>
-      <p className="text-center fw-bold text-success display-2">{formatoMoneda(resultados.TotalGeneral)}</p>
+      <h1 className="text-center mt-2 display-6" id="resultado-general">Total General</h1>
+      <p className="text-center fw-bold text-success total-general">{formatoMoneda(resultados.TotalGeneral)}</p>
 
       <div className="text-center mb-3">
         <button
@@ -43,44 +43,46 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
       <section className="detalle-categoria">
         <article className="text-center">
           <h5>Total de m2</h5>
-          <span className="display-6 text-primary">{formatoNumero(resultados.TotalM2)} m2</span>
+          <span className="valor-categoria text-primary">{formatoNumero(resultados.TotalM2)} m2</span>
         </article>
         <article className="text-center">
           <h5>Categoría determinada</h5>
-          <span className="display-6 text-success">{resultados.CategoriaDeterminada}</span>
+          <span className="valor-categoria text-success">{resultados.CategoriaDeterminada}</span>
         </article>
       </section>
 
       <section className="detalle-fdu">
         <h2>Resultados FDU</h2>
         {fduUsados.length > 0 ? (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>SUP (m2)</th>
-                <th>FDU</th>
-                <th>Categoría</th>
-                <th>Valor m2 x UT</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fduUsados.map((f) => (
-                <tr key={f.clave}>
-                  <td>{formatoNumero(f.superficie)}</td>
-                  <td>{f.fdu}</td>
-                  <td>{f.categoria}</td>
-                  <td>{formatoMoneda(f.valorMxUt)}</td>
-                  <td>{formatoMoneda(f.subtotal)}</td>
+          <div className="table-responsive">
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>SUP (m2)</th>
+                  <th>FDU</th>
+                  <th>Categoría</th>
+                  <th>Valor m2 x UT</th>
+                  <th>Subtotal</th>
                 </tr>
-              ))}
-              <tr>
-                <td colSpan={5} className="text-end">
-                  <strong>Total FDU: {formatoMoneda(resultados.TotalFDU)}</strong>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {fduUsados.map((f) => (
+                  <tr key={f.clave}>
+                    <td>{formatoNumero(f.superficie)}</td>
+                    <td>{f.fdu}</td>
+                    <td>{f.categoria}</td>
+                    <td>{formatoMoneda(f.valorMxUt)}</td>
+                    <td>{formatoMoneda(f.subtotal)}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <td colSpan={5} className="text-end">
+                    <strong>Total FDU: {formatoMoneda(resultados.TotalFDU)}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         ) : (
           <p>No se aplica FDU.</p>
         )}
@@ -95,16 +97,17 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
             <span className="obra-pill">Estado: <strong>{obra.estado}</strong></span>
 
             <div className="obra-importe">Subtotal de la sección: {formatoMoneda(obra.importe)}</div>
-
-            <table className="table">
-              <tbody>
-                <tr><td>Valor m2 de la categoría</td><td>{formatoNumero(obra.valorM2)}</td></tr>
-                <tr><td>Monto (valor m2 x UT)</td><td>{formatoMoneda(obra.monto)}</td></tr>
-                <tr><td>Subtotal (monto x superficie ingresada)</td><td>{formatoMoneda(obra.subtotal)}</td></tr>
-                <tr><td>UT 2026</td><td>{formatoMoneda(obra.ut)}</td></tr>
-                <tr><td>% aplicado por estado de obra</td><td>{formatoNumero(obra.porcentaje)} %</td></tr>
-              </tbody>
-            </table>
+            <div className="table-responsive">
+              <table className="table">
+                <tbody>
+                  <tr><td>Valor m2 de la categoría</td><td>{formatoNumero(obra.valorM2)}</td></tr>
+                  <tr><td>Monto (valor m2 x UT)</td><td>{formatoMoneda(obra.monto)}</td></tr>
+                  <tr><td>Subtotal (monto x superficie ingresada)</td><td>{formatoMoneda(obra.subtotal)}</td></tr>
+                  <tr><td>UT 2026</td><td>{formatoMoneda(obra.ut)}</td></tr>
+                  <tr><td>% aplicado por estado de obra</td><td>{formatoNumero(obra.porcentaje)} %</td></tr>
+                </tbody>
+              </table>
+            </div>
           </li>
         ))}
       </ul>
