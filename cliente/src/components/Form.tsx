@@ -1,137 +1,136 @@
 import "../css/calculadora.css";
-import { useState, type FormEvent } from "react";
-import { Calculadora } from "../utils/calculadora";
+import { useRef, useState, type FormEvent } from "react";
+import { calcularTotal, ErrorCalculo } from "../utils/calculadora";
+import { categorias, FDU_TRAMOS } from "../constants/impuestos";
 import ResultadosDetalle from "./ResultadosDetalle";
 import type { Resultado } from "../utils/types";
 import LayerIcon from "../imgs/layer-icon.png";
+import CalculadoraIcon from "../imgs/calculadora-icon.png";
+import AddIcon from "../imgs/add-icon.png";
 
-type Obra = {
-  id: number;
-  metros_cuadrados: string;
-  estado: string;
-};
+// Estado del formulario: todo string porque viene de inputs
+type ObraForm = { id: number; metros_cuadrados: string; estado: string };
+
+const FDU_INICIAL = { sup_4: "", sup_8: "", sup_12: "" };
+
+// "" -> NaN (y no 0), para que la validación detecte campos vacíos
+const aNumero = (v: string) => (v.trim() === "" ? NaN : Number(v));
 
 function Form() {
-  const calculadora = new Calculadora();
-  // Array de obras
-  const [count, SetCount] = useState(1);
-  const [obras, setObras] = useState<Obra[]>([
-    {
-      id: count,
-      metros_cuadrados: "",
-      estado: "",
-    },
+  const siguienteId = useRef(2);
+  const [obras, setObras] = useState<ObraForm[]>([
+    { id: 1, metros_cuadrados: "", estado: "" },
   ]);
-  const [Resultados, setResultados] = useState<Resultado | null>(null);
-  const [fdu, setFdu] = useState({
-    sup_4: "",
-    sup_8: "",
-    sup_12: "",
-  });
-  const [isVisible, setIsVisible] = useState(false);
-  // Añadir nueva obra al Array
-  function handleChange(
-    index: number,
-    field: "metros_cuadrados" | "estado",
-    value: string,
-  ) {
-    setObras((prev) =>
-      prev.map((obra, i) =>
-        i === index
-          ? {
-            ...obra,
-            [field]: value,
-          }
-          : obra,
-      ),
-    );
+  const [fdu, setFdu] = useState(FDU_INICIAL);
+  const [mostrarFdu, setMostrarFdu] = useState(false);
+  const [resultados, setResultados] = useState<Resultado | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  function handleChange(id: number, field: "metros_cuadrados" | "estado", value: string) {
+    setObras((prev) => prev.map((o) => (o.id === id ? { ...o, [field]: value } : o)));
   }
+
   function agregarSeccion() {
-    setObras([
-      ...obras,
-      {
-        id: count + 1,
-        metros_cuadrados: "",
-        estado: "",
-      },
+    setObras((prev) => [
+      ...prev,
+      { id: siguienteId.current++, metros_cuadrados: "", estado: "" },
     ]);
-    SetCount(count + 1);
   }
-  // Calcular total
+
+  function quitarSeccion(id: number) {
+    setObras((prev) => prev.filter((o) => o.id !== id));
+  }
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const obrasParseadas = obras.map((obra) => ({
-      id: obra.id,
-      metros_cuadrados: Number(obra.metros_cuadrados),
-      estado: Number(obra.estado),
-    }));
     try {
-      setResultados(
-        calculadora.calcularTotal(obrasParseadas, {
-          sup_4: Number(fdu.sup_4),
-          sup_8: Number(fdu.sup_8),
-          sup_12: Number(fdu.sup_12),
-        }),
-      )
-    } catch (error) {
-      alert(error)
+      const resultado = calcularTotal(
+        obras.map((o) => ({
+          id: o.id,
+          metros_cuadrados: aNumero(o.metros_cuadrados),
+          estado: aNumero(o.estado),
+        })),
+        {
+          // Si el panel FDU está oculto, no se suma
+          sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
+          sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
+          sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
+        },
+      );
+      setResultados(resultado);
+      setError(null);
+    } catch (err) {
+      setResultados(null);
+      setError(err instanceof ErrorCalculo ? err.message : "Ocurrió un error inesperado.");
     }
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="formulario-obras">
+      <form onSubmit={handleSubmit} className="formulario-obras" noValidate>
         {obras.map((obra, index) => (
           <div key={obra.id}>
-            <h5><img src={LayerIcon} alt="Estado de Obra" className="layer-icon" />Estado de obra {index + 1}</h5>
-            <label>Metros cuadrados (m²)</label>
+            <h5>
+              <img src={LayerIcon} alt="Estado de Obra" className="layer-icon" />
+              Estado de obra {index + 1}
+            </h5>
+            <label htmlFor={`m2-${obra.id}`}>Metros cuadrados (m²)</label>
             <input
+              id={`m2-${obra.id}`}
               type="number"
+              min="0"
+              step="any"
+              inputMode="decimal"
               placeholder="Metros cuadrados"
               value={obra.metros_cuadrados}
-              onChange={(e) =>
-                handleChange(index, "metros_cuadrados", e.target.value)
-              }
-              required
+              onChange={(e) => handleChange(obra.id, "metros_cuadrados", e.target.value)}
             />
-            <label>Estado de obra</label>
+            <label htmlFor={`estado-${obra.id}`}>Estado de obra</label>
             <select
+              id={`estado-${obra.id}`}
               value={obra.estado}
-              onChange={(e) => handleChange(index, "estado", e.target.value)}
-              required
+              onChange={(e) => handleChange(obra.id, "estado", e.target.value)}
             >
               <option value="" disabled>
                 Seleccione un estado de obra
               </option>
-              <option value="0">Obra Nueva (0.5%)</option>
-              <option value="1">
-                Acorde al codigo - exist. sin permiso en construccion (1%)
-              </option>
-              <option value="2">
-                Acorde al codigo - exist. sin permiso en concluido (2%)
-              </option>
-              <option value="3">Antirreg. - concluida detectada (6%)</option>
-              <option value="4">Antirreg. - pv de obra concluida (5%)</option>
-              <option value="5">
-                Cuerpo cerrado sobre linea municipal (9%)
-              </option>
-              <option value="6">Balcones (6%)</option>
-              <option value="7">Marquesinas y/o aleros (4%)</option>
+              {categorias.map((c, i) => (
+                <option key={c.nombre} value={i}>
+                  {c.nombre} ({c.porcentaje}%)
+                </option>
+              ))}
             </select>
+            {obras.length > 1 && (
+              <button
+                type="button"
+                className="quitar-seccion-btn"
+                onClick={() => quitarSeccion(obra.id)}
+              >
+                Quitar
+              </button>
+            )}
             <hr />
           </div>
         ))}
+
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
         <section className="botones-section">
-          <button type="submit">Calcular total</button>
-          <button
-            type="button"
-            onClick={agregarSeccion}
-            className="agregar-seccion-btn"
-          >
+          <button type="submit">
+            <img src={CalculadoraIcon} alt="Calcular" />
+            Calcular total
+          </button>
+          <button type="button" onClick={agregarSeccion} className="agregar-seccion-btn">
+            <img src={AddIcon} alt="Añadir m2" />
             Cargar m2 con otro estado
           </button>
         </section>
-        {isVisible && (
+
+        {mostrarFdu && (
           <section className="fdu-section">
             <h5>FDU (Carga por Tramos)</h5>
             <table className="table fdu-table">
@@ -142,69 +141,46 @@ function Form() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <input
-                      type="number"
-                      value={fdu.sup_4}
-                      onChange={(e) =>
-                        setFdu({ ...fdu, sup_4: e.target.value })
-                      }
-                    />
-                  </td>
-                  <td>Sup. entre 9,01 y 18,00 - FDU: 4% </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      type="number"
-                      value={fdu.sup_8}
-                      onChange={(e) =>
-                        setFdu({ ...fdu, sup_8: e.target.value })
-                      }
-                    />
-                  </td>
-                  <td>Sup. entre 18,01 y 30,00 - FDU: 8% </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      type="number"
-                      value={fdu.sup_12}
-                      onChange={(e) =>
-                        setFdu({ ...fdu, sup_12: e.target.value })
-                      }
-                    />
-                  </td>
-                  <td>Sup. sobre 30,00 - FDU: 12% </td>
-                </tr>
+                {FDU_TRAMOS.map(({ clave, etiqueta }) => (
+                  <tr key={clave}>
+                    <td>
+                      <input
+                        type="number"
+                        min="0"
+                        step="any"
+                        aria-label={etiqueta}
+                        value={fdu[clave]}
+                        onChange={(e) => setFdu({ ...fdu, [clave]: e.target.value })}
+                      />
+                    </td>
+                    <td>{etiqueta}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <span className="text-muted fst-italic">
               Fórmula: <strong>SUP × (FDU%) × (valor m² categoría × UT)</strong>
-              . Ej.: 1950 × 4% × 110000 = $ 8.580.000,00{" "}
             </span>
           </section>
         )}
+
         <section className="fdu-toggle-section">
           <article>
-            <span className="fw-bold">
-              ¿Tu obra supera los 9 m? Calculá el FDU
-            </span>
-            <span className="text-muted fst-italic">
-              Podés sumarlo al Total General.
-            </span>
+            <span className="fw-bold">¿Tu obra supera los 9 m²? Calculá el FDU</span>
+            <span className="text-muted fst-italic">Podés sumarlo al Total General.</span>
           </article>
           <button
             type="button"
-            onClick={() => setIsVisible(!isVisible)}
+            onClick={() => setMostrarFdu((v) => !v)}
             className="fdu-toggle-btn"
+            aria-expanded={mostrarFdu}
           >
-            Agregar FDU
+            {mostrarFdu ? "Quitar FDU" : "Agregar FDU"}
           </button>
         </section>
       </form>
-      {Resultados && <ResultadosDetalle resultados={Resultados} />}
+
+      {resultados && <ResultadosDetalle resultados={resultados} />}
     </>
   );
 }

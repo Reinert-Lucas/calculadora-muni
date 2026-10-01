@@ -6,13 +6,18 @@
 }
 
 .formulario-obras input,
-select {
+.formulario-obras select {
     width: 100%;
     padding: 10px;
     margin: 5px 0;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 3px;
+}
+
+.layer-icon {
+    width: 1.5em;
+    height: 1.2em;
 }
 
 .formulario-obras label {
@@ -26,7 +31,7 @@ select {
     margin: 0 .5rem;
 }
 
-.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn) {
+.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn) {
     width: fit-content;
     padding: 10px;
     background-color: #4CAF50;
@@ -41,8 +46,15 @@ select {
     width: 100%;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     margin: 20px 0;
     gap: 10px;
+}
+
+.botones-section img {
+    width: 1.5em;
+    height: 1.5em;
+    margin: 0 5px 0 0;
 }
 
 .agregar-seccion-btn {
@@ -98,19 +110,40 @@ select {
     border-collapse: collapse;
 }
 
-.detalle-fdu {
+.detalle-fdu,
+.detalle-obra {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 1rem 0;
-    z-index: 1000;
+}
+
+.obra-importe {
+    background: #4CAF50;
+    border: 1px solid #3c883f;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    margin: 1rem 0;
+    border-radius: 5px;
+}
+
+.quitar-seccion-btn {
+    margin-top: 8px;
+    background: transparent;
+    color: #c0392b;
+    border: 1px solid #c0392b;
+    border-radius: 3px;
+    padding: 6px 10px;
+    cursor: pointer;
 }
 
 .detalle-categoria {
     width: 100%;
-    background: #74dfff;
+    justify-self: center;
+    background: #cff4fc;
     border: 1px solid #2ec4ff;
     padding: 1rem;
     border-radius: 5px;
@@ -120,22 +153,16 @@ select {
     margin-bottom: 20px;
 }
 
+.detalle-categoria h5 {
+    font-weight: bold;
+}
+
 .lista-obras {
     list-style: none;
     padding: 0;
 }
 
 /* Diseño de tarjeta flotante */
-.detalle-obra {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 1rem 0;
-    z-index: 1000;
-}
-
 .detalle-obra section {
     background: #4CAF50;
     border: 1px solid #3c883f;
@@ -156,4 +183,22 @@ select {
     border: 1px #39be65 dashed;
     border-radius: 15px;
     font-size: 0.9em;
+}
+
+.descargar-pdf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #fff;
+    color: #3c883f;
+    font-weight: bold;
+    border: 1px solid #3c883f;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.descargar-pdf-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
 }
