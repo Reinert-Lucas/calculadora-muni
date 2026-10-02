@@ -11,7 +11,7 @@ export default function App() {
       </section>
       <CalculatorCard />
       <footer>
-        <h6>© {new Date().getFullYear()} - Municipalidad de Posadas | Cálculo orientativo. Verifique la normativa vigente.</h6>
+        <h6 className="text-center text-muted">© {new Date().getFullYear()} - Municipalidad de Posadas | Cálculo orientativo. Verifique la normativa vigente.</h6>
       </footer>
     </div>
   );
