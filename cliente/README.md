@@ -1,5 +1,3 @@
-# Agregar  
+# Agregar [Mas Facil a Mas Dificil]  
 
-- Precios de colegios
-- Precios de bomberos
-- Honorarios del Profesional
+- Precios de colegios [Poner el valor que corresponda]

@@ -11,11 +11,10 @@ export default function CalculatorCard() {
       </div>
       <div className="card-body">
         <p className="card-title text-center h5">
-          Valor de la UT correspondiente al año 2026: {formatoMoneda(VALOR_UT)}
+          Valor de la UT correspondiente al año {new Date().getFullYear()}: {formatoMoneda(VALOR_UT)}
         </p>
         <Form />
       </div>
-      <span className="text-center p-2 fw-light disclaimer">El presente cálculo es estimativo, no incluye costos menores referidos a los Tributos 231 (Inspecciones y demoliciones) y Tributo 233 (Derechos de Oficina). Los valores están sujetos al valor de la UT (Unidad Tributaria) vigente sujeto a actualización.</span>
     </div>
   );
 }

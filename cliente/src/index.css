@@ -15,6 +15,13 @@ body {
     overflow-x: hidden;
 }
 
+button,
+a,
+input,
+select {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .main-container {
     width: 100%;
     min-height: 100vh;
@@ -25,17 +32,58 @@ body {
     padding-right: max(20px, env(safe-area-inset-right));
     padding-bottom: max(20px, env(safe-area-inset-bottom));
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .main-container>.card {
     width: 100%;
     max-width: 960px;
+    animation: aparecer 500ms ease-out 100ms both;
+}
+
+.titulo {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 0 2rem 0;
+    border-bottom: 2px solid #58be69;
+    animation: aparecer 450ms ease-out both;
+}
+
+.titulo h1 {
+    font-size: 2em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.logo-gop {
+    width: 2em;
+    height: 2em;
+    margin: 0 .5rem 0 0;
+}
+
+.titulo h6 {
+    font-size: 1em;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+    color: #58be69;
+    font-weight: 500;
 }
 
 .card {
     border-radius: 15px !important;
+    transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .main-container>.card:hover {
+        box-shadow: 0 1rem 2.5rem rgba(28, 60, 35, 0.12) !important;
+        transform: translateY(-2px);
+    }
 }
 
 .header-container {
@@ -62,6 +110,18 @@ body {
     flex-shrink: 0;
 }
 
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Total y categoría: tamaños fluidos para que no se desborden */
 .total-general {
     font-size: clamp(2rem, 11vw, 4rem);
@@ -85,11 +145,27 @@ body {
         padding: 12px 14px;
     }
 
+    .titulo {
+        width: 100%;
+    }
+
     .card-body {
         padding: 1rem 0.75rem;
     }
 
     .card-title.h5 {
         font-size: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }

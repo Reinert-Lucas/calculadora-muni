@@ -22,7 +22,7 @@ describe("calcularTotal", () => {
         const r = calcularTotal(
             [{ id: 1, metros_cuadrados: 100, estado: 0 }],
             fduVacio,
-            { colegio1: 1000, colegio2: 2000, honorarios: 3000 },
+            { colegio1: 1000, colegio2: 2000, honorarios: 3000, bomberos: 4000 },
         );
         expect(r.TotalAdicionales).toBe(6000);
         expect(r.TotalGeneral).toBe(77500);

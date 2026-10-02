@@ -13,6 +13,14 @@
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 3px;
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.formulario-obras input:focus,
+.formulario-obras select:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.16);
+    outline: none;
 }
 
 .layer-icon {
@@ -31,6 +39,13 @@
     margin: 0 .5rem;
 }
 
+.formulario-obras-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn):not(.limpiar-btn) {
     width: fit-content;
     padding: 10px;
@@ -40,6 +55,65 @@
     border: none;
     border-radius: 3px;
     cursor: pointer;
+}
+
+.formulario-obras button,
+.descargar-pdf-btn,
+.limpiar-btn,
+.agregar-seccion-btn,
+.fdu-toggle-btn,
+.quitar-seccion-btn {
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, opacity 180ms ease;
+}
+
+.formulario-obras button:focus-visible,
+.descargar-pdf-btn:focus-visible,
+.limpiar-btn:focus-visible,
+.agregar-seccion-btn:focus-visible,
+.fdu-toggle-btn:focus-visible,
+.quitar-seccion-btn:focus-visible {
+    outline: 3px solid rgba(76, 175, 80, 0.35);
+    outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .formulario-obras button:not(:disabled):hover,
+    .descargar-pdf-btn:not(:disabled):hover,
+    .limpiar-btn:not(:disabled):hover,
+    .agregar-seccion-btn:hover,
+    .fdu-toggle-btn:hover,
+    .quitar-seccion-btn:hover {
+        box-shadow: 0 4px 10px rgba(32, 76, 39, 0.12);
+        transform: translateY(-1px);
+    }
+}
+
+.formulario-obras button:not(:disabled):active,
+.descargar-pdf-btn:not(:disabled):active,
+.limpiar-btn:not(:disabled):active,
+.agregar-seccion-btn:active,
+.fdu-toggle-btn:active,
+.quitar-seccion-btn:active {
+    transform: translateY(0);
+}
+
+@keyframes contenido-aparece {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.formulario-obras>div,
+.fdu-section,
+.formulario-obras .alert {
+    animation: contenido-aparece 260ms ease-out both;
 }
 
 .botones-section {
@@ -70,7 +144,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    background: #bbbbbb;
+    background: #d1d0d0;
     align-items: center;
     margin-top: 20px;
     border: 1px solid #ccc;
@@ -108,6 +182,14 @@
     border-collapse: collapse;
 }
 
+.fdu-btns {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
 .detalle-fdu,
 .detalle-obra {
     background: #fff;
@@ -116,6 +198,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 1rem 0;
+    animation: contenido-aparece 360ms ease-out both;
+    transition: box-shadow 180ms ease, border-color 180ms ease;
 }
 
 .obra-importe {
@@ -149,6 +233,12 @@
     justify-content: space-around;
     align-items: center;
     margin-bottom: 20px;
+    animation: contenido-aparece 320ms ease-out both;
+}
+
+#resultado-general,
+.total-general {
+    animation: contenido-aparece 400ms ease-out both;
 }
 
 .detalle-categoria h5 {
@@ -189,9 +279,9 @@
     gap: 8px;
     padding: 10px 16px;
     background: #fff;
-    color: #3c883f;
+    color: #0d6efd;
     font-weight: bold;
-    border: 1px solid #3c883f;
+    border: 1px solid #0d6efd;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -246,6 +336,16 @@
 
 .fdu-table input {
     min-width: 90px;
+}
+
+.accordion-button {
+    margin: 0 !important;
+}
+
+.res {
+    background-color: #efefef;
+    padding: .5rem;
+    border-radius: 5px;
 }
 
 @media (max-width: 576px) {
@@ -312,5 +412,46 @@
         width: 100%;
         justify-content: center;
         min-height: 44px;
+    }
+
+    .formulario-obras-title button {
+        width: 20%;
+    }
+
+    .fdu-btns {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .fdu-btns button,
+    .fdu-sbmt {
+        width: 100% !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .formulario-obras>div,
+    .fdu-section,
+    .formulario-obras .alert,
+    .detalle-fdu,
+    .detalle-obra,
+    .detalle-categoria,
+    #resultado-general,
+    .total-general {
+        animation: none;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .detalle-fdu:hover,
+    .detalle-obra:hover {
+        border-color: #b7d8bb;
+        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
     }
 }

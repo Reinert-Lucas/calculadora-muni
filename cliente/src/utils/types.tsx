@@ -8,6 +8,7 @@ export type CostosAdicionales = {
   colegio1: number;
   colegio2: number;
   honorarios: number;
+  bomberos: number;
 };
 
 export type DetalleObra = {
@@ -42,4 +43,5 @@ export type Resultado = {
   CategoriaDeterminada: string;
   EstadoObras: DetalleObra[];
   ResultadosFDU: DetalleFDU[];
+  Coeficiente: number
 };

@@ -2,7 +2,7 @@ import "../css/calculadora.css";
 import { useRef, useState, type FormEvent } from "react";
 import { calcularTotal, ErrorCalculo } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
-import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon } from "lucide-react";
+import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import type { Resultado } from "../utils/types";
 
@@ -10,7 +10,7 @@ import type { Resultado } from "../utils/types";
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
 
 const FDU_INICIAL = { sup_4: "", sup_8: "", sup_12: "" };
-const COSTOS_INICIALES = { colegio1: "", colegio2: "", honorarios: "" };
+const COSTOS_INICIALES = { colegio1: "", colegio2: "", honorarios: "", bomberos: "" };
 
 // "" -> NaN (y no 0), para que la validación detecte campos vacíos
 const aNumero = (v: string) => (v.trim() === "" ? NaN : Number(v));
@@ -25,6 +25,7 @@ function Form() {
   const [mostrarFdu, setMostrarFdu] = useState(false);
   const [resultados, setResultados] = useState<Resultado | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [catMsg, setCatMsg] = useState<string | null>(null);
 
   function handleChange(id: number, field: "metros_cuadrados" | "estado", value: string) {
     setObras((prev) => prev.map((o) => (o.id === id ? { ...o, [field]: value } : o)));
@@ -51,6 +52,7 @@ function Form() {
     setMostrarFdu(false);
     setResultados(null);
     setError(null);
+    setCatMsg(null)
   }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -72,26 +74,21 @@ function Form() {
           colegio1: Number(costos.colegio1) || 0,
           colegio2: Number(costos.colegio2) || 0,
           honorarios: Number(costos.honorarios) || 0,
+          bomberos: Number(costos.bomberos) || 0,
         },
       );
       setResultados(resultado);
+      setCatMsg(`Categoría general detectada: ${resultado.CategoriaDeterminada} — Valor m²: ${resultado.Coeficiente},00 — Total m²: ${resultado.TotalM2}`);
       setError(null);
     } catch (err) {
       setResultados(null);
       setError(err instanceof ErrorCalculo ? err.message : "Ocurrió un error inesperado.");
     }
-    // Scrollear automáticamente a los resultados si se calculó correctamente
-    if (resultados) {
-      setTimeout(() => {
-        const resultadosSection = document.getElementById("resultado-general");
-        resultadosSection?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    }
-    // Scroll en celulares: si el teclado virtual tapa los resultados, se hace scroll para que queden visibles
+    // Scrollear automáticamente a los resultados
     setTimeout(() => {
       const resultadosSection = document.getElementById("resultado-general");
       resultadosSection?.scrollIntoView({ behavior: "smooth" });
-    }, 500);
+    }, 100);
   }
 
   return (
@@ -99,10 +96,21 @@ function Form() {
       <form onSubmit={handleSubmit} className="formulario-obras" noValidate>
         {obras.map((obra, index) => (
           <div key={obra.id}>
-            <h5>
-              <Layers2Icon size={18} className="layer-icon" color="#4CAF50" />
-              Estado de obra {index + 1}
-            </h5>
+            <div className="formulario-obras-title">
+              <h5>
+                <Layers2Icon size={18} className="layer-icon" color="#4CAF50" />
+                Estado de obra {index + 1}
+              </h5>
+              {obras.length > 1 && (
+                <button
+                  type="button"
+                  className="quitar-seccion-btn"
+                  onClick={() => quitarSeccion(obra.id)}
+                >
+                  <TrashIcon size={18} />
+                </button>
+              )}
+            </div>
             <label htmlFor={`m2-${obra.id}`}>Metros cuadrados (m²)</label>
             <input
               id={`m2-${obra.id}`}
@@ -129,14 +137,8 @@ function Form() {
                 </option>
               ))}
             </select>
-            {obras.length > 1 && (
-              <button
-                type="button"
-                className="quitar-seccion-btn"
-                onClick={() => quitarSeccion(obra.id)}
-              >
-                Quitar
-              </button>
+            {catMsg && (
+              <span className="text-info"> <Info size={18} /> {catMsg}</span>
             )}
             <hr />
           </div>
@@ -196,13 +198,52 @@ function Form() {
             <span className="text-muted fst-italic">
               Fórmula: <strong>SUP × (FDU%) × (valor m² categoría × UT)</strong>
             </span>
+            <section className="fdu-btns">
+              <button type="submit" className="fdu-sbmt">
+                <CalculatorIcon size={18} />
+                Aplicar FDU
+              </button>
+              <button type="button" className="limpiar-btn" onClick={() => setMostrarFdu((v) => !v)}>
+                <XCircleIcon size={18} />
+                Cancelar
+              </button>
+              <button type="button" className="limpiar-btn" onClick={() => {
+                setFdu(FDU_INICIAL)
+                setResultados((prev) => {
+                  if (!prev) return null;
+                  // Recalcular resultados sin FDU
+                  const resultadoSinFdu = calcularTotal(
+                    obras.map((o) => ({
+                      id: o.id,
+                      metros_cuadrados: aNumero(o.metros_cuadrados),
+                      estado: aNumero(o.estado),
+                    })),
+                    { sup_4: 0, sup_8: 0, sup_12: 0 },
+                    {
+                      colegio1: Number(costos.colegio1) || 0,
+                      colegio2: Number(costos.colegio2) || 0,
+                      honorarios: Number(costos.honorarios) || 0,
+                      bomberos: Number(costos.bomberos) || 0,
+                    },
+                  );
+                  setTimeout(() => {
+                    const resultadosSection = document.getElementById("resultado-general");
+                    resultadosSection?.scrollIntoView({ behavior: "smooth" });
+                  }, 100);
+                  return resultadoSinFdu;
+                });
+              }}>
+                <TrashIcon size={18} />
+                Limpiar FDU
+              </button>
+            </section>
           </section>
         )}
 
         <section className="fdu-toggle-section">
           <article>
             <span className="fw-bold">¿Tu obra supera los 9 m²? Calculá el FDU</span>
-            <span className="text-muted fst-italic">Podés sumarlo al Total General.</span>
+            <span className="text-muted fst-italic">Se sumará al Total General.</span>
           </article>
           <button
             type="button"
@@ -242,6 +283,23 @@ function Form() {
           />
         </section>
         <hr />
+        <section className="bomberos-section">
+          <h5>
+            Bomberos
+          </h5>
+          <label htmlFor="bomberos">Costo del Tramite</label>
+          <input
+            id="bomberos"
+            type="number"
+            min="0"
+            step="any"
+            inputMode="decimal"
+            placeholder="$000,00"
+            value={costos.bomberos}
+            onChange={(e) => setCostos({ ...costos, bomberos: e.target.value })}
+          />
+        </section>
+        <hr />
         <section className="honorarios-section">
           <h5>
             Honorarios del Profesional a Cargo
@@ -258,8 +316,8 @@ function Form() {
             onChange={(e) => setCostos({ ...costos, honorarios: e.target.value })}
           />
         </section>
+        <hr />
       </form>
-
       {resultados && <ResultadosDetalle resultados={resultados} />}
     </>
   );

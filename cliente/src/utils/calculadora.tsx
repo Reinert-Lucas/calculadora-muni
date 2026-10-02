@@ -34,7 +34,7 @@ function validar(obras: Obra[], fdu: FDU, totalM2: number) {
 export function calcularTotal(
   obras: Obra[],
   fdu: FDU,
-  costosAdicionales: CostosAdicionales = { colegio1: 0, colegio2: 0, honorarios: 0 },
+  costosAdicionales: CostosAdicionales = { colegio1: 0, colegio2: 0, honorarios: 0, bomberos: 0 },
 ): Resultado {
   const totalM2 = obras.reduce((acc, o) => acc + o.metros_cuadrados, 0);
   validar(obras, fdu, totalM2);
@@ -92,5 +92,6 @@ export function calcularTotal(
     CategoriaDeterminada: tramo.etiqueta,
     EstadoObras,
     ResultadosFDU,
+    Coeficiente: tramo.coef
   };
 }

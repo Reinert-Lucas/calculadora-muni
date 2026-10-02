@@ -225,6 +225,7 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
                 ...(r.CostosAdicionales.colegio1 > 0 ? [["Colegio 1", pesos(r.CostosAdicionales.colegio1)]] : []),
                 ...(r.CostosAdicionales.colegio2 > 0 ? [["Colegio 2", pesos(r.CostosAdicionales.colegio2)]] : []),
                 ...(r.CostosAdicionales.honorarios > 0 ? [["Honorarios", pesos(r.CostosAdicionales.honorarios)]] : []),
+                ...(r.CostosAdicionales.bomberos > 0 ? [["Bomberos", pesos(r.CostosAdicionales.bomberos)]] : []),
                 [{ content: "TOTAL ADICIONAL", styles: { fontStyle: "bold" } }, { content: pesos(r.TotalAdicionales), styles: { fontStyle: "bold", halign: "right" } }],
             ],
             columnStyles: { 0: { cellWidth: anchoUtil / 2 } },
