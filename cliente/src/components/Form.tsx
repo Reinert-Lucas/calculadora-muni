@@ -257,9 +257,9 @@ function Form() {
         <hr />
         <section className="colegios-section">
           <h5>
-            Costos de Colegios
+            Visado de Instalaciones Complementarias
           </h5>
-          <label htmlFor="colegio-1-prc">Colegio 1</label>
+          <label htmlFor="colegio-1-prc">Consejo de Ingeniería</label>
           <input
             id="colegio-1-prc"
             type="number"
@@ -270,7 +270,7 @@ function Form() {
             value={costos.colegio1}
             onChange={(e) => setCostos({ ...costos, colegio1: e.target.value })}
           />
-          <label htmlFor="colegio-2-prc">Colegio 2</label>
+          <label htmlFor="colegio-2-prc">Colegio de Arquitectos de la Provincia de Misiones</label>
           <input
             id="colegio-2-prc"
             type="number"
@@ -316,7 +316,6 @@ function Form() {
             onChange={(e) => setCostos({ ...costos, honorarios: e.target.value })}
           />
         </section>
-        <hr />
       </form>
       {resultados && <ResultadosDetalle resultados={resultados} />}
     </>

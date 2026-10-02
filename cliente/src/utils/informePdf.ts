@@ -249,6 +249,11 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
     });
     doc.setFont("helvetica", "normal").setFontSize(9).setTextColor(...GRIS);
     doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`, MARGEN, y);
+    y += 8;
+
+
+    doc.setFont("helvetica", "normal", "bold").setFontSize(9).setTextColor(...GRIS);
+    doc.text(`EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`, MARGEN, y);
 
     // ---------- Pie de página en todas las hojas ----------
     const paginas = doc.getNumberOfPages();
