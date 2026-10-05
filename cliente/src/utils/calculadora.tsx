@@ -12,7 +12,7 @@ export function obtenerTramo(m2: number) {
   return TRAMOS.find((t) => t.contiene(m2)) ?? TRAMOS[TRAMOS.length - 1];
 }
 
-function validar(obras: Obra[], fdu: FDU, totalM2: number) {
+function validar(obras: Obra[], fdu: FDU) {
   if (obras.length === 0) throw new ErrorCalculo("Cargá al menos una obra o tramo de FDU.");
 
   for (const [i, obra] of obras.entries()) {
@@ -33,7 +33,7 @@ export function calcularTotal(
   costosAdicionales: CostosAdicionales = { colegio1: 0, colegio2: 0, honorarios: 0, bomberos: 0 },
 ): Resultado {
   const totalM2 = obras.reduce((acc, o) => acc + o.metros_cuadrados, 0);
-  validar(obras, fdu, totalM2);
+  validar(obras, fdu);
 
   if (Object.values(costosAdicionales).some((costo) => !Number.isFinite(costo) || costo < 0))
     throw new ErrorCalculo("Los costos adicionales deben ser números positivos o cero.");

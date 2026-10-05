@@ -286,13 +286,6 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
         }
     };
 
-    const separador = () => {
-        doc.setDrawColor(...BORDE);
-        doc.setLineWidth(0.3);
-        doc.line(MARGEN, y, ancho - MARGEN, y);
-        y += 6;
-    };
-
     const subtitulo = (texto: string) => {
         asegurarEspacio(20);
         doc.setFont("helvetica", "normal").setFontSize(11).setTextColor(...TEXTO);
