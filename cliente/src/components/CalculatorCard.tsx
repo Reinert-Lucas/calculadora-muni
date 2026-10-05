@@ -13,6 +13,7 @@ export default function CalculatorCard() {
         <p className="card-title text-center h5">
           Valor de la UT correspondiente al año {new Date().getFullYear()}: {formatoMoneda(VALOR_UT)}
         </p>
+        {/* Formulario */}
         <Form />
       </div>
     </div>

@@ -2,10 +2,10 @@ import "../css/calculadora.css";
 import { useRef, useState, type FormEvent } from "react";
 import { calcularTotal, ErrorCalculo, calcularSoloFDU } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
+import type { ResultadoSoloFDU, Resultado } from "../utils/types";
 import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import ResultadosFDUDetalle from "./ResultadosFDUDetalle";
-import type { ResultadoSoloFDU, Resultado } from "../utils/types";
 
 // Estado del formulario: todo string porque viene de inputs
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
@@ -44,8 +44,8 @@ function Form() {
     setObras((prev) => prev.filter((o) => o.id !== id));
   }
 
+  // Limpiar datos de todos los campos del formulario (Incluidos los del FDU)
   function limpiarTodo() {
-    // Limpiar / Resetear datos de todos los campos del formulario (Incluidos los del FDU)
     setObras([
       { id: 1, metros_cuadrados: "", estado: "" },
     ]);
@@ -75,6 +75,7 @@ function Form() {
           sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
         },
         {
+          // Costos extra
           colegio1: Number(costos.colegio1) || 0,
           colegio2: Number(costos.colegio2) || 0,
           honorarios: Number(costos.honorarios) || 0,
@@ -95,6 +96,7 @@ function Form() {
     }, 100);
   }
 
+  // Calcular SOLO Fdu, sin ninguna obra cargada
   function soloFDU() {
     try {
       setResultados(null)
@@ -169,12 +171,14 @@ function Form() {
           </div>
         ))}
 
+        {/* Mostrar Errores */}
         {error && (
           <div className="alert alert-danger" role="alert">
             {error}
           </div>
         )}
 
+        {/* Botones principales */}
         <section className="botones-section">
           <button type="submit">
             <CalculatorIcon size={18} className="btn-icon" />
@@ -190,6 +194,7 @@ function Form() {
           </button>
         </section>
 
+        {/* Seccion de FDU */}
         {mostrarFdu && (
           <section className="fdu-section">
             <h5>FDU (Carga por Tramos)</h5>
