@@ -45,3 +45,8 @@ export type Resultado = {
   ResultadosFDU: DetalleFDU[];
   Coeficiente: number
 };
+
+export type ResultadoSoloFDU = {
+  TotalFDU: number;
+  ResultadosFDU: DetalleFDU[]
+}

@@ -99,7 +99,7 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
                   ))}
                   <tr>
                     <td colSpan={5} className="text-end">
-                      <strong>Total FDU: {formatoMoneda(resultados.TotalFDU)}</strong>
+                      <strong>Total FDU: <span className="text-success">{formatoMoneda(resultados.TotalFDU)}</span></strong>
                     </td>
                   </tr>
                 </tbody>
@@ -131,7 +131,7 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
                     <div className="accordion-body">
                       <div className="table-responsive">
                         <table className="table">
-                          <tbody>
+                          <tbody className="tabla-res">
                             <tr><td> <Ruler size={18} /> Valor m2 de la categoría</td><td className="fw-bold text-end">{formatoNumero(obra.valorM2)}</td></tr>
                             <tr><td> <ArrowRight size={18} /> Monto (valor m2 x UT)</td><td className="fw-bold text-end">{formatoMoneda(obra.monto)}</td></tr>
                             <tr><td> <Calculator size={18} /> Subtotal (monto x superficie ingresada)</td><td className="fw-bold text-end">{formatoMoneda(obra.subtotal)}</td></tr>

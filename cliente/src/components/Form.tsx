@@ -1,10 +1,11 @@
 import "../css/calculadora.css";
 import { useRef, useState, type FormEvent } from "react";
-import { calcularTotal, ErrorCalculo } from "../utils/calculadora";
+import { calcularTotal, ErrorCalculo, calcularSoloFDU } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
 import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
-import type { Resultado } from "../utils/types";
+import ResultadosFDUDetalle from "./ResultadosFDUDetalle";
+import type { ResultadoSoloFDU, Resultado } from "../utils/types";
 
 // Estado del formulario: todo string porque viene de inputs
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
@@ -24,6 +25,7 @@ function Form() {
   const [costos, setCostos] = useState(COSTOS_INICIALES);
   const [mostrarFdu, setMostrarFdu] = useState(false);
   const [resultados, setResultados] = useState<Resultado | null>(null);
+  const [resultadosFDU, setResultadosFDU] = useState<ResultadoSoloFDU | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [catMsg, setCatMsg] = useState<string | null>(null);
 
@@ -51,6 +53,7 @@ function Form() {
     setCostos(COSTOS_INICIALES);
     setMostrarFdu(false);
     setResultados(null);
+    setResultadosFDU(null)
     setError(null);
     setCatMsg(null)
   }
@@ -58,6 +61,7 @@ function Form() {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
+      setResultadosFDU(null)
       const resultado = calcularTotal(
         obras.map((o) => ({
           id: o.id,
@@ -82,6 +86,27 @@ function Form() {
       setError(null);
     } catch (err) {
       setResultados(null);
+      setError(err instanceof ErrorCalculo ? err.message : "Ocurrió un error inesperado.");
+    }
+    // Scrollear automáticamente a los resultados
+    setTimeout(() => {
+      const resultadosSection = document.getElementById("resultado-general");
+      resultadosSection?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }
+
+  function soloFDU() {
+    try {
+      setResultados(null)
+      const resultadosFDU = calcularSoloFDU({
+        // Si el panel FDU está oculto, no se suma
+        sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
+        sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
+        sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
+      });
+
+      setResultadosFDU(resultadosFDU);
+    } catch (err) {
       setError(err instanceof ErrorCalculo ? err.message : "Ocurrió un error inesperado.");
     }
     // Scrollear automáticamente a los resultados
@@ -196,12 +221,12 @@ function Form() {
               </table>
             </div>
             <span className="text-muted fst-italic">
-              Fórmula: <strong>SUP × (FDU%) × (valor m² categoría × UT)</strong>
+              Fórmula: <strong>SUP × (FDU%) × (valor m² categoría × UT).</strong> Ej.: 1950 × 4% × 110000 = $ 8.580.000,00
             </span>
             <section className="fdu-btns">
-              <button type="submit" className="fdu-sbmt">
-                <CalculatorIcon size={18} />
-                Aplicar FDU
+              <button type="button" className="fdu-sbmt" onClick={soloFDU}>
+                <CalculatorIcon size={18} className="btn-icon" />
+                Calcular Solo FDU
               </button>
               <button type="button" className="limpiar-btn" onClick={() => setMostrarFdu((v) => !v)}>
                 <XCircleIcon size={18} />
@@ -243,7 +268,7 @@ function Form() {
         <section className="fdu-toggle-section">
           <article>
             <span className="fw-bold">¿Tu obra supera los 9 m²? Calculá el FDU</span>
-            <span className="text-muted fst-italic">Se sumará al Total General.</span>
+            <span className="text-muted fst-italic">Lo podes sumar al Total General o verlo por separado</span>
           </article>
           <button
             type="button"
@@ -318,6 +343,7 @@ function Form() {
         </section>
       </form>
       {resultados && <ResultadosDetalle resultados={resultados} />}
+      {resultadosFDU && <ResultadosFDUDetalle resultados={resultadosFDU} />}
     </>
   );
 }

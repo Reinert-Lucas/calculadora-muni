@@ -13,7 +13,7 @@ export function obtenerTramo(m2: number) {
 }
 
 function validar(obras: Obra[], fdu: FDU, totalM2: number) {
-  if (obras.length === 0) throw new ErrorCalculo("Cargá al menos una obra.");
+  if (obras.length === 0) throw new ErrorCalculo("Cargá al menos una obra o tramo de FDU.");
 
   for (const [i, obra] of obras.entries()) {
     if (!Number.isFinite(obra.metros_cuadrados) || obra.metros_cuadrados <= 0)
@@ -25,10 +25,6 @@ function validar(obras: Obra[], fdu: FDU, totalM2: number) {
   const supFdu = Object.values(fdu);
   if (supFdu.some((s) => !Number.isFinite(s) || s < 0))
     throw new ErrorCalculo("Las superficies FDU deben ser números positivos.");
-  if (supFdu.reduce((a, b) => a + b, 0) > totalM2)
-    throw new ErrorCalculo(
-      "La suma de las superficies FDU no puede exceder el total de metros cuadrados.",
-    );
 }
 
 export function calcularTotal(
@@ -93,5 +89,34 @@ export function calcularTotal(
     EstadoObras,
     ResultadosFDU,
     Coeficiente: tramo.coef
+  };
+}
+
+// Calcular FDU sin ningun estado de obra
+export function calcularSoloFDU(fdu: FDU) {
+  const supFdu = Object.values(fdu);
+  if (supFdu.some((s) => !Number.isFinite(s) || s < 0))
+    throw new ErrorCalculo("Las superficies FDU deben ser números positivos.");
+
+  // En FDU cada tramo calcula su coeficiente con su propia superficie
+  const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
+    const superficie = fdu[clave];
+    const t = obtenerTramo(superficie);
+    const valorMxUt = superficie > 0 ? t.coef * VALOR_UT : 0;
+    return {
+      clave,
+      superficie,
+      fdu: etiqueta,
+      categoria: t.etiqueta,
+      valorMxUt,
+      subtotal: redondear(superficie * porcentaje * valorMxUt),
+    };
+  });
+
+  const TotalFDU = redondear(ResultadosFDU.reduce((a, f) => a + f.subtotal, 0));
+
+  return {
+    TotalFDU,
+    ResultadosFDU
   };
 }

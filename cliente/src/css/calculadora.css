@@ -202,6 +202,18 @@
     transition: box-shadow 180ms ease, border-color 180ms ease;
 }
 
+.tabla-res tr td {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.tabla-res tr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .obra-importe {
     background: #4CAF50;
     border: 1px solid #3c883f;
@@ -254,7 +266,6 @@
 .detalle-obra section {
     background: #4CAF50;
     border: 1px solid #3c883f;
-
     color: #fff;
     font-weight: bold;
     padding: 10px;
