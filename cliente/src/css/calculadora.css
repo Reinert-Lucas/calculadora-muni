@@ -191,7 +191,8 @@
 }
 
 .detalle-fdu,
-.detalle-obra {
+.detalle-obra,
+.detalle-costos-adicionales {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -200,18 +201,6 @@
     margin: 1rem 0;
     animation: contenido-aparece 360ms ease-out both;
     transition: box-shadow 180ms ease, border-color 180ms ease;
-}
-
-.tabla-res tr td {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.tabla-res tr {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .obra-importe {
@@ -418,6 +407,134 @@
     .detalle-obra .table,
     .detalle-fdu .table {
         font-size: 0.85rem;
+    }
+
+    .tabla-fdu-responsive {
+        overflow-x: visible;
+    }
+
+    .tabla-fdu-resultados {
+        display: block;
+        width: 100%;
+    }
+
+    .tabla-fdu-resultados thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .tabla-fdu-resultados tbody {
+        display: grid;
+        gap: 0.65rem;
+    }
+
+    .tabla-fdu-resultados tbody tr:not(.tabla-fdu-total) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.35rem 0.75rem;
+        padding: 0.65rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        background: #fff;
+    }
+
+    .tabla-fdu-resultados tbody tr:not(.tabla-fdu-total) td {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        border: 0;
+        padding: 0.2rem;
+        overflow-wrap: anywhere;
+    }
+
+    .tabla-fdu-resultados tbody tr:not(.tabla-fdu-total) td::before {
+        content: attr(data-label);
+        margin-bottom: 0.15rem;
+        color: #6c757d;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .tabla-fdu-resultados tbody tr.tabla-fdu-total {
+        display: block;
+        padding: 0.5rem 0.2rem 0;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .tabla-fdu-resultados tbody tr.tabla-fdu-total td {
+        display: block;
+        border: 0;
+        padding: 0.25rem 0;
+    }
+
+    .tabla-movil-responsive {
+        overflow-x: visible;
+    }
+
+    .tabla-movil-detalle {
+        display: block;
+        width: 100%;
+    }
+
+    .tabla-movil-detalle thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .tabla-movil-detalle tbody {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .tabla-movil-detalle tbody tr {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+        gap: 0.35rem 0.75rem;
+        padding: 0.65rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        background: #fff;
+    }
+
+    .tabla-movil-detalle tbody td {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        justify-content: flex-start;
+        border: 0;
+        padding: 0.2rem;
+        overflow-wrap: anywhere;
+    }
+
+    .tabla-movil-detalle tbody td::before {
+        content: attr(data-label);
+        margin-bottom: 0.15rem;
+        color: #6c757d;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .tabla-movil-detalle tbody td:last-child {
+        text-align: right;
+    }
+
+    .tabla-movil-detalle tbody tr.adicionales-foot {
+        border-color: #adb5bd;
+        background: #f8f9fa;
     }
 
     .descargar-pdf-btn {
