@@ -25,7 +25,7 @@ function ResultadosFDUDetalle({ resultados }: { resultados: ResultadoSoloFDU }) 
       <div className="res">
         <h1 className="text-center mt-2 display-6" id="resultado-general">Resultado FDU</h1>
         <p className="text-center fw-bold text-success total-general">{formatoMoneda(resultados.TotalFDU)}</p>
-
+        {/* Boton para descargar PDF */}
         <div className="text-center mb-3">
           <button
             type="button"
@@ -41,8 +41,8 @@ function ResultadosFDUDetalle({ resultados }: { resultados: ResultadoSoloFDU }) 
         <section className="detalle-fdu">
           <h2>Resultados FDU</h2>
           {resultados.ResultadosFDU.length > 0 ? (
-            <div className="table-responsive">
-              <table className="table">
+            <div className="table-responsive tabla-fdu-responsive">
+              <table className="table tabla-fdu-resultados">
                 <thead>
                   <tr>
                     <th>SUP (m2)</th>
@@ -55,14 +55,14 @@ function ResultadosFDUDetalle({ resultados }: { resultados: ResultadoSoloFDU }) 
                 <tbody>
                   {resultados.ResultadosFDU.map((f) => (
                     <tr key={f.clave}>
-                      <td>{formatoNumero(f.superficie)}</td>
-                      <td>{f.fdu}</td>
-                      <td>{f.superficie === 0 ? "-" : f.categoria}</td>
-                      <td>{formatoMoneda(f.valorMxUt)}</td>
-                      <td>{formatoMoneda(f.subtotal)}</td>
+                      <td data-label="SUP (m2)">{formatoNumero(f.superficie)}</td>
+                      <td data-label="FDU">{f.fdu}</td>
+                      <td data-label="Categoría">{f.superficie === 0 ? "-" : f.categoria}</td>
+                      <td data-label="Valor m2 x UT">{formatoMoneda(f.valorMxUt)}</td>
+                      <td data-label="Subtotal">{formatoMoneda(f.subtotal)}</td>
                     </tr>
                   ))}
-                  <tr>
+                  <tr className="tabla-fdu-total">
                     <td colSpan={5} className="text-end">
                       <strong>Total FDU: <span className="text-success">{formatoMoneda(resultados.TotalFDU)}</span></strong>
                     </td>

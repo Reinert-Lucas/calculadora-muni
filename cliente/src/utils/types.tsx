@@ -4,6 +4,7 @@ export type Obra = { id: number; metros_cuadrados: number; estado: number };
 
 export type FDU = Record<(typeof FDU_TRAMOS)[number]["clave"], number>;
 
+// Costos extras (Colegio, Consejo, Bomberos, Honorarios)
 export type CostosAdicionales = {
   colegio1: number;
   colegio2: number;
@@ -15,7 +16,7 @@ export type DetalleObra = {
   id: number;
   superficie: number;
   categoria: string; // tramo de superficie
-  estado: string; // nombre del estado de obra
+  estado: string;
   valorM2: number; // coeficiente de UT
   ut: number;
   monto: number; // valorM2 x UT
@@ -24,6 +25,7 @@ export type DetalleObra = {
   importe: number; // subtotal x porcentaje
 };
 
+// Detalles de precios del FDU
 export type DetalleFDU = {
   clave: string;
   superficie: number;
@@ -33,6 +35,7 @@ export type DetalleFDU = {
   subtotal: number;
 };
 
+// Resultado genernal (Obras + ?FDU)
 export type Resultado = {
   TotalGeneral: number;
   TotalBase: number;
@@ -46,6 +49,7 @@ export type Resultado = {
   Coeficiente: number
 };
 
+// Resultado solo del FDU
 export type ResultadoSoloFDU = {
   TotalFDU: number;
   ResultadosFDU: DetalleFDU[]
