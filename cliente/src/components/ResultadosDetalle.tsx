@@ -1,5 +1,5 @@
 import type { Resultado } from "../utils/types";
-import { ArrowRight, CheckIcon, CheckCircle, CheckCircle2, Building, Calculator, Calendar, Download, Grid, Info, Layers2Icon, PlusCircleIcon, Ruler } from "lucide-react";
+import { ArrowRight, Building, Calculator, Calendar, Download, Grid, Info, Layers2Icon, PlusCircleIcon, Ruler } from "lucide-react";
 import LogoIcon from "../imgs/gop-icon.png";
 import { formatoMoneda, formatoNumero } from "../utils/formato";
 import { useState } from "react";
