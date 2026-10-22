@@ -16,7 +16,7 @@ const COSTOS_INICIALES = { colegio1: "", colegio2: "", honorarios: "", bomberos:
 // "" -> NaN (y no 0), para que la validación detecte campos vacíos
 const aNumero = (v: string) => (v.trim() === "" ? NaN : Number(v));
 
-function Form() {
+function Form({ valorUt }: { valorUt: number }) {
   const siguienteId = useRef(2);
   const [obras, setObras] = useState<ObraForm[]>([
     { id: 1, metros_cuadrados: "", estado: "" },
@@ -81,6 +81,7 @@ function Form() {
           honorarios: Number(costos.honorarios) || 0,
           bomberos: Number(costos.bomberos) || 0,
         },
+        valorUt,
       );
       setResultados(resultado);
       setCatMsg(`Categoría general detectada: ${resultado.CategoriaDeterminada} — Valor m²: ${resultado.Coeficiente},00 — Total m²: ${resultado.TotalM2}`);
@@ -105,7 +106,7 @@ function Form() {
         sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
         sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
         sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
-      });
+      }, valorUt);
 
       setResultadosFDU(resultadosFDU);
     } catch (err) {
@@ -255,6 +256,7 @@ function Form() {
                       honorarios: Number(costos.honorarios) || 0,
                       bomberos: Number(costos.bomberos) || 0,
                     },
+                    valorUt,
                   );
                   setTimeout(() => {
                     const resultadosSection = document.getElementById("resultado-general");

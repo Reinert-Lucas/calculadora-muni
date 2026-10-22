@@ -46,11 +46,13 @@ export type Resultado = {
   CategoriaDeterminada: string;
   EstadoObras: DetalleObra[];
   ResultadosFDU: DetalleFDU[];
-  Coeficiente: number
+  Coeficiente: number;
+  ValorUT: number;
 };
 
 // Resultado solo del FDU
 export type ResultadoSoloFDU = {
   TotalFDU: number;
-  ResultadosFDU: DetalleFDU[]
+  ResultadosFDU: DetalleFDU[];
+  ValorUT: number;
 }

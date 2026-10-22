@@ -1,0 +1,5 @@
+# SPA: todas las rutas (ej. /admin) sirven index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
