@@ -1,4 +1,4 @@
-export const VALOR_UT = 1430; // Valor de la UT
+export const VALOR_UT = 1430; // Valor de la UT por defecto (el vigente se carga desde /api/valor-ut)
 
 export const categorias = [
   { nombre: "Obra Nueva", porcentaje: 0.5 },

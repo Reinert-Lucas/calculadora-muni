@@ -1,0 +1,79 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "8cc89da5-33ff-4470-9260-9401d2b863ff",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "isRlsEnabled": false,
+      "name": "parametros",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "clave",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "parametros"
+    },
+    {
+      "type": "double precision",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "valor",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "parametros"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "actualizado_por",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "parametros"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "actualizado_en",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "parametros"
+    },
+    {
+      "columns": [
+        "clave"
+      ],
+      "nameExplicit": false,
+      "name": "parametros_pkey",
+      "schema": "public",
+      "table": "parametros",
+      "entityType": "pks"
+    }
+  ],
+  "renames": []
+}

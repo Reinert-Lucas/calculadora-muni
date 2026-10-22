@@ -1,6 +1,5 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { VALOR_UT } from "../constants/impuestos";
 import type { Resultado, ResultadoSoloFDU } from "./types";
 type RGB = [number, number, number];
 
@@ -247,7 +246,7 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         timeStyle: "short",
     });
     doc.setFont("helvetica", "normal").setFontSize(9).setTextColor(...GRIS);
-    doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`, MARGEN, y);
+    doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(r.ValorUT)}`, MARGEN, y);
     y += 8;
 
 
@@ -376,7 +375,7 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
         timeStyle: "short",
     });
     doc.setFont("helvetica", "normal").setFontSize(9).setTextColor(...GRIS);
-    doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`, MARGEN, y);
+    doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(r.ValorUT)}`, MARGEN, y);
     y += 8;
 
 
