@@ -46,7 +46,7 @@
     align-items: center;
 }
 
-.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn):not(.limpiar-btn) {
+.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn):not(.limpiar-btn):not(.adicionales-toggle-btn-mostrar):not(.adicionales-toggle-btn-ocultar) {
     width: fit-content;
     padding: 10px;
     background-color: #4CAF50;
@@ -347,6 +347,74 @@
     padding: .5rem;
     border-radius: 5px;
     margin: 1rem 0 0 0;
+}
+
+.adicionales-btns-section {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: .5rem;
+}
+
+.adicionales-toggle-btn-ocultar, .adicionales-toggle-btn-mostrar {
+    width: 33%;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.adicionales-toggle-btn-mostrar {
+    background-color: #4CAF50;
+}
+
+.adicionales-toggle-btn-ocultar {
+    background-color: #c0392b;
+}
+
+.colegios-section, .bomberos-section, .honorarios-section {
+    animation: aparecer 450ms ease-out both;
+}
+
+.adicionales-title {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.sbmt-btn {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .adicionales-btns-section {
+        flex-direction: column;
+        gap: .5rem;
+    }
+    .adicionales-toggle-btn-mostrar, .adicionales-toggle-btn-ocultar {
+        width: 100%;
+    }
 }
 
 @media (max-width: 576px) {

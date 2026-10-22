@@ -3,7 +3,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { calcularTotal, ErrorCalculo, calcularSoloFDU } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
 import type { ResultadoSoloFDU, Resultado } from "../utils/types";
-import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info } from "lucide-react";
+import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info, ClipboardCheckIcon } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import ResultadosFDUDetalle from "./ResultadosFDUDetalle";
 
@@ -24,6 +24,9 @@ function Form({ valorUt }: { valorUt: number }) {
   const [fdu, setFdu] = useState(FDU_INICIAL);
   const [costos, setCostos] = useState(COSTOS_INICIALES);
   const [mostrarFdu, setMostrarFdu] = useState(false);
+  const [mostrarColegios, setMostrarColegios] = useState(false);
+  const [mostrarBomberos, setMostrarBomberos] = useState(false);
+  const [mostrarHonorarios, setMostrarHonorarios] = useState(false);
   const [resultados, setResultados] = useState<Resultado | null>(null);
   const [resultadosFDU, setResultadosFDU] = useState<ResultadoSoloFDU | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +55,9 @@ function Form({ valorUt }: { valorUt: number }) {
     setFdu(FDU_INICIAL);
     setCostos(COSTOS_INICIALES);
     setMostrarFdu(false);
+    setMostrarBomberos(false)
+    setMostrarColegios(false)
+    setMostrarHonorarios(false)
     setResultados(null);
     setResultadosFDU(null)
     setError(null);
@@ -75,11 +81,11 @@ function Form({ valorUt }: { valorUt: number }) {
           sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
         },
         {
-          // Costos extra
-          colegio1: Number(costos.colegio1) || 0,
-          colegio2: Number(costos.colegio2) || 0,
-          honorarios: Number(costos.honorarios) || 0,
-          bomberos: Number(costos.bomberos) || 0,
+          // Costos extra, si estan ocultos, no se suman
+          colegio1: mostrarColegios ? Number(costos.colegio1) || 0 : 0,
+          colegio2: mostrarColegios ? Number(costos.colegio2) || 0 : 0,
+          honorarios: mostrarHonorarios ? Number(costos.honorarios) || 0 : 0,
+          bomberos: mostrarBomberos ? Number(costos.bomberos) || 0 : 0,
         },
         valorUt,
       );
@@ -181,10 +187,6 @@ function Form({ valorUt }: { valorUt: number }) {
 
         {/* Botones principales */}
         <section className="botones-section">
-          <button type="submit">
-            <CalculatorIcon size={18} className="btn-icon" />
-            Calcular total
-          </button>
           <button type="button" onClick={agregarSeccion} className="agregar-seccion-btn">
             <PlusCircleIcon size={18} className="btn-icon" />
             Cargar m2 con otro estado
@@ -287,67 +289,121 @@ function Form({ valorUt }: { valorUt: number }) {
           </button>
         </section>
         <hr />
-        <section className="colegios-section">
-          <h5>
-            Visado de Instalaciones Complementarias
-          </h5>
-          <label htmlFor="colegio-1-prc">Consejo de Ingeniería</label>
-          <input
-            id="colegio-1-prc"
-            type="number"
-            min="0"
-            step="any"
-            inputMode="decimal"
-            placeholder="$000,00"
-            value={costos.colegio1}
-            onChange={(e) => setCostos({ ...costos, colegio1: e.target.value })}
-          />
-          <label htmlFor="colegio-2-prc">Colegio de Arquitectos de la Provincia de Misiones</label>
-          <input
-            id="colegio-2-prc"
-            type="number"
-            min="0"
-            step="any"
-            inputMode="decimal"
-            placeholder="$000,00"
-            value={costos.colegio2}
-            onChange={(e) => setCostos({ ...costos, colegio2: e.target.value })}
-          />
+        <section>
+          <h4 className="adicionales-title">
+            <ClipboardCheckIcon />Costos Adicionales
+          </h4>
+          <p className="text-muted fst-italic">Agregar costo de: Visado de Instalaciones Complementarias, Trámite de Bomberos y Honorarios</p>
+          <section className="adicionales-btns-section">
+            <button
+              type="button"
+              onClick={() => setMostrarColegios((v) => !v)}
+              className={`adicionales-toggle-btn-${mostrarColegios ? "ocultar" : "mostrar"}`}
+              aria-expanded={mostrarColegios}
+            >
+              {mostrarColegios ? <TrashIcon /> : <PlusCircleIcon />}
+              {mostrarColegios ? "Quitar Visados" : "Agregar Visados"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMostrarBomberos((v) => !v)}
+              className={`adicionales-toggle-btn-${mostrarBomberos ? "ocultar" : "mostrar"}`}
+              aria-expanded={mostrarBomberos}
+            >
+              {mostrarBomberos ? <TrashIcon /> : <PlusCircleIcon />}
+              {mostrarBomberos ? "Quitar Bomberos" : "Agregar Bomberos"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setMostrarHonorarios((v) => !v)}
+              className={`adicionales-toggle-btn-${mostrarHonorarios ? "ocultar" : "mostrar"}`}
+              aria-expanded={mostrarHonorarios}
+            >
+              {mostrarHonorarios ? <TrashIcon /> : <PlusCircleIcon />}
+              {mostrarHonorarios ? "Quitar Honorarios" : "Agregar Honorarios"}
+            </button>
+          </section>
         </section>
         <hr />
-        <section className="bomberos-section">
-          <h5>
-            Bomberos
-          </h5>
-          <label htmlFor="bomberos">Costo del Tramite</label>
-          <input
-            id="bomberos"
-            type="number"
-            min="0"
-            step="any"
-            inputMode="decimal"
-            placeholder="$000,00"
-            value={costos.bomberos}
-            onChange={(e) => setCostos({ ...costos, bomberos: e.target.value })}
-          />
-        </section>
+        {mostrarColegios ? (
+          <>
+            <section className="colegios-section">
+              <h5>
+                Visado de Instalaciones Complementarias
+              </h5>
+              <label htmlFor="colegio-1-prc">Consejo de Ingeniería</label>
+              <input
+                id="colegio-1-prc"
+                type="number"
+                min="0"
+                step="any"
+                inputMode="decimal"
+                placeholder="$000,00"
+                value={costos.colegio1}
+                onChange={(e) => setCostos({ ...costos, colegio1: e.target.value })}
+              />
+              <label htmlFor="colegio-2-prc">Colegio de Arquitectos de la Provincia de Misiones</label>
+              <input
+                id="colegio-2-prc"
+                type="number"
+                min="0"
+                step="any"
+                inputMode="decimal"
+                placeholder="$000,00"
+                value={costos.colegio2}
+                onChange={(e) => setCostos({ ...costos, colegio2: e.target.value })}
+              />
+            </section>
+            <hr />
+          </>
+        ) : [costos.colegio1 = "", costos.colegio2 = ""]}
+        {mostrarBomberos ? (
+          <>
+            <section className="bomberos-section">
+              <h5>
+                Bomberos
+              </h5>
+              <label htmlFor="bomberos">Costo del Tramite</label>
+              <input
+                id="bomberos"
+                type="number"
+                min="0"
+                step="any"
+                inputMode="decimal"
+                placeholder="$000,00"
+                value={costos.bomberos}
+                onChange={(e) => setCostos({ ...costos, bomberos: e.target.value })}
+              />
+            </section>
+            <hr />
+          </>
+        ) : costos.bomberos = ""}
+        {mostrarHonorarios ? (
+          <>
+            <section className="honorarios-section">
+              <h5>
+                Honorarios del Profesional a Cargo
+              </h5>
+              <label htmlFor="honorarios">Honorarios</label>
+              <input
+                id="honorarios"
+                type="number"
+                min="0"
+                step="any"
+                inputMode="decimal"
+                placeholder="$000,00"
+                value={costos.honorarios}
+                onChange={(e) => setCostos({ ...costos, honorarios: e.target.value })}
+              />
+            </section>
+            <hr />
+          </>
+        ) : costos.honorarios = ""}
+        <button type="submit" className="sbmt-btn fs-3">
+          <CalculatorIcon size={28} className="btn-icon" />
+          Calcular total
+        </button>
         <hr />
-        <section className="honorarios-section">
-          <h5>
-            Honorarios del Profesional a Cargo
-          </h5>
-          <label htmlFor="honorarios">Honorarios</label>
-          <input
-            id="honorarios"
-            type="number"
-            min="0"
-            step="any"
-            inputMode="decimal"
-            placeholder="$000,00"
-            value={costos.honorarios}
-            onChange={(e) => setCostos({ ...costos, honorarios: e.target.value })}
-          />
-        </section>
       </form>
       {resultados && <ResultadosDetalle resultados={resultados} />}
       {resultadosFDU && <ResultadosFDUDetalle resultados={resultadosFDU} />}
