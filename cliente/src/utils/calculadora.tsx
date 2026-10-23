@@ -31,7 +31,6 @@ export function calcularTotal(
   obras: Obra[],
   fdu: FDU,
   costosAdicionales: CostosAdicionales = { colegio1: 0, colegio2: 0, honorarios: 0, bomberos: 0 },
-  valorUt: number = VALOR_UT,
 ): Resultado {
   const totalM2 = obras.reduce((acc, o) => acc + o.metros_cuadrados, 0);
   validar(obras, fdu);
@@ -41,7 +40,7 @@ export function calcularTotal(
 
   // El coeficiente de las obras depende del total de m2 de todas ellas
   const tramo = obtenerTramo(totalM2);
-  const monto = tramo.coef * valorUt;
+  const monto = tramo.coef * VALOR_UT;
 
   const EstadoObras = obras.map((obra) => {
     const { nombre, porcentaje } = categorias[obra.estado];
@@ -52,7 +51,7 @@ export function calcularTotal(
       categoria: tramo.etiqueta,
       estado: nombre,
       valorM2: tramo.coef,
-      ut: valorUt,
+      ut: VALOR_UT,
       monto,
       subtotal,
       porcentaje,
@@ -64,7 +63,7 @@ export function calcularTotal(
   const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
     const superficie = fdu[clave];
     const t = obtenerTramo(superficie);
-    const valorMxUt = superficie > 0 ? t.coef * valorUt : 0;
+    const valorMxUt = superficie > 0 ? t.coef * VALOR_UT : 0;
     return {
       clave,
       superficie,
@@ -89,13 +88,12 @@ export function calcularTotal(
     CategoriaDeterminada: tramo.etiqueta,
     EstadoObras,
     ResultadosFDU,
-    Coeficiente: tramo.coef,
-    ValorUT: valorUt,
+    Coeficiente: tramo.coef
   };
 }
 
 // Calcular FDU sin ningun estado de obra
-export function calcularSoloFDU(fdu: FDU, valorUt: number = VALOR_UT) {
+export function calcularSoloFDU(fdu: FDU) {
   const supFdu = Object.values(fdu);
   if (supFdu.some((s) => !Number.isFinite(s) || s < 0))
     throw new ErrorCalculo("Las superficies FDU deben ser números positivos.");
@@ -104,7 +102,7 @@ export function calcularSoloFDU(fdu: FDU, valorUt: number = VALOR_UT) {
   const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
     const superficie = fdu[clave];
     const t = obtenerTramo(superficie);
-    const valorMxUt = superficie > 0 ? t.coef * valorUt : 0;
+    const valorMxUt = superficie > 0 ? t.coef * VALOR_UT : 0;
     return {
       clave,
       superficie,
@@ -119,7 +117,6 @@ export function calcularSoloFDU(fdu: FDU, valorUt: number = VALOR_UT) {
 
   return {
     TotalFDU,
-    ResultadosFDU,
-    ValorUT: valorUt,
+    ResultadosFDU
   };
 }
