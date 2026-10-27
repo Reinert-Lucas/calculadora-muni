@@ -295,7 +295,14 @@ function Form() {
           <section className="adicionales-btns-section">
             <button
               type="button"
-              onClick={() => setMostrarColegios((v) => !v)}
+              onClick={() => {
+                setMostrarColegios((visible) => {
+                  if (visible) {
+                    setCostos((prev) => ({ ...prev, colegio1: "", colegio2: "" }));
+                  }
+                  return !visible;
+                });
+              }}
               className={`adicionales-toggle-btn-${mostrarColegios ? "ocultar" : "mostrar"}`}
               aria-expanded={mostrarColegios}
             >
@@ -304,7 +311,14 @@ function Form() {
             </button>
             <button
               type="button"
-              onClick={() => setMostrarBomberos((v) => !v)}
+              onClick={() => {
+                setMostrarBomberos((visible) => {
+                  if (visible) {
+                    setCostos((prev) => ({ ...prev, bomberos: "" }));
+                  }
+                  return !visible;
+                });
+              }}
               className={`adicionales-toggle-btn-${mostrarBomberos ? "ocultar" : "mostrar"}`}
               aria-expanded={mostrarBomberos}
             >
@@ -313,7 +327,14 @@ function Form() {
             </button>
             <button
               type="button"
-              onClick={() => setMostrarHonorarios((v) => !v)}
+              onClick={() => {
+                setMostrarHonorarios((visible) => {
+                  if (visible) {
+                    setCostos((prev) => ({ ...prev, honorarios: "" }));
+                  }
+                  return !visible;
+                });
+              }}
               className={`adicionales-toggle-btn-${mostrarHonorarios ? "ocultar" : "mostrar"}`}
               aria-expanded={mostrarHonorarios}
             >
@@ -354,7 +375,7 @@ function Form() {
             </section>
             <hr />
           </>
-        ) : [costos.colegio1 = "", costos.colegio2 = ""]}
+        ) : null}
         {mostrarBomberos ? (
           <>
             <section className="bomberos-section">
@@ -375,7 +396,7 @@ function Form() {
             </section>
             <hr />
           </>
-        ) : costos.bomberos = ""}
+        ) : null}
         {mostrarHonorarios ? (
           <>
             <section className="honorarios-section">
@@ -396,7 +417,7 @@ function Form() {
             </section>
             <hr />
           </>
-        ) : costos.honorarios = ""}
+        ) : null}
         <button type="submit" className="sbmt-btn fs-3">
           <CalculatorIcon size={28} className="btn-icon" />
           Calcular total
