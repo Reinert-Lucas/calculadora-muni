@@ -100,12 +100,12 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
               <div className="accordion" id={"accordion-" + obra.id}>
                 <div className="accordion-item">
                   <h2 className="accordion-header">
-                    <button className="accordion-button obra-importe" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <button className="accordion-button obra-importe" type="button" data-bs-toggle="collapse" data-bs-target={"#collapse" + obra.id} aria-expanded="false" aria-controls={"collapse" + obra.id}>
                       <PlusCircleIcon size={18} className="btn-icon" />
                       Ver Detalles del Cálculo
                     </button>
                   </h2>
-                  <div id="collapseOne" className="accordion-collapse collapse" data-bs-parent={"accordion-" + obra.id}>
+                  <div id={"collapse" + obra.id} className="accordion-collapse collapse" data-bs-parent={"accordion-" + obra.id}>
                     <div className="accordion-body">
                       <div className="table-responsive tabla-movil-responsive">
                         <table className="table tabla-movil-detalle">
