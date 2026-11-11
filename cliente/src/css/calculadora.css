@@ -129,7 +129,8 @@
     margin: 0 5px 0 0;
 }
 
-.agregar-seccion-btn {
+.agregar-seccion-btn,
+#to-colegio-btn {
     width: fit-content;
     padding: 10px;
     background-color: #fff;
@@ -357,7 +358,8 @@
     gap: .5rem;
 }
 
-.adicionales-toggle-btn-ocultar, .adicionales-toggle-btn-mostrar {
+.adicionales-toggle-btn-ocultar,
+.adicionales-toggle-btn-mostrar {
     width: 33%;
     padding: 10px;
     color: white;
@@ -378,7 +380,9 @@
     background-color: #c0392b;
 }
 
-.colegios-section, .bomberos-section, .honorarios-section {
+.colegios-section,
+.bomberos-section,
+.honorarios-section {
     animation: aparecer 450ms ease-out both;
 }
 
@@ -395,6 +399,7 @@
     justify-content: center;
     align-items: center;
 }
+
 @keyframes aparecer {
     from {
         opacity: 0;
@@ -412,7 +417,9 @@
         flex-direction: column;
         gap: .5rem;
     }
-    .adicionales-toggle-btn-mostrar, .adicionales-toggle-btn-ocultar {
+
+    .adicionales-toggle-btn-mostrar,
+    .adicionales-toggle-btn-ocultar {
         width: 100%;
     }
 }

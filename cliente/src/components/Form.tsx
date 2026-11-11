@@ -3,7 +3,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { calcularTotal, ErrorCalculo, calcularSoloFDU } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
 import type { ResultadoSoloFDU, Resultado } from "../utils/types";
-import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info, ClipboardCheckIcon } from "lucide-react";
+import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info, ClipboardCheckIcon, ArrowUpRight } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import ResultadosFDUDetalle from "./ResultadosFDUDetalle";
 
@@ -361,14 +361,20 @@ function Form() {
                 value={costos.colegio1}
                 onChange={(e) => setCostos({ ...costos, colegio1: e.target.value })}
               />
+              <hr />
               <label htmlFor="colegio-2-prc">Colegio de Arquitectos de la Provincia de Misiones</label>
+              <button className="btn to-colegio-btn mx-2" id="to-colegio-btn" onClick={() => window.open("https://www.arquitectosmisiones.org.ar/autogestion/index.php", "_blank")}>
+                Ir a la página del colegio
+                <ArrowUpRight size={20} />
+              </button>
+              <p className="text-center text-muted p-2 fw-light disclaimer">En la misma podras realizar el calculo, una vez lo tengas puedes copiar ese resultado y agregarlo al total.</p>
               <input
                 id="colegio-2-prc"
                 type="number"
                 min="0"
                 step="any"
                 inputMode="decimal"
-                placeholder="$000,00"
+                placeholder="Resultado obtenido $000,00"
                 value={costos.colegio2}
                 onChange={(e) => setCostos({ ...costos, colegio2: e.target.value })}
               />
