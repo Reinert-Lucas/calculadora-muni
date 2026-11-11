@@ -89,9 +89,9 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
         </section>
 
         <ul className="lista-obras">
-          {resultados.EstadoObras.map((obra) => (
+          {resultados.EstadoObras.map((obra, index) => (
             <li key={obra.id} className="detalle-obra">
-              <span className="obra-pill"> <Layers2Icon size={18} /> Obra <strong>#{obra.id}</strong></span>
+              <span className="obra-pill"> <Layers2Icon size={18} /> Obra <strong>#{index + 1}</strong></span>
               <span className="obra-pill"> <Ruler size={18} /> Superficie: <strong>{formatoNumero(obra.superficie)} m2</strong></span>
               <span className="obra-pill"> <Grid size={18} /> Categoría: <strong>{obra.categoria}</strong></span>
               <span className="obra-pill"> <Building size={18} /> Estado: <strong>{obra.estado}</strong></span>
