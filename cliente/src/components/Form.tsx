@@ -363,10 +363,10 @@ function Form() {
               />
               <hr />
               <label htmlFor="colegio-2-prc">Colegio de Arquitectos de la Provincia de Misiones</label>
-              <button className="btn to-colegio-btn mx-2" id="to-colegio-btn" onClick={() => window.open("https://www.arquitectosmisiones.org.ar/autogestion/index.php", "_blank")}>
+              <a className="btn to-colegio-btn mx-2" id="to-colegio-btn" href="https://www.arquitectosmisiones.org.ar/autogestion/index.php" target="_blank">
                 Ir a la página del colegio
                 <ArrowUpRight size={20} />
-              </button>
+              </a>
               <p className="text-center text-muted p-2 fw-light disclaimer">En la misma podras realizar el calculo, una vez lo tengas puedes copiar ese resultado y agregarlo al total.</p>
               <input
                 id="colegio-2-prc"
@@ -374,7 +374,7 @@ function Form() {
                 min="0"
                 step="any"
                 inputMode="decimal"
-                placeholder="Resultado obtenido $000,00"
+                placeholder="Resultado obtenido..."
                 value={costos.colegio2}
                 onChange={(e) => setCostos({ ...costos, colegio2: e.target.value })}
               />
@@ -429,8 +429,9 @@ function Form() {
           Calcular total
         </button>
         <hr />
-      </form>
-      {resultados && <ResultadosDetalle resultados={resultados} />}
+      </form >
+      {resultados && <ResultadosDetalle resultados={resultados} />
+      }
       {resultadosFDU && <ResultadosFDUDetalle resultados={resultadosFDU} />}
     </>
   );
