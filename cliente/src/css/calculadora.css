@@ -422,6 +422,11 @@
     .adicionales-toggle-btn-ocultar {
         width: 100%;
     }
+
+    #to-colegio-btn {
+        width: 100%;
+        margin: 0;
+    }
 }
 
 @media (max-width: 576px) {
