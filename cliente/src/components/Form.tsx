@@ -367,7 +367,7 @@ function Form() {
                 Ir a la página del colegio
                 <ArrowUpRight size={20} />
               </a>
-              <p className="text-center text-muted p-2 fw-light disclaimer">En la misma podras realizar el calculo, una vez lo tengas puedes copiar ese resultado y agregarlo al total.</p>
+              <p className="text-center text-muted p-2 fw-light disclaimer">En la misma podras calcular el costo del visado, una vez lo tengas puedes copiar ese resultado y agregarlo al total.</p>
               <input
                 id="colegio-2-prc"
                 type="number"
