@@ -361,20 +361,14 @@ function Form() {
                 value={costos.colegio1}
                 onChange={(e) => setCostos({ ...costos, colegio1: e.target.value })}
               />
-              <hr />
               <label htmlFor="colegio-2-prc">Colegio de Arquitectos de la Provincia de Misiones</label>
-              <a className="btn to-colegio-btn mx-2" id="to-colegio-btn" href="https://www.arquitectosmisiones.org.ar/autogestion/index.php" target="_blank">
-                Ir a la página del colegio
-                <ArrowUpRight size={20} />
-              </a>
-              <p className="text-center text-muted p-2 fw-light disclaimer">En la misma podras calcular el costo del visado, una vez lo tengas puedes copiar ese resultado y agregarlo al total.</p>
               <input
                 id="colegio-2-prc"
                 type="number"
                 min="0"
                 step="any"
                 inputMode="decimal"
-                placeholder="Resultado obtenido..."
+                placeholder="$000,00"
                 value={costos.colegio2}
                 onChange={(e) => setCostos({ ...costos, colegio2: e.target.value })}
               />
