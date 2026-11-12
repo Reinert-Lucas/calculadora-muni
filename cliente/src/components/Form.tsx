@@ -3,7 +3,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { calcularTotal, ErrorCalculo, calcularSoloFDU } from "../utils/calculadora";
 import { categorias, FDU_TRAMOS } from "../constants/impuestos";
 import type { ResultadoSoloFDU, Resultado } from "../utils/types";
-import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info, ClipboardCheckIcon, ArrowUpRight } from "lucide-react";
+import { Layers2Icon, CalculatorIcon, PlusCircleIcon, EraserIcon, TrashIcon, XCircleIcon, Info, ClipboardCheckIcon } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import ResultadosFDUDetalle from "./ResultadosFDUDetalle";
 
