@@ -54,3 +54,22 @@ export type ResultadoSoloFDU = {
     TotalFDU: number;
     ResultadosFDU: DetalleFDU[];
 };
+
+export type SeleccionVisados = Record<
+    import("../constants/impuestos").ClaveVisado,
+    string
+>;
+
+export type DetalleVisado = {
+    clave: string;
+    nombre: string;
+    unidades: string; // tramo elegido
+    factor: number;
+    ut: number;
+    subtotal: number; // factor × ut × estado
+};
+
+export type ResultadoVisados = {
+    TotalVisados: number;
+    DetalleVisados: DetalleVisado[];
+};

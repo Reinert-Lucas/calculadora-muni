@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calcularTotal, ErrorCalculo } from "./calculadora";
+import { calcularVisados } from "./calculadora";
 
 const fduVacio = { sup_4: 0, sup_8: 0, sup_12: 0 };
 
@@ -69,6 +70,29 @@ describe("calcularTotal", () => {
                 ...fduVacio,
                 sup_4: 20,
             }),
+        ).toThrow(ErrorCalculo);
+    });
+});
+describe("calcularVisados", () => {
+    const vacio = { electrica: "", gas: "", salubridad: "", ascensores: "" };
+
+    it("eléctrica 0-50 (factor 10) x UT x estado 1", () => {
+        const r = calcularVisados({ ...vacio, electrica: "0" }, "0");
+        expect(r.TotalVisados).toBe(10 * 1430);
+    });
+
+    it("suma varias instalaciones: gas 5-25 (22) + ascensores 10+ (65), estado 0,8", () => {
+        const r = calcularVisados({ ...vacio, gas: "1", ascensores: "3" }, "1");
+        expect(r.TotalVisados).toBeCloseTo((22 + 65) * 1430 * 0.8, 2);
+    });
+
+    it("rechaza sin selección, sin estado y tramo sin factor", () => {
+        expect(() => calcularVisados(vacio, "0")).toThrow(ErrorCalculo);
+        expect(() => calcularVisados({ ...vacio, gas: "0" }, "")).toThrow(
+            ErrorCalculo,
+        );
+        expect(() =>
+            calcularVisados({ ...vacio, electrica: "8" }, "0"),
         ).toThrow(ErrorCalculo);
     });
 });

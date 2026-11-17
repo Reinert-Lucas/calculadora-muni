@@ -3,8 +3,18 @@ import {
     TRAMOS,
     FDU_TRAMOS,
     categorias,
+    VISADOS,
+    VALOR_UT_VISADO,
+    etiquetaTramo,
 } from "../constants/impuestos";
-import type { Obra, FDU, Resultado, CostosAdicionales } from "./types";
+import type {
+    Obra,
+    FDU,
+    Resultado,
+    CostosAdicionales,
+    SeleccionVisados,
+    ResultadoVisados,
+} from "./types";
 
 // Fórmula base: (m2 * coef * UT * %estado) / 100
 // Fórmula FDU:  sup * %FDU * (coef * UT)
@@ -152,5 +162,37 @@ export function calcularSoloFDU(fdu: FDU) {
     return {
         TotalFDU,
         ResultadosFDU,
+    };
+}
+
+// Visados del Colegio de Arquitectos: Factor × UT_VISADO × Estado
+export function calcularVisados(seleccion: SeleccionVisados): ResultadoVisados {
+    const elegidos = VISADOS.filter((v) => seleccion[v.clave] !== "");
+    if (elegidos.length === 0)
+        throw new ErrorCalculo(
+            "Seleccioná las unidades de al menos un tipo de visado.",
+        );
+
+    const DetalleVisados = elegidos.map((v) => {
+        const tramo = v.tramos[Number(seleccion[v.clave])];
+        if (!tramo || tramo.factor === null)
+            throw new ErrorCalculo(
+                `${v.nombre}: el tramo elegido no tiene un factor definido.`,
+            );
+        return {
+            clave: v.clave,
+            nombre: v.nombre,
+            unidades: etiquetaTramo(tramo),
+            factor: tramo.factor,
+            ut: VALOR_UT_VISADO,
+            subtotal: redondear(tramo.factor * VALOR_UT_VISADO),
+        };
+    });
+
+    return {
+        TotalVisados: redondear(
+            DetalleVisados.reduce((a, d) => a + d.subtotal, 0),
+        ),
+        DetalleVisados,
     };
 }

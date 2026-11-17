@@ -52,53 +52,82 @@ export const FDU_TRAMOS = [
     { clave: "sup_12", porcentaje: 0.12, etiqueta: "Sup. sobre 30,00 - (12%)" },
 ] as const;
 
-// Factores de Visados
-export const FACTORES_VISADOS = [
+// ---------- Visados (Colegio de Arquitectos) ----------
+// Fórmula: Factor × UT_VISADO
+export const VALOR_UT_VISADO = 3748.5;
+
+export type ClaveVisado = "electrica" | "gas" | "salubridad" | "ascensores";
+
+export type TramoVisado = {
+    desde: number;
+    hasta: number | null; // null = "en adelante"
+    factor: number | null; // null = sin factor definido ("-" en la tabla)
+};
+
+export const VISADOS: readonly {
+    clave: ClaveVisado;
+    nombre: string;
+    tramos: readonly TramoVisado[];
+}[] = [
     {
-        tipo: "electrica",
-        unidad: "cantidad de bocas",
-        factor: [
-            { etiqueta: "0-50", valor: 10 },
-            { etiqueta: "50-100", valor: 20 },
-            { etiqueta: "100-200", valor: 25 },
-            { etiqueta: "200-300", valor: 30 },
-            { etiqueta: "300-500", valor: 45 },
-            { etiqueta: "500-1000", valor: 55 },
-            { etiqueta: "1000-2000", valor: 65 },
-            { etiqueta: "2000-3500", valor: 75 },
+        clave: "electrica",
+        nombre: "Eléctrica",
+        tramos: [
+            { desde: 0, hasta: 50, factor: 10 },
+            { desde: 50, hasta: 100, factor: 20 },
+            { desde: 100, hasta: 150, factor: 25 },
+            { desde: 150, hasta: 250, factor: 30 },
+            { desde: 250, hasta: 350, factor: 45 },
+            { desde: 350, hasta: 500, factor: 55 },
+            { desde: 500, hasta: 750, factor: 65 },
+            { desde: 750, hasta: 1000, factor: 75 },
+            { desde: 1000, hasta: 2000, factor: 85 },
+            { desde: 2000, hasta: 3500, factor: 95 },
+            { desde: 3500, hasta: null, factor: null },
         ],
     },
     {
-        tipo: "salubridad",
-        unidad: "bocas de artefactos",
-        factor: [
-            { etiqueta: "0-10", valor: 10 },
-            { etiqueta: "10-20", valor: 20 },
-            { etiqueta: "20-50", valor: 25 },
-            { etiqueta: "50-100", valor: 30 },
-            { etiqueta: "100-200", valor: 45 },
-            { etiqueta: "200-300", valor: 55 },
-            { etiqueta: "300-500", valor: 65 },
+        clave: "salubridad",
+        nombre: "Salubridad",
+        tramos: [
+            { desde: 0, hasta: 10, factor: 10 },
+            { desde: 10, hasta: 20, factor: 20 },
+            { desde: 20, hasta: 50, factor: 25 },
+            { desde: 50, hasta: 100, factor: 30 },
+            { desde: 100, hasta: 200, factor: 45 },
+            { desde: 200, hasta: 300, factor: 55 },
+            { desde: 300, hasta: 500, factor: 65 },
+            { desde: 500, hasta: 750, factor: 75 },
+            { desde: 750, hasta: 1000, factor: 85 },
+            { desde: 1000, hasta: null, factor: null },
         ],
     },
     {
-        tipo: "gas",
-        unidad: "cantidad de bocas",
-        factor: [
-            { etiqueta: "0-5", valor: 10 },
-            { etiqueta: "5-25", valor: 22 },
-            { etiqueta: "25-50", valor: 32 },
-            { etiqueta: "50", valor: 45 },
+        clave: "gas",
+        nombre: "Gas",
+        tramos: [
+            { desde: 0, hasta: 5, factor: 10 },
+            { desde: 5, hasta: 25, factor: 22 },
+            { desde: 25, hasta: 50, factor: 32 },
+            { desde: 50, hasta: 75, factor: 45 },
+            { desde: 75, hasta: 100, factor: 55 },
+            { desde: 100, hasta: 200, factor: 65 },
+            { desde: 100, hasta: 200, factor: 65 },
+            { desde: 200, hasta: null, factor: 65 },
         ],
     },
     {
-        tipo: "ascensores",
-        unidad: "cantidad de equipos",
-        factor: [
-            { etiqueta: "0-2", valor: 10 },
-            { etiqueta: "2-5", valor: 25 },
-            { etiqueta: "5-10", valor: 55 },
-            { etiqueta: "10", valor: 65 },
+        clave: "ascensores",
+        nombre: "Ascensores",
+        tramos: [
+            { desde: 0, hasta: 2, factor: 10 },
+            { desde: 2, hasta: 5, factor: 25 },
+            { desde: 5, hasta: 10, factor: 55 },
+            { desde: 10, hasta: 15, factor: 65 },
+            { desde: 15, hasta: null, factor: null },
         ],
     },
-] as const;
+];
+
+export const etiquetaTramo = (t: { desde: number; hasta: number | null }) =>
+    t.hasta === null ? `${t.desde} o más` : `${t.desde} a ${t.hasta}`;

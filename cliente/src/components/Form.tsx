@@ -1,13 +1,6 @@
 import "../css/calculadora.css";
 import { useRef, useState, type FormEvent } from "react";
 import {
-    calcularTotal,
-    ErrorCalculo,
-    calcularSoloFDU,
-} from "../utils/calculadora";
-import { categorias, FDU_TRAMOS } from "../constants/impuestos";
-import type { ResultadoSoloFDU, Resultado } from "../utils/types";
-import {
     Layers2Icon,
     CalculatorIcon,
     PlusCircleIcon,
@@ -19,6 +12,27 @@ import {
 } from "lucide-react";
 import ResultadosDetalle from "./ResultadosDetalle";
 import ResultadosFDUDetalle from "./ResultadosFDUDetalle";
+import {
+    calcularTotal,
+    ErrorCalculo,
+    calcularSoloFDU,
+    calcularVisados,
+} from "../utils/calculadora";
+import {
+    categorias,
+    FDU_TRAMOS,
+    VISADOS,
+    VALOR_UT_VISADO,
+    etiquetaTramo,
+    type ClaveVisado,
+} from "../constants/impuestos";
+import type {
+    ResultadoSoloFDU,
+    Resultado,
+    ResultadoVisados,
+} from "../utils/types";
+import { formatoMoneda } from "../utils/formato";
+import ResultadosVisadosDetalle from "./ResultadosVisadosDetalle";
 
 // Estado del formulario: todo string porque viene de inputs
 type ObraForm = { id: number; metros_cuadrados: string; estado: string };
@@ -29,6 +43,12 @@ const COSTOS_INICIALES = {
     colegio2: "",
     honorarios: "",
     bomberos: "",
+};
+const VISADOS_INICIAL: Record<ClaveVisado, string> = {
+    electrica: "",
+    gas: "",
+    salubridad: "",
+    ascensores: "",
 };
 
 // "" -> NaN (y no 0), para que la validación detecte campos vacíos
@@ -49,6 +69,9 @@ function Form() {
     const [resultadosFDU, setResultadosFDU] = useState<ResultadoSoloFDU | null>(
         null,
     );
+    const [visados, setVisados] = useState(VISADOS_INICIAL);
+    const [resultadosVisados, setResultadosVisados] =
+        useState<ResultadoVisados | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [catMsg, setCatMsg] = useState<string | null>(null);
 
@@ -78,20 +101,52 @@ function Form() {
         setObras([{ id: 1, metros_cuadrados: "", estado: "" }]);
         setFdu(FDU_INICIAL);
         setCostos(COSTOS_INICIALES);
+        setVisados(VISADOS_INICIAL);
         setMostrarFdu(false);
         setMostrarBomberos(false);
         setMostrarColegios(false);
         setMostrarHonorarios(false);
+        setResultadosVisados(null);
         setResultados(null);
         setResultadosFDU(null);
         setError(null);
         setCatMsg(null);
     }
 
+    // Colegio 2 ahora sale de la fórmula. Si no se eligió ningún visado, vale 0.
+    function totalColegio2() {
+        if (!mostrarColegios) return 0;
+        const hayAlguno = Object.values(visados).some((v) => v !== "");
+        return hayAlguno ? calcularVisados(visados).TotalVisados : 0;
+    }
+
+    // Calcular SOLO visados (se ve por separado, como el FDU)
+    function soloVisados() {
+        try {
+            setResultados(null);
+            setResultadosFDU(null);
+            setResultadosVisados(calcularVisados(visados));
+            setError(null);
+        } catch (err) {
+            setResultadosVisados(null);
+            setError(
+                err instanceof ErrorCalculo
+                    ? err.message
+                    : "Ocurrió un error inesperado.",
+            );
+        }
+        setTimeout(() => {
+            document
+                .getElementById("resultado-general")
+                ?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+    }
+
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
             setResultadosFDU(null);
+            setResultadosVisados(null);
             const resultado = calcularTotal(
                 obras.map((o) => ({
                     id: o.id,
@@ -109,9 +164,7 @@ function Form() {
                     colegio1: mostrarColegios
                         ? Number(costos.colegio1) || 0
                         : 0,
-                    colegio2: mostrarColegios
-                        ? Number(costos.colegio2) || 0
-                        : 0,
+                    colegio2: mostrarColegios ? totalColegio2() || 0 : 0,
                     honorarios: mostrarHonorarios
                         ? Number(costos.honorarios) || 0
                         : 0,
@@ -145,6 +198,7 @@ function Form() {
     function soloFDU() {
         try {
             setResultados(null);
+            setResultadosVisados(null);
             const resultadosFDU = calcularSoloFDU({
                 // Si el panel FDU está oculto, no se suma
                 sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
@@ -356,9 +410,7 @@ function Form() {
                                                 colegio1:
                                                     Number(costos.colegio1) ||
                                                     0,
-                                                colegio2:
-                                                    Number(costos.colegio2) ||
-                                                    0,
+                                                colegio2: totalColegio2() || 0,
                                                 honorarios:
                                                     Number(costos.honorarios) ||
                                                     0,
@@ -426,6 +478,8 @@ function Form() {
                                             colegio1: "",
                                             colegio2: "",
                                         }));
+                                        setVisados(VISADOS_INICIAL);
+                                        setResultadosVisados(null);
                                     }
                                     return !visible;
                                 });
@@ -517,25 +571,65 @@ function Form() {
                                     })
                                 }
                             />
-                            <label htmlFor="colegio-2-prc">
+
+                            <h6 className="mt-4">
                                 Colegio de Arquitectos de la Provincia de
                                 Misiones
-                            </label>
-                            <input
-                                id="colegio-2-prc"
-                                type="number"
-                                min="0"
-                                step="any"
-                                inputMode="decimal"
-                                placeholder="$000,00"
-                                value={costos.colegio2}
-                                onChange={(e) =>
-                                    setCostos({
-                                        ...costos,
-                                        colegio2: e.target.value,
-                                    })
-                                }
-                            />
+                            </h6>
+                            <p className="text-muted fst-italic">
+                                Fórmula:{" "}
+                                <strong>
+                                    Factor × UT de Visados:{" "}
+                                    {formatoMoneda(VALOR_UT_VISADO)}
+                                </strong>
+                            </p>
+
+                            {VISADOS.map((v) => (
+                                <div key={v.clave}>
+                                    <label htmlFor={`visado-${v.clave}`}>
+                                        {v.nombre} (cantidad de unidades)
+                                    </label>
+                                    <select
+                                        id={`visado-${v.clave}`}
+                                        value={visados[v.clave]}
+                                        onChange={(e) =>
+                                            setVisados({
+                                                ...visados,
+                                                [v.clave]: e.target.value,
+                                            })
+                                        }
+                                    >
+                                        <option value="">Seleccionar...</option>
+                                        {v.tramos.map((t, i) => (
+                                            <option
+                                                key={i}
+                                                value={i}
+                                                disabled={t.factor === null}
+                                            >
+                                                {etiquetaTramo(t)}{" "}
+                                                {t.factor === null
+                                                    ? "— sin factor definido"
+                                                    : ""}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            ))}
+                            <span className="text-muted fst-italic d-block mt-2">
+                                Se suma al Total General al presionar "Calcular
+                                total", o podés verlo por separado.
+                            </span>
+                            <button
+                                type="button"
+                                className="fdu-sbmt mt-2"
+                                onClick={soloVisados}
+                            >
+                                <CalculatorIcon
+                                    size={18}
+                                    className="btn-icon"
+                                />
+                                Calcular Solo Visados
+                            </button>
                         </section>
                         <hr />
                     </>
@@ -597,6 +691,9 @@ function Form() {
             {resultados && <ResultadosDetalle resultados={resultados} />}
             {resultadosFDU && (
                 <ResultadosFDUDetalle resultados={resultadosFDU} />
+            )}
+            {resultadosVisados && (
+                <ResultadosVisadosDetalle resultados={resultadosVisados} />
             )}
         </>
     );
