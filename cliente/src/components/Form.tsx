@@ -587,7 +587,7 @@ function Form() {
                             {VISADOS.map((v) => (
                                 <div key={v.clave}>
                                     <label htmlFor={`visado-${v.clave}`}>
-                                        {v.nombre} (cantidad de unidades)
+                                        {v.nombre} (cantidad de {v.unidad})
                                     </label>
                                     <select
                                         id={`visado-${v.clave}`}

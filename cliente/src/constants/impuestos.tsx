@@ -52,7 +52,6 @@ export const FDU_TRAMOS = [
     { clave: "sup_12", porcentaje: 0.12, etiqueta: "Sup. sobre 30,00 - (12%)" },
 ] as const;
 
-// ---------- Visados (Colegio de Arquitectos) ----------
 // Fórmula: Factor × UT_VISADO
 export const VALOR_UT_VISADO = 3748.5;
 
@@ -67,11 +66,13 @@ export type TramoVisado = {
 export const VISADOS: readonly {
     clave: ClaveVisado;
     nombre: string;
+    unidad: string;
     tramos: readonly TramoVisado[];
 }[] = [
     {
         clave: "electrica",
-        nombre: "Eléctrica",
+        nombre: "Instalación Eléctrica",
+        unidad: "bocas",
         tramos: [
             { desde: 0, hasta: 50, factor: 10 },
             { desde: 50, hasta: 100, factor: 20 },
@@ -88,7 +89,8 @@ export const VISADOS: readonly {
     },
     {
         clave: "salubridad",
-        nombre: "Salubridad",
+        nombre: "Instalaciones de Salubridad",
+        unidad: "artefactos",
         tramos: [
             { desde: 0, hasta: 10, factor: 10 },
             { desde: 10, hasta: 20, factor: 20 },
@@ -104,7 +106,8 @@ export const VISADOS: readonly {
     },
     {
         clave: "gas",
-        nombre: "Gas",
+        nombre: "Instalación de Gas",
+        unidad: "bocas",
         tramos: [
             { desde: 0, hasta: 5, factor: 10 },
             { desde: 5, hasta: 25, factor: 22 },
@@ -118,7 +121,8 @@ export const VISADOS: readonly {
     },
     {
         clave: "ascensores",
-        nombre: "Ascensores",
+        nombre: "Instalación de Ascensores",
+        unidad: "unidades",
         tramos: [
             { desde: 0, hasta: 2, factor: 10 },
             { desde: 2, hasta: 5, factor: 25 },
