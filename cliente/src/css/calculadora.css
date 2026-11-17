@@ -13,7 +13,10 @@
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 3px;
-    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        background-color 180ms ease;
 }
 
 .formulario-obras input:focus,
@@ -36,7 +39,7 @@
 .formulario-obras .layer-icon {
     width: 1.5em;
     height: 1.2em;
-    margin: 0 .5rem;
+    margin: 0 0.5rem;
 }
 
 .formulario-obras-title {
@@ -46,10 +49,15 @@
     align-items: center;
 }
 
-.formulario-obras button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(.quitar-seccion-btn):not(.limpiar-btn):not(.adicionales-toggle-btn-mostrar):not(.adicionales-toggle-btn-ocultar) {
+.formulario-obras
+    button:not(.agregar-seccion-btn):not(.fdu-toggle-btn):not(
+        .quitar-seccion-btn
+    ):not(.limpiar-btn):not(.adicionales-toggle-btn-mostrar):not(
+        .adicionales-toggle-btn-ocultar
+    ) {
     width: fit-content;
     padding: 10px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     font-weight: bold;
     border: none;
@@ -63,7 +71,13 @@
 .agregar-seccion-btn,
 .fdu-toggle-btn,
 .quitar-seccion-btn {
-    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, opacity 180ms ease;
+    transition:
+        color 180ms ease,
+        background-color 180ms ease,
+        border-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease,
+        opacity 180ms ease;
 }
 
 .formulario-obras button:focus-visible,
@@ -77,7 +91,6 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-
     .formulario-obras button:not(:disabled):hover,
     .descargar-pdf-btn:not(:disabled):hover,
     .limpiar-btn:not(:disabled):hover,
@@ -110,7 +123,7 @@
     }
 }
 
-.formulario-obras>div,
+.formulario-obras > div,
 .fdu-section,
 .formulario-obras .alert {
     animation: contenido-aparece 260ms ease-out both;
@@ -134,9 +147,9 @@
     width: fit-content;
     padding: 10px;
     background-color: #fff;
-    color: #4CAF50;
+    color: #4caf50;
     font-weight: bold;
-    border: 1px solid #4CAF50;
+    border: 1px solid #4caf50;
     border-radius: 3px;
     cursor: pointer;
 }
@@ -201,11 +214,13 @@
     padding: 20px;
     margin: 1rem 0;
     animation: contenido-aparece 360ms ease-out both;
-    transition: box-shadow 180ms ease, border-color 180ms ease;
+    transition:
+        box-shadow 180ms ease,
+        border-color 180ms ease;
 }
 
 .obra-importe {
-    background: #4CAF50;
+    background: #4caf50;
     border: 1px solid #3c883f;
     color: #fff;
     font-weight: bold;
@@ -254,7 +269,7 @@
 
 /* Diseño de tarjeta flotante */
 .detalle-obra section {
-    background: #4CAF50;
+    background: #4caf50;
     border: 1px solid #3c883f;
     color: #fff;
     font-weight: bold;
@@ -345,7 +360,7 @@
 
 .res {
     background-color: #efefef;
-    padding: .5rem;
+    padding: 0.5rem;
     border-radius: 5px;
     margin: 1rem 0 0 0;
 }
@@ -355,7 +370,7 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .adicionales-toggle-btn-ocultar,
@@ -373,7 +388,7 @@
 }
 
 .adicionales-toggle-btn-mostrar {
-    background-color: #4CAF50;
+    background-color: #4caf50;
 }
 
 .adicionales-toggle-btn-ocultar {
@@ -415,7 +430,7 @@
 @media (max-width: 768px) {
     .adicionales-btns-section {
         flex-direction: column;
-        gap: .5rem;
+        gap: 0.5rem;
     }
 
     .adicionales-toggle-btn-mostrar,
@@ -430,7 +445,6 @@
 }
 
 @media (max-width: 576px) {
-
     /* Botones principales a lo ancho */
     .botones-section {
         flex-direction: column;
@@ -643,8 +657,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
-    .formulario-obras>div,
+    .formulario-obras > div,
     .fdu-section,
     .formulario-obras .alert,
     .detalle-fdu,
@@ -657,7 +670,6 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-
     .detalle-fdu:hover,
     .detalle-obra:hover {
         border-color: #b7d8bb;

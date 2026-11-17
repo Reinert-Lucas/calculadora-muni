@@ -45,7 +45,9 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
     const anchoUtil = ancho - MARGEN * 2;
     let y = 16;
 
-    const ultimaY = () => (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY;
+    const ultimaY = () =>
+        (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable
+            .finalY;
     // Salta de página si no entra lo que sigue
     const asegurarEspacio = (necesario: number) => {
         if (y + necesario > alto - ALTO_PIE) {
@@ -63,7 +65,9 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
 
     const subtitulo = (texto: string) => {
         asegurarEspacio(20);
-        doc.setFont("helvetica", "normal").setFontSize(11).setTextColor(...TEXTO);
+        doc.setFont("helvetica", "normal")
+            .setFontSize(11)
+            .setTextColor(...TEXTO);
         doc.text(texto, MARGEN, y);
         y += 4;
     };
@@ -80,19 +84,36 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
             lineWidth: 0.3,
             cellPadding: 2.5,
         },
-        headStyles: { fillColor: FONDO, textColor: TEXTO, fontStyle: "bold" as const },
-        footStyles: { fillColor: [255, 255, 255] as RGB, textColor: TEXTO, fontStyle: "bold" as const },
+        headStyles: {
+            fillColor: FONDO,
+            textColor: TEXTO,
+            fontStyle: "bold" as const,
+        },
+        footStyles: {
+            fillColor: [255, 255, 255] as RGB,
+            textColor: TEXTO,
+            fontStyle: "bold" as const,
+        },
     };
 
     // ---------- Encabezado ----------
     if (logoUrl) {
         try {
-            doc.addImage(await cargarImagen(logoUrl), "PNG", MARGEN, y - 8, 12, 12);
+            doc.addImage(
+                await cargarImagen(logoUrl),
+                "PNG",
+                MARGEN,
+                y - 8,
+                12,
+                12,
+            );
         } catch {
             /* si el logo falla, el informe se genera igual */
         }
     }
-    doc.setFont("helvetica", "normal").setFontSize(17).setTextColor(...TEXTO);
+    doc.setFont("helvetica", "normal")
+        .setFontSize(17)
+        .setTextColor(...TEXTO);
     doc.text("Informe de Cálculo de Derechos Municipales", MARGEN + 16, y);
     doc.setFontSize(10).setTextColor(...VERDE);
     doc.text("Municipalidad de Posadas", MARGEN + 16, y + 6);
@@ -111,7 +132,11 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
             ["Costos adicionales", pesos(r.TotalAdicionales)],
         ],
         columnStyles: {
-            0: { fontStyle: "bold", fillColor: FONDO, cellWidth: anchoUtil / 2 },
+            0: {
+                fontStyle: "bold",
+                fillColor: FONDO,
+                cellWidth: anchoUtil / 2,
+            },
         },
     });
     y = ultimaY() + 6;
@@ -133,7 +158,8 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         columnStyles: { 4: { halign: "right" } },
         headStyles: { ...base.headStyles, halign: "left" },
         didParseCell: (d) => {
-            if (d.section === "head" && d.column.index === 4) d.cell.styles.halign = "right";
+            if (d.section === "head" && d.column.index === 4)
+                d.cell.styles.halign = "right";
         },
     });
     y = ultimaY() + 6;
@@ -144,7 +170,9 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
     y += 3;
     for (const o of r.EstadoObras) {
         asegurarEspacio(60);
-        doc.setFont("helvetica", "bold").setFontSize(11).setTextColor(...TEXTO);
+        doc.setFont("helvetica", "bold")
+            .setFontSize(11)
+            .setTextColor(...TEXTO);
         doc.text(`Estado de obra #${o.id}`, MARGEN, y);
         y += 6;
         doc.setFont("helvetica", "normal").setFontSize(10);
@@ -164,14 +192,25 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
                 ["UT vigente (2026)", nf.format(o.ut)],
                 ["Monto (valor m² × UT)", pesos(o.monto)],
                 ["Subtotal (monto × superficie)", pesos(o.subtotal)],
-                [`Aplicación por estado (${nfM2.format(o.porcentaje)}%)`, pesos(o.importe)],
+                [
+                    `Aplicación por estado (${nfM2.format(o.porcentaje)}%)`,
+                    pesos(o.importe),
+                ],
             ],
             columnStyles: {
-                0: { fontStyle: "bold", fillColor: FONDO, cellWidth: anchoUtil / 2 },
+                0: {
+                    fontStyle: "bold",
+                    fillColor: FONDO,
+                    cellWidth: anchoUtil / 2,
+                },
             },
             didParseCell: (d) => {
                 // La última fila (el importe de la sección) va resaltada
-                if (d.section === "body" && d.row.index === 4 && d.column.index === 1) {
+                if (
+                    d.section === "body" &&
+                    d.row.index === 4 &&
+                    d.column.index === 1
+                ) {
                     d.cell.styles.fontStyle = "bold";
                 }
             },
@@ -187,7 +226,15 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         autoTable(doc, {
             ...base,
             startY: y,
-            head: [["SUP (m²)", "Tramo / FDU", "Categoría", "Valor m² × UT", "Subtotal"]],
+            head: [
+                [
+                    "SUP (m²)",
+                    "Tramo / FDU",
+                    "Categoría",
+                    "Valor m² × UT",
+                    "Subtotal",
+                ],
+            ],
             body: r.ResultadosFDU.map((f) => [
                 nf.format(f.superficie),
                 f.fdu,
@@ -197,14 +244,19 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
             ]),
             foot: [
                 [
-                    { content: "TOTAL FDU", colSpan: 4, styles: { halign: "right" } },
+                    {
+                        content: "TOTAL FDU",
+                        colSpan: 4,
+                        styles: { halign: "right" },
+                    },
                     { content: pesos(r.TotalFDU), styles: { halign: "right" } },
                 ],
             ],
             showFoot: "lastPage",
             columnStyles: { 4: { halign: "right" } },
             didParseCell: (d) => {
-                if (d.section === "head" && d.column.index === 4) d.cell.styles.halign = "right";
+                if (d.section === "head" && d.column.index === 4)
+                    d.cell.styles.halign = "right";
             },
         });
         y = ultimaY() + 10;
@@ -221,11 +273,28 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
             ...base,
             startY: y,
             body: [
-                ...(r.CostosAdicionales.colegio1 > 0 ? [["Colegio 1", pesos(r.CostosAdicionales.colegio1)]] : []),
-                ...(r.CostosAdicionales.colegio2 > 0 ? [["Colegio 2", pesos(r.CostosAdicionales.colegio2)]] : []),
-                ...(r.CostosAdicionales.honorarios > 0 ? [["Honorarios", pesos(r.CostosAdicionales.honorarios)]] : []),
-                ...(r.CostosAdicionales.bomberos > 0 ? [["Bomberos", pesos(r.CostosAdicionales.bomberos)]] : []),
-                [{ content: "TOTAL ADICIONAL", styles: { fontStyle: "bold" } }, { content: pesos(r.TotalAdicionales), styles: { fontStyle: "bold", halign: "right" } }],
+                ...(r.CostosAdicionales.colegio1 > 0
+                    ? [["Colegio 1", pesos(r.CostosAdicionales.colegio1)]]
+                    : []),
+                ...(r.CostosAdicionales.colegio2 > 0
+                    ? [["Colegio 2", pesos(r.CostosAdicionales.colegio2)]]
+                    : []),
+                ...(r.CostosAdicionales.honorarios > 0
+                    ? [["Honorarios", pesos(r.CostosAdicionales.honorarios)]]
+                    : []),
+                ...(r.CostosAdicionales.bomberos > 0
+                    ? [["Bomberos", pesos(r.CostosAdicionales.bomberos)]]
+                    : []),
+                [
+                    {
+                        content: "TOTAL ADICIONAL",
+                        styles: { fontStyle: "bold" },
+                    },
+                    {
+                        content: pesos(r.TotalAdicionales),
+                        styles: { fontStyle: "bold", halign: "right" },
+                    },
+                ],
             ],
             columnStyles: { 0: { cellWidth: anchoUtil / 2 } },
         });
@@ -234,7 +303,9 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
 
     // ---------- Total general ----------
     asegurarEspacio(25);
-    doc.setFont("helvetica", "bold").setFontSize(13).setTextColor(...TEXTO);
+    doc.setFont("helvetica", "bold")
+        .setFontSize(13)
+        .setTextColor(...TEXTO);
     const etiqueta = "Total General: ";
     doc.text(etiqueta, MARGEN, y);
     const xValor = MARGEN + doc.getTextWidth(etiqueta);
@@ -246,13 +317,24 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         dateStyle: "short",
         timeStyle: "short",
     });
-    doc.setFont("helvetica", "normal").setFontSize(9).setTextColor(...GRIS);
-    doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`, MARGEN, y);
+    doc.setFont("helvetica", "normal")
+        .setFontSize(9)
+        .setTextColor(...GRIS);
+    doc.text(
+        `Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`,
+        MARGEN,
+        y,
+    );
     y += 8;
 
-
-    doc.setFont("helvetica", "normal", "bold").setFontSize(9).setTextColor(...GRIS);
-    doc.text(`EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`, MARGEN, y);
+    doc.setFont("helvetica", "normal", "bold")
+        .setFontSize(9)
+        .setTextColor(...GRIS);
+    doc.text(
+        `EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`,
+        MARGEN,
+        y,
+    );
 
     // ---------- Pie de página en todas las hojas ----------
     const paginas = doc.getNumberOfPages();
@@ -260,24 +342,36 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
         doc.setPage(i);
         doc.setDrawColor(...BORDE).setLineWidth(0.3);
         doc.line(MARGEN, alto - 22, ancho - MARGEN, alto - 22);
-        doc.setFont("helvetica", "normal").setFontSize(7.5).setTextColor(...GRIS);
-        doc.text(LEYENDA, ancho / 2, alto - 18, { align: "center", maxWidth: anchoUtil });
+        doc.setFont("helvetica", "normal")
+            .setFontSize(7.5)
+            .setTextColor(...GRIS);
+        doc.text(LEYENDA, ancho / 2, alto - 18, {
+            align: "center",
+            maxWidth: anchoUtil,
+        });
         doc.setFontSize(8);
-        doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, { align: "right" });
+        doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, {
+            align: "right",
+        });
     }
 
     const fecha = new Date().toISOString().slice(0, 10);
     doc.save(`informe-calculo-${fecha}.pdf`);
 }
 
-export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: string) {
+export async function generarInformePdfSoloFdu(
+    r: ResultadoSoloFDU,
+    logoUrl?: string,
+) {
     const doc = new jsPDF({ unit: "mm", format: "a4" });
     const ancho = doc.internal.pageSize.getWidth();
     const alto = doc.internal.pageSize.getHeight();
     const anchoUtil = ancho - MARGEN * 2;
     let y = 16;
 
-    const ultimaY = () => (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable.finalY;
+    const ultimaY = () =>
+        (doc as jsPDF & { lastAutoTable: { finalY: number } }).lastAutoTable
+            .finalY;
     // Salta de página si no entra lo que sigue
     const asegurarEspacio = (necesario: number) => {
         if (y + necesario > alto - ALTO_PIE) {
@@ -288,7 +382,9 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
 
     const subtitulo = (texto: string) => {
         asegurarEspacio(20);
-        doc.setFont("helvetica", "normal").setFontSize(11).setTextColor(...TEXTO);
+        doc.setFont("helvetica", "normal")
+            .setFontSize(11)
+            .setTextColor(...TEXTO);
         doc.text(texto, MARGEN, y);
         y += 4;
     };
@@ -305,19 +401,36 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
             lineWidth: 0.3,
             cellPadding: 2.5,
         },
-        headStyles: { fillColor: FONDO, textColor: TEXTO, fontStyle: "bold" as const },
-        footStyles: { fillColor: [255, 255, 255] as RGB, textColor: TEXTO, fontStyle: "bold" as const },
+        headStyles: {
+            fillColor: FONDO,
+            textColor: TEXTO,
+            fontStyle: "bold" as const,
+        },
+        footStyles: {
+            fillColor: [255, 255, 255] as RGB,
+            textColor: TEXTO,
+            fontStyle: "bold" as const,
+        },
     };
 
     // ---------- Encabezado ----------
     if (logoUrl) {
         try {
-            doc.addImage(await cargarImagen(logoUrl), "PNG", MARGEN, y - 8, 12, 12);
+            doc.addImage(
+                await cargarImagen(logoUrl),
+                "PNG",
+                MARGEN,
+                y - 8,
+                12,
+                12,
+            );
         } catch {
             /* si el logo falla, el informe se genera igual */
         }
     }
-    doc.setFont("helvetica", "normal").setFontSize(17).setTextColor(...TEXTO);
+    doc.setFont("helvetica", "normal")
+        .setFontSize(17)
+        .setTextColor(...TEXTO);
     doc.text("Informe de Cálculo de Derechos Municipales", MARGEN + 16, y);
     doc.setFontSize(10).setTextColor(...VERDE);
     doc.text("Municipalidad de Posadas", MARGEN + 16, y + 6);
@@ -333,7 +446,15 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
         autoTable(doc, {
             ...base,
             startY: y,
-            head: [["SUP (m²)", "Tramo / FDU", "Categoría", "Valor m² × UT", "Subtotal"]],
+            head: [
+                [
+                    "SUP (m²)",
+                    "Tramo / FDU",
+                    "Categoría",
+                    "Valor m² × UT",
+                    "Subtotal",
+                ],
+            ],
             body: r.ResultadosFDU.map((f) => [
                 nf.format(f.superficie),
                 f.fdu,
@@ -343,14 +464,19 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
             ]),
             foot: [
                 [
-                    { content: "TOTAL FDU", colSpan: 4, styles: { halign: "right" } },
+                    {
+                        content: "TOTAL FDU",
+                        colSpan: 4,
+                        styles: { halign: "right" },
+                    },
                     { content: pesos(r.TotalFDU), styles: { halign: "right" } },
                 ],
             ],
             showFoot: "lastPage",
             columnStyles: { 4: { halign: "right" } },
             didParseCell: (d) => {
-                if (d.section === "head" && d.column.index === 4) d.cell.styles.halign = "right";
+                if (d.section === "head" && d.column.index === 4)
+                    d.cell.styles.halign = "right";
             },
         });
         y = ultimaY() + 10;
@@ -363,7 +489,9 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
 
     // ---------- Total general ----------
     asegurarEspacio(25);
-    doc.setFont("helvetica", "bold").setFontSize(13).setTextColor(...TEXTO);
+    doc.setFont("helvetica", "bold")
+        .setFontSize(13)
+        .setTextColor(...TEXTO);
     const etiqueta = "Total FDU: ";
     doc.text(etiqueta, MARGEN, y);
     const xValor = MARGEN + doc.getTextWidth(etiqueta);
@@ -375,13 +503,24 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
         dateStyle: "short",
         timeStyle: "short",
     });
-    doc.setFont("helvetica", "normal").setFontSize(9).setTextColor(...GRIS);
-    doc.text(`Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`, MARGEN, y);
+    doc.setFont("helvetica", "normal")
+        .setFontSize(9)
+        .setTextColor(...GRIS);
+    doc.text(
+        `Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`,
+        MARGEN,
+        y,
+    );
     y += 8;
 
-
-    doc.setFont("helvetica", "normal", "bold").setFontSize(9).setTextColor(...GRIS);
-    doc.text(`EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`, MARGEN, y);
+    doc.setFont("helvetica", "normal", "bold")
+        .setFontSize(9)
+        .setTextColor(...GRIS);
+    doc.text(
+        `EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`,
+        MARGEN,
+        y,
+    );
 
     // ---------- Pie de página en todas las hojas ----------
     const paginas = doc.getNumberOfPages();
@@ -389,10 +528,17 @@ export async function generarInformePdfSoloFdu(r: ResultadoSoloFDU, logoUrl?: st
         doc.setPage(i);
         doc.setDrawColor(...BORDE).setLineWidth(0.3);
         doc.line(MARGEN, alto - 22, ancho - MARGEN, alto - 22);
-        doc.setFont("helvetica", "normal").setFontSize(7.5).setTextColor(...GRIS);
-        doc.text(LEYENDA, ancho / 2, alto - 18, { align: "center", maxWidth: anchoUtil });
+        doc.setFont("helvetica", "normal")
+            .setFontSize(7.5)
+            .setTextColor(...GRIS);
+        doc.text(LEYENDA, ancho / 2, alto - 18, {
+            align: "center",
+            maxWidth: anchoUtil,
+        });
         doc.setFontSize(8);
-        doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, { align: "right" });
+        doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, {
+            align: "right",
+        });
     }
 
     const fecha = new Date().toISOString().slice(0, 10);

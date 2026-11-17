@@ -37,7 +37,7 @@ select {
     align-items: center;
 }
 
-.main-container>.card {
+.main-container > .card {
     width: 100%;
     max-width: 960px;
     animation: aparecer 500ms ease-out 100ms both;
@@ -63,7 +63,7 @@ select {
 .logo-gop {
     width: 2em;
     height: 2em;
-    margin: 0 .5rem 0 0;
+    margin: 0 0.5rem 0 0;
 }
 
 .titulo h6 {
@@ -76,11 +76,13 @@ select {
 
 .card {
     border-radius: 15px !important;
-    transition: box-shadow 220ms ease, transform 220ms ease;
+    transition:
+        box-shadow 220ms ease,
+        transform 220ms ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .main-container>.card:hover {
+    .main-container > .card:hover {
         box-shadow: 0 1rem 2.5rem rgba(28, 60, 35, 0.12) !important;
         transform: translateY(-2px);
     }
@@ -159,7 +161,6 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {
