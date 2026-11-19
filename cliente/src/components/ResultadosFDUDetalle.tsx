@@ -6,8 +6,10 @@ import LogoIcon from "../imgs/gop-icon.png";
 
 function ResultadosFDUDetalle({
   resultados,
+  utMuni,
 }: {
   resultados: ResultadoSoloFDU;
+  utMuni: number;
 }) {
   const [generando, setGenerando] = useState(false);
 
@@ -16,7 +18,7 @@ function ResultadosFDUDetalle({
     try {
       // import dinámico: jsPDF no pesa en la carga inicial de la página
       const { generarInformePdfSoloFdu } = await import("../utils/informePdf");
-      await generarInformePdfSoloFdu(resultados, LogoIcon);
+      await generarInformePdfSoloFdu(resultados, utMuni, LogoIcon);
     } catch {
       alert("No se pudo generar el PDF. Intentá nuevamente.");
     } finally {

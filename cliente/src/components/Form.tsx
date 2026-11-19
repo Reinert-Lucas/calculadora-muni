@@ -22,7 +22,6 @@ import {
   categorias,
   FDU_TRAMOS,
   VISADOS,
-  VALOR_UT_VISADO,
   etiquetaTramo,
   type ClaveVisado,
 } from "../constants/impuestos";
@@ -54,7 +53,7 @@ const VISADOS_INICIAL: Record<ClaveVisado, string> = {
 // "" -> NaN (y no 0), para que la validación detecte campos vacíos
 const aNumero = (v: string) => (v.trim() === "" ? NaN : Number(v));
 
-function Form() {
+function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
   const siguienteId = useRef(2);
   const [obras, setObras] = useState<ObraForm[]>([
     { id: 1, metros_cuadrados: "", estado: "" },
@@ -117,7 +116,7 @@ function Form() {
   function totalColegio2() {
     if (!mostrarColegios) return 0;
     const hayAlguno = Object.values(visados).some((v) => v !== "");
-    return hayAlguno ? calcularVisados(visados).TotalVisados : 0;
+    return hayAlguno ? calcularVisados(visados, utCapm).TotalVisados : 0;
   }
 
   // Calcular SOLO visados (se ve por separado, como el FDU)
@@ -125,7 +124,7 @@ function Form() {
     try {
       setResultados(null);
       setResultadosFDU(null);
-      setResultadosVisados(calcularVisados(visados));
+      setResultadosVisados(calcularVisados(visados, utCapm));
       setError(null);
     } catch (err) {
       setResultadosVisados(null);
@@ -159,6 +158,7 @@ function Form() {
           sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
           sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
         },
+        utMuni,
         {
           // Costos extra, si estan ocultos, no se suman
           colegio1: mostrarColegios ? Number(costos.colegio1) || 0 : 0,
@@ -192,12 +192,15 @@ function Form() {
     try {
       setResultados(null);
       setResultadosVisados(null);
-      const resultadosFDU = calcularSoloFDU({
-        // Si el panel FDU está oculto, no se suma
-        sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
-        sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
-        sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
-      });
+      const resultadosFDU = calcularSoloFDU(
+        {
+          // Si el panel FDU está oculto, no se suma
+          sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
+          sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
+          sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
+        },
+        utMuni,
+      );
 
       setResultadosFDU(resultadosFDU);
     } catch (err) {
@@ -364,6 +367,7 @@ function Form() {
                         estado: aNumero(o.estado),
                       })),
                       { sup_4: 0, sup_8: 0, sup_12: 0 },
+                      utMuni,
                       {
                         colegio1: Number(costos.colegio1) || 0,
                         colegio2: totalColegio2() || 0,
@@ -508,7 +512,7 @@ function Form() {
               <p className="text-muted fst-italic">
                 Fórmula:{" "}
                 <strong>
-                  Factor × UT de Visados: {formatoMoneda(VALOR_UT_VISADO)}
+                  Factor × UT de Visados: {formatoMoneda(utCapm)}
                 </strong>
               </p>
 
@@ -607,8 +611,12 @@ function Form() {
         </button>
         <hr />
       </form>
-      {resultados && <ResultadosDetalle resultados={resultados} />}
-      {resultadosFDU && <ResultadosFDUDetalle resultados={resultadosFDU} />}
+      {resultados && (
+        <ResultadosDetalle resultados={resultados} utMuni={utMuni} />
+      )}
+      {resultadosFDU && (
+        <ResultadosFDUDetalle resultados={resultadosFDU} utMuni={utMuni} />
+      )}
       {resultadosVisados && (
         <ResultadosVisadosDetalle resultados={resultadosVisados} />
       )}

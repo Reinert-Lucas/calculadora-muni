@@ -1,6 +1,5 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { VALOR_UT } from "../constants/impuestos";
 import type { Resultado, ResultadoSoloFDU } from "./types";
 type RGB = [number, number, number];
 
@@ -38,7 +37,11 @@ async function cargarImagen(url: string): Promise<string> {
   });
 }
 
-export async function generarInformePdf(r: Resultado, logoUrl?: string) {
+export async function generarInformePdf(
+  r: Resultado,
+  utMuni: number,
+  logoUrl?: string,
+) {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ancho = doc.internal.pageSize.getWidth();
   const alto = doc.internal.pageSize.getHeight();
@@ -308,7 +311,7 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
     .setFontSize(9)
     .setTextColor(...GRIS);
   doc.text(
-    `Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`,
+    `Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`,
     MARGEN,
     y,
   );
@@ -350,6 +353,7 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
 
 export async function generarInformePdfSoloFdu(
   r: ResultadoSoloFDU,
+  utMuni: number,
   logoUrl?: string,
 ) {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -486,7 +490,7 @@ export async function generarInformePdfSoloFdu(
     .setFontSize(9)
     .setTextColor(...GRIS);
   doc.text(
-    `Emitido: ${emitido}  |  UT (2026): ${nf.format(VALOR_UT)}`,
+    `Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`,
     MARGEN,
     y,
   );
