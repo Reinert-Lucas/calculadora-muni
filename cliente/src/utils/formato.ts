@@ -1,6 +1,6 @@
 const moneda = new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
+  style: "currency",
+  currency: "ARS",
 });
 const numero = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
 
