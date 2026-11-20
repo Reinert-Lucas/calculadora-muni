@@ -5,7 +5,7 @@ export const categorias = [
     porcentaje: 1,
   },
   {
-    nombre: "Acorde al codigo - exist. sin permiso en concluido",
+    nombre: "Acorde al codigo - exist. sin permiso concluido",
     porcentaje: 2,
   },
   { nombre: "Antirreg. - concluida detectada", porcentaje: 6 },

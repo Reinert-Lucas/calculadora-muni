@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import axios from "axios";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 export type DynamicValue = {
   _id: string;
@@ -138,7 +139,8 @@ export default function Dashboard() {
   }
 
   return (
-    <main className="container py-5">
+    <main className="main-container">
+      <Header />
       <section className="card mx-auto mb-4" style={{ maxWidth: "56rem" }}>
         <div className="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
           <div>

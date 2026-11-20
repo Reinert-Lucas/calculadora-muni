@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "./Header";
 import Form from "./Form";
 import { formatoMoneda } from "../utils/formato";
+import { CalculatorIcon } from "lucide-react";
 
 type CalculatorValues = {
   ut_muni: number;
@@ -34,8 +34,8 @@ export default function CalculatorCard() {
       })
       .catch(() => {
         if (active) {
-          setValues(null);
-          setError("No se pudieron cargar los valores desde el servidor.");
+          setValues({ ut_capm: 3748.5, ut_muni: 1430 });
+          // setError("No se pudieron cargar los valores desde el servidor.");
         }
       })
       .finally(() => {
@@ -50,7 +50,10 @@ export default function CalculatorCard() {
   return (
     <div className="card mb-3">
       <div className="card-header p-0">
-        <Header />
+        <div className="header-container">
+          <CalculatorIcon size={48} />
+          <h1>Calculadora de Derechos Municipales</h1>
+        </div>
       </div>
       <div className="card-body">
         {loading && (

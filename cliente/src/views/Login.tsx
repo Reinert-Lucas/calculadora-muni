@@ -3,6 +3,7 @@ import "../css/views.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 export default function Login() {
   const [username, setUsername] = useState<string>("");
@@ -37,57 +38,60 @@ export default function Login() {
   };
 
   return (
-    <main className="login-page">
-      <form className="login-card" onSubmit={handleSubmit}>
-        <header className="login-card__header">
-          <h1 className="text-center">Iniciar sesión</h1>
-        </header>
-        <div className="login-card__body">
-          <div className="login-field">
-            <label htmlFor="username">Usuario</label>
-            <input
-              className="login-input"
-              type="text"
-              placeholder="Usuario"
-              id="username"
-              name="username"
-              autoComplete="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+    <div className="main-container">
+      <Header />
+      <main className="login-page">
+        <form className="login-card" onSubmit={handleSubmit}>
+          <header className="login-card__header">
+            <h1 className="text-center">Iniciar sesión</h1>
+          </header>
+          <div className="login-card__body">
+            <div className="login-field">
+              <label htmlFor="username">Usuario</label>
+              <input
+                className="login-input"
+                type="text"
+                placeholder="Usuario"
+                id="username"
+                name="username"
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="login-field">
+              <label htmlFor="password">Contraseña</label>
+              <input
+                className="login-input"
+                type="password"
+                placeholder="Contraseña"
+                id="password"
+                name="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="login-submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Ingresando..." : "Ingresar"}
+            </button>
+            {errorMessage && (
+              <p className="login-error" role="alert">
+                {errorMessage}
+              </p>
+            )}
+            <Link className="login-back-link" to="/">
+              Volver a la calculadora
+            </Link>
           </div>
-          <div className="login-field">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              className="login-input"
-              type="password"
-              placeholder="Contraseña"
-              id="password"
-              name="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="login-submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Ingresando..." : "Ingresar"}
-          </button>
-          {errorMessage && (
-            <p className="login-error" role="alert">
-              {errorMessage}
-            </p>
-          )}
-          <Link className="login-back-link" to="/">
-            Volver a la calculadora
-          </Link>
-        </div>
-      </form>
-    </main>
+        </form>
+      </main>
+    </div>
   );
 }
