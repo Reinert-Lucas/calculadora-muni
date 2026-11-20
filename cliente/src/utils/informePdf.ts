@@ -162,13 +162,13 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
   // ---------- Detalle por sección ----------
   subtitulo("Detalle de cálculos por sección:");
   y += 3;
-  for (const o of r.EstadoObras) {
+  r.EstadoObras.map((o, index) => {
     asegurarEspacio(60);
     doc
       .setFont("helvetica", "bold")
       .setFontSize(11)
       .setTextColor(...TEXTO);
-    doc.text(`Estado de obra #${o.id}`, MARGEN, y);
+    doc.text(`Estado de obra #${index + 1}`, MARGEN, y);
     y += 6;
     doc.setFont("helvetica", "normal").setFontSize(10);
     doc.text(
@@ -207,7 +207,53 @@ export async function generarInformePdf(r: Resultado, logoUrl?: string) {
       },
     });
     y = ultimaY() + 8;
-  }
+  });
+  // for (const o of r.EstadoObras) {
+  //   asegurarEspacio(60);
+  //   doc
+  //     .setFont("helvetica", "bold")
+  //     .setFontSize(11)
+  //     .setTextColor(...TEXTO);
+  //   doc.text(`Estado de obra #${o.id}`, MARGEN, y);
+  //   y += 6;
+  //   doc.setFont("helvetica", "normal").setFontSize(10);
+  //   doc.text(
+  //     `Superficie: ${m2(o.superficie)} - Categoría: ${o.categoria} - Estado: ${o.estado}`,
+  //     MARGEN,
+  //     y,
+  //     { maxWidth: anchoUtil },
+  //   );
+  //   y += 5;
+
+  //   autoTable(doc, {
+  //     ...base,
+  //     startY: y,
+  //     body: [
+  //       ["Valor m² de la categoría", nf.format(o.valorM2)],
+  //       ["UT vigente (2026)", nf.format(o.ut)],
+  //       ["Monto (valor m² × UT)", pesos(o.monto)],
+  //       ["Subtotal (monto × superficie)", pesos(o.subtotal)],
+  //       [
+  //         `Aplicación por estado (${nfM2.format(o.porcentaje)}%)`,
+  //         pesos(o.importe),
+  //       ],
+  //     ],
+  //     columnStyles: {
+  //       0: {
+  //         fontStyle: "bold",
+  //         fillColor: FONDO,
+  //         cellWidth: anchoUtil / 2,
+  //       },
+  //     },
+  //     didParseCell: (d) => {
+  //       // La última fila (el importe de la sección) va resaltada
+  //       if (d.section === "body" && d.row.index === 4 && d.column.index === 1) {
+  //         d.cell.styles.fontStyle = "bold";
+  //       }
+  //     },
+  //   });
+  //   y = ultimaY() + 8;
+  // }
   separador();
 
   // ---------- FDU ----------
