@@ -1,10 +1,8 @@
 import {
-  VALOR_UT,
   TRAMOS,
   FDU_TRAMOS,
   categorias,
   VISADOS,
-  VALOR_UT_VISADO,
   etiquetaTramo,
 } from "../constants/impuestos";
 import type {
@@ -48,6 +46,7 @@ function validar(obras: Obra[], fdu: FDU) {
 export function calcularTotal(
   obras: Obra[],
   fdu: FDU,
+  utMuni: number,
   costosAdicionales: CostosAdicionales = {
     colegio1: 0,
     colegio2: 0,
@@ -69,7 +68,7 @@ export function calcularTotal(
 
   // El coeficiente de las obras depende del total de m2 de todas ellas
   const tramo = obtenerTramo(totalM2);
-  const monto = tramo.coef * VALOR_UT;
+  const monto = tramo.coef * utMuni;
 
   const EstadoObras = obras.map((obra) => {
     const { nombre, porcentaje } = categorias[obra.estado];
@@ -80,7 +79,7 @@ export function calcularTotal(
       categoria: tramo.etiqueta,
       estado: nombre,
       valorM2: tramo.coef,
-      ut: VALOR_UT,
+      ut: utMuni,
       monto,
       subtotal,
       porcentaje,
@@ -92,7 +91,7 @@ export function calcularTotal(
   const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
     const superficie = fdu[clave];
     const t = obtenerTramo(superficie);
-    const valorMxUt = superficie > 0 ? t.coef * VALOR_UT : 0;
+    const valorMxUt = superficie > 0 ? t.coef * utMuni : 0;
     return {
       clave,
       superficie,
@@ -124,7 +123,7 @@ export function calcularTotal(
 }
 
 // Calcular FDU sin ningun estado de obra
-export function calcularSoloFDU(fdu: FDU) {
+export function calcularSoloFDU(fdu: FDU, utMuni: number) {
   const supFdu = Object.values(fdu);
   if (supFdu.some((s) => !Number.isFinite(s) || s < 0))
     throw new ErrorCalculo("Las superficies FDU deben ser números positivos.");
@@ -133,7 +132,7 @@ export function calcularSoloFDU(fdu: FDU) {
   const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
     const superficie = fdu[clave];
     const t = obtenerTramo(superficie);
-    const valorMxUt = superficie > 0 ? t.coef * VALOR_UT : 0;
+    const valorMxUt = superficie > 0 ? t.coef * utMuni : 0;
     return {
       clave,
       superficie,
@@ -153,7 +152,10 @@ export function calcularSoloFDU(fdu: FDU) {
 }
 
 // Visados del Colegio de Arquitectos: Factor × UT_VISADO × Estado
-export function calcularVisados(seleccion: SeleccionVisados): ResultadoVisados {
+export function calcularVisados(
+  seleccion: SeleccionVisados,
+  utCapm: number,
+): ResultadoVisados {
   const elegidos = VISADOS.filter((v) => seleccion[v.clave] !== "");
   if (elegidos.length === 0)
     throw new ErrorCalculo(
@@ -171,8 +173,8 @@ export function calcularVisados(seleccion: SeleccionVisados): ResultadoVisados {
       nombre: v.nombre,
       unidades: etiquetaTramo(tramo),
       factor: tramo.factor,
-      ut: VALOR_UT_VISADO,
-      subtotal: redondear(tramo.factor * VALOR_UT_VISADO),
+      ut: utCapm,
+      subtotal: redondear(tramo.factor * utCapm),
     };
   });
 

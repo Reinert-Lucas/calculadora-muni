@@ -15,7 +15,13 @@ import LogoIcon from "../imgs/gop-icon.png";
 import { formatoMoneda, formatoNumero } from "../utils/formato";
 import { useState } from "react";
 
-function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
+function ResultadosDetalle({
+  resultados,
+  utMuni,
+}: {
+  resultados: Resultado;
+  utMuni: number;
+}) {
   // Solo mostramos los tramos FDU que realmente se usaron
   const fduUsados = resultados.ResultadosFDU.filter((f) => f.superficie > 0);
 
@@ -26,7 +32,7 @@ function ResultadosDetalle({ resultados }: { resultados: Resultado }) {
     try {
       // import dinámico: jsPDF no pesa en la carga inicial de la página
       const { generarInformePdf } = await import("../utils/informePdf");
-      await generarInformePdf(resultados, LogoIcon);
+      await generarInformePdf(resultados, utMuni, LogoIcon);
     } catch {
       alert("No se pudo generar el PDF. Intentá nuevamente.");
     } finally {

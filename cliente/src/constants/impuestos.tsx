@@ -1,5 +1,3 @@
-export const VALOR_UT = 1430; // Valor de la UT
-
 export const categorias = [
   { nombre: "Obra Nueva", porcentaje: 0.5 },
   {
@@ -7,7 +5,7 @@ export const categorias = [
     porcentaje: 1,
   },
   {
-    nombre: "Acorde al codigo - exist. sin permiso en concluido",
+    nombre: "Acorde al codigo - exist. sin permiso concluido",
     porcentaje: 2,
   },
   { nombre: "Antirreg. - concluida detectada", porcentaje: 6 },
@@ -51,9 +49,6 @@ export const FDU_TRAMOS = [
   },
   { clave: "sup_12", porcentaje: 0.12, etiqueta: "Sup. sobre 30,00 - (12%)" },
 ] as const;
-
-// Fórmula: Factor × UT_VISADO
-export const VALOR_UT_VISADO = 3748.5;
 
 export type ClaveVisado = "electrica" | "gas" | "salubridad" | "ascensores";
 

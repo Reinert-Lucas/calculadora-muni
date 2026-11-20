@@ -23,4 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
+atlas-credentials.env
+/atlas-credentials.env
+./atlas-credentials.env
+.atlas-credentials.env
+
 .env
