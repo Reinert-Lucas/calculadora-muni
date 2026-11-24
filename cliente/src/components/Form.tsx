@@ -23,8 +23,6 @@ import CalculoFDU from "./CalculoFDU";
 import CalculoAdicionales from "./CalculoAdicionales";
 
 const COSTOS_INICIALES = {
-  colegio1: "",
-  colegio2: "",
   honorarios: "",
   bomberos: "",
 };
@@ -67,7 +65,7 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
   }
 
   // Si no se eligió ningún visado, vale 0.
-  function totalColegio2() {
+  function totalVisadosArquitectos() {
     if (!mostrarColegios) return 0;
     const hayAlguno = Object.values(visados).some((v) => v !== "");
     return hayAlguno ? calcularVisados(visados, utCapm).TotalVisados : 0;
@@ -115,8 +113,7 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
         utMuni,
         {
           // Costos extra, si estan ocultos, no se suman
-          colegio1: mostrarColegios ? Number(costos.colegio1) || 0 : 0,
-          colegio2: mostrarColegios ? totalColegio2() || 0 : 0,
+          colegioArquitectos: mostrarColegios ? totalVisadosArquitectos() : 0,
           honorarios: mostrarHonorarios ? Number(costos.honorarios) || 0 : 0,
           bomberos: mostrarBomberos ? Number(costos.bomberos) || 0 : 0,
         },
@@ -192,7 +189,7 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
           onCalcularTotal={calcularTotal}
           costos={costos}
           obras={obras}
-          onTotalColegio={totalColegio2}
+          totalVisadosArquitectos={totalVisadosArquitectos()}
         />
         <hr />
         <CalculoAdicionales

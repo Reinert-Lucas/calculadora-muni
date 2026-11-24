@@ -48,8 +48,7 @@ export function calcularTotal(
   fdu: FDU,
   utMuni: number,
   costosAdicionales: CostosAdicionales = {
-    colegio1: 0,
-    colegio2: 0,
+    colegioArquitectos: 0,
     honorarios: 0,
     bomberos: 0,
   },

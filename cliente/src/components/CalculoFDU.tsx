@@ -13,7 +13,7 @@ export default function CalculoFDU({
   setResultados,
   onSoloFdu,
   onCalcularTotal,
-  onTotalColegio,
+  totalVisadosArquitectos,
 }: CalculoFDUProps) {
   return (
     <>
@@ -86,8 +86,7 @@ export default function CalculoFDU({
                     { sup_4: 0, sup_8: 0, sup_12: 0 },
                     utMuni,
                     {
-                      colegio1: Number(costos.colegio1) || 0,
-                      colegio2: onTotalColegio() || 0,
+                      colegioArquitectos: totalVisadosArquitectos || 0,
                       honorarios: Number(costos.honorarios) || 0,
                       bomberos: Number(costos.bomberos) || 0,
                     },

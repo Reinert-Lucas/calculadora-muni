@@ -31,8 +31,7 @@ export default function CalculoAdicionales({
           Costos Adicionales
         </h4>
         <p className="text-muted fst-italic">
-          Agregar costo de: Visado de Instalaciones Complementarias, Trámite de
-          Bomberos y Honorarios
+          Agregar costo de: Visados, Trámite de Bomberos y Honorarios
         </p>
         <section className="adicionales-btns-section">
           <button
@@ -40,11 +39,6 @@ export default function CalculoAdicionales({
             onClick={() => {
               setMostrarColegios((visible) => {
                 if (visible) {
-                  setCostos((prev) => ({
-                    ...prev,
-                    colegio1: "",
-                    colegio2: "",
-                  }));
                   setVisados(VISADOS_INICIAL);
                   setResultadosVisados(null);
                 }
@@ -101,27 +95,8 @@ export default function CalculoAdicionales({
       {mostrarColegios ? (
         <>
           <section className="colegios-section">
-            <h4>Visado de Instalaciones Complementarias</h4>
-            <label htmlFor="colegio-1-prc">Consejo de Ingeniería</label>
-            <input
-              id="colegio-1-prc"
-              type="number"
-              min="0"
-              step="any"
-              inputMode="decimal"
-              placeholder="$000,00"
-              value={costos.colegio1}
-              onChange={(e) =>
-                setCostos({
-                  ...costos,
-                  colegio1: e.target.value,
-                })
-              }
-            />
-
-            <h5 className="mt-4">
-              Colegio de Arquitectos de la Provincia de Misiones
-            </h5>
+            <h4>Visados</h4>
+            <h5>Colegio de Arquitectos de la Provincia de Misiones</h5>
             <p className="text-muted fst-italic">
               Fórmula:{" "}
               <strong>Factor × UT de Visados: {formatoMoneda(utCapm)}</strong>

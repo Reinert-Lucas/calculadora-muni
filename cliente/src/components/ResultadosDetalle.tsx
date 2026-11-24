@@ -282,27 +282,17 @@ function ResultadosDetalle({
                           </tr>
                         </thead>
                         <tbody className="tabla-res">
-                          {resultados.CostosAdicionales.colegio1 > 0 && (
+                          {resultados.CostosAdicionales.colegioArquitectos >
+                            0 && (
                             <tr>
                               <td data-label="Concepto">
-                                Visado de Instalaciones Complementarias
+                                Visados - Colegio de Arquitectos de la
+                                Provincia de Misiones
                               </td>
                               <td data-label="Importe">
                                 {formatoMoneda(
-                                  resultados.CostosAdicionales.colegio1,
-                                )}
-                              </td>
-                            </tr>
-                          )}
-                          {resultados.CostosAdicionales.colegio2 > 0 && (
-                            <tr>
-                              <td data-label="Concepto">
-                                Colegio de Arquitectos de la Provincia de
-                                Misiones
-                              </td>
-                              <td data-label="Importe">
-                                {formatoMoneda(
-                                  resultados.CostosAdicionales.colegio2,
+                                  resultados.CostosAdicionales
+                                    .colegioArquitectos,
                                 )}
                               </td>
                             </tr>

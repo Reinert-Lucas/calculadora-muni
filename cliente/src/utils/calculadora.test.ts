@@ -31,14 +31,13 @@ describe("calcularTotal", () => {
       fduVacio,
       UT_MUNI,
       {
-        colegio1: 1000,
-        colegio2: 2000,
+        colegioArquitectos: 2000,
         honorarios: 3000,
         bomberos: 4000,
       },
     );
-    expect(r.TotalAdicionales).toBe(10000);
-    expect(r.TotalGeneral).toBe(81500);
+    expect(r.TotalAdicionales).toBe(9000);
+    expect(r.TotalGeneral).toBe(80500);
   });
 
   it("mantiene los límites de los tramos", () => {
