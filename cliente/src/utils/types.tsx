@@ -1,4 +1,4 @@
-import type { FDU_TRAMOS } from "../constants/impuestos";
+import type { ClaveVisado, FDU_TRAMOS } from "../constants/impuestos";
 
 export type Obra = { id: number; metros_cuadrados: number; estado: number };
 
@@ -73,3 +73,85 @@ export type ResultadoVisados = {
   TotalVisados: number;
   DetalleVisados: DetalleVisado[];
 };
+
+// Estado del formulario: todo string porque viene de inputs
+export type ObraForm = { id: number; metros_cuadrados: string; estado: string };
+
+export interface CalculoSimpleProps {
+  obras: ObraForm[];
+  error: string | null;
+  catMsg: string | null;
+  setObras: React.Dispatch<React.SetStateAction<ObraForm[]>>;
+  onLimpiar: () => void;
+}
+
+export interface CalculoFDUProps {
+  mostrarFdu: boolean;
+  fdu: { sup_4: string; sup_8: string; sup_12: string };
+  obras: ObraForm[];
+  utMuni: number;
+  costos: {
+    colegio1: string;
+    colegio2: string;
+    honorarios: string;
+    bomberos: string;
+  };
+  setFdu: React.Dispatch<
+    React.SetStateAction<{
+      sup_4: string;
+      sup_8: string;
+      sup_12: string;
+    }>
+  >;
+  setMostrarFdu: React.Dispatch<React.SetStateAction<boolean>>;
+  setResultados: React.Dispatch<React.SetStateAction<Resultado | null>>;
+  onSoloFdu: () => void;
+  onCalcularTotal: (
+    obras: Obra[],
+    fdu: FDU,
+    utMuni: number,
+    costosAdicionales?: CostosAdicionales,
+  ) => Resultado;
+  onTotalColegio: () => number;
+}
+
+export interface CalculoAdicionalesProps {
+  setMostrarColegios: React.Dispatch<React.SetStateAction<boolean>>;
+  setVisados: React.Dispatch<React.SetStateAction<Record<ClaveVisado, string>>>;
+  setCostos: React.Dispatch<
+    React.SetStateAction<{
+      colegio1: string;
+      colegio2: string;
+      honorarios: string;
+      bomberos: string;
+    }>
+  >;
+  setResultadosVisados: React.Dispatch<
+    React.SetStateAction<ResultadoVisados | null>
+  >;
+  setMostrarBomberos: React.Dispatch<React.SetStateAction<boolean>>;
+  setMostrarHonorarios: React.Dispatch<React.SetStateAction<boolean>>;
+  onSoloVisados: () => void;
+  mostrarColegios: boolean;
+  mostrarHonorarios: boolean;
+  mostrarBomberos: boolean;
+  costos: {
+    colegio1: string;
+    colegio2: string;
+    honorarios: string;
+    bomberos: string;
+  };
+  utCapm: number;
+  visados: Record<ClaveVisado, string>;
+}
+
+export const FDU_INICIAL = { sup_4: "", sup_8: "", sup_12: "" };
+export const VISADOS_INICIAL: Record<ClaveVisado, string> = {
+  electrica: "",
+  gas: "",
+  salubridad: "",
+  ascensores: "",
+};
+
+// "" -> NaN (y no 0), para que la validación detecte campos vacíos
+export const aNumero = (v: string) => (v.trim() === "" ? NaN : Number(v));
