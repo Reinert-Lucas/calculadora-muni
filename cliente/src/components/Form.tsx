@@ -24,7 +24,6 @@ import CalculoAdicionales from "./CalculoAdicionales";
 
 const COSTOS_INICIALES = {
   honorarios: "",
-  bomberos: "",
 };
 
 function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
@@ -35,7 +34,6 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
   const [costos, setCostos] = useState(COSTOS_INICIALES);
   const [mostrarFdu, setMostrarFdu] = useState(false);
   const [mostrarColegios, setMostrarColegios] = useState(false);
-  const [mostrarBomberos, setMostrarBomberos] = useState(false);
   const [mostrarHonorarios, setMostrarHonorarios] = useState(false);
   const [resultados, setResultados] = useState<Resultado | null>(null);
   const [resultadosFDU, setResultadosFDU] = useState<ResultadoSoloFDU | null>(
@@ -54,7 +52,6 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
     setCostos(COSTOS_INICIALES);
     setVisados(VISADOS_INICIAL);
     setMostrarFdu(false);
-    setMostrarBomberos(false);
     setMostrarColegios(false);
     setMostrarHonorarios(false);
     setResultadosVisados(null);
@@ -115,7 +112,6 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
           // Costos extra, si estan ocultos, no se suman
           colegioArquitectos: mostrarColegios ? totalVisadosArquitectos() : 0,
           honorarios: mostrarHonorarios ? Number(costos.honorarios) || 0 : 0,
-          bomberos: mostrarBomberos ? Number(costos.bomberos) || 0 : 0,
         },
       );
       setResultados(resultado);
@@ -194,12 +190,10 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
         <hr />
         <CalculoAdicionales
           costos={costos}
-          mostrarBomberos={mostrarBomberos}
           mostrarColegios={mostrarColegios}
           mostrarHonorarios={mostrarHonorarios}
           onSoloVisados={soloVisados}
           setCostos={setCostos}
-          setMostrarBomberos={setMostrarBomberos}
           setMostrarColegios={setMostrarColegios}
           setMostrarHonorarios={setMostrarHonorarios}
           setResultadosVisados={setResultadosVisados}

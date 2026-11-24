@@ -267,7 +267,7 @@
     padding: 0;
 }
 
-/* Diseño de tarjeta flotante */
+/* DiseÃ±o de tarjeta flotante */
 .detalle-obra section {
     background: #4caf50;
     border: 1px solid #3c883f;
@@ -320,7 +320,7 @@
     cursor: wait;
 }
 
-/* 16px evita el zoom automático de iOS y 44px es el tamaño táctil recomendado */
+/* 16px evita el zoom automÃ¡tico de iOS y 44px es el tamaÃ±o tÃ¡ctil recomendado */
 .formulario-obras input,
 .formulario-obras select {
     font-size: 16px;
@@ -396,7 +396,6 @@
 }
 
 .colegios-section,
-.bomberos-section,
 .honorarios-section {
     animation: aparecer 450ms ease-out both;
 }

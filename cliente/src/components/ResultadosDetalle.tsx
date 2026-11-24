@@ -297,18 +297,6 @@ function ResultadosDetalle({
                               </td>
                             </tr>
                           )}
-                          {resultados.CostosAdicionales.bomberos > 0 && (
-                            <tr>
-                              <td data-label="Concepto">
-                                Costo del Trámite en Bomberos
-                              </td>
-                              <td data-label="Importe">
-                                {formatoMoneda(
-                                  resultados.CostosAdicionales.bomberos,
-                                )}
-                              </td>
-                            </tr>
-                          )}
                           {resultados.CostosAdicionales.honorarios > 0 && (
                             <tr>
                               <td data-label="Concepto">

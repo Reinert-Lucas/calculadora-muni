@@ -50,7 +50,6 @@ export function calcularTotal(
   costosAdicionales: CostosAdicionales = {
     colegioArquitectos: 0,
     honorarios: 0,
-    bomberos: 0,
   },
 ): Resultado {
   const totalM2 = obras.reduce((acc, o) => acc + o.metros_cuadrados, 0);

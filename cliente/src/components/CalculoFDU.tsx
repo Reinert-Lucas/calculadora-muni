@@ -88,7 +88,6 @@ export default function CalculoFDU({
                     {
                       colegioArquitectos: totalVisadosArquitectos || 0,
                       honorarios: Number(costos.honorarios) || 0,
-                      bomberos: Number(costos.bomberos) || 0,
                     },
                   );
                   setTimeout(() => {

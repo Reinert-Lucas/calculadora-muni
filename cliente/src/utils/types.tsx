@@ -4,11 +4,10 @@ export type Obra = { id: number; metros_cuadrados: number; estado: number };
 
 export type FDU = Record<(typeof FDU_TRAMOS)[number]["clave"], number>;
 
-// Costos extras (Visados CAPM, Bomberos, Honorarios)
+// Costos extras (Visados CAPM, Honorarios)
 export type CostosAdicionales = {
   colegioArquitectos: number;
   honorarios: number;
-  bomberos: number;
 };
 
 export type DetalleObra = {
@@ -91,7 +90,6 @@ export interface CalculoFDUProps {
   utMuni: number;
   costos: {
     honorarios: string;
-    bomberos: string;
   };
   setFdu: React.Dispatch<
     React.SetStateAction<{
@@ -118,21 +116,17 @@ export interface CalculoAdicionalesProps {
   setCostos: React.Dispatch<
     React.SetStateAction<{
       honorarios: string;
-      bomberos: string;
     }>
   >;
   setResultadosVisados: React.Dispatch<
     React.SetStateAction<ResultadoVisados | null>
   >;
-  setMostrarBomberos: React.Dispatch<React.SetStateAction<boolean>>;
   setMostrarHonorarios: React.Dispatch<React.SetStateAction<boolean>>;
   onSoloVisados: () => void;
   mostrarColegios: boolean;
   mostrarHonorarios: boolean;
-  mostrarBomberos: boolean;
   costos: {
     honorarios: string;
-    bomberos: string;
   };
   utCapm: number;
   visados: Record<ClaveVisado, string>;

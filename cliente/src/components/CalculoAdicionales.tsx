@@ -13,12 +13,10 @@ export default function CalculoAdicionales({
   setVisados,
   setCostos,
   setResultadosVisados,
-  setMostrarBomberos,
   setMostrarHonorarios,
   onSoloVisados,
   mostrarHonorarios,
   mostrarColegios,
-  mostrarBomberos,
   costos,
   utCapm,
   visados,
@@ -31,7 +29,7 @@ export default function CalculoAdicionales({
           Costos Adicionales
         </h4>
         <p className="text-muted fst-italic">
-          Agregar costo de: Visados, Trámite de Bomberos y Honorarios
+          Agregar costo de: Visados y Honorarios
         </p>
         <section className="adicionales-btns-section">
           <button
@@ -50,25 +48,6 @@ export default function CalculoAdicionales({
           >
             {mostrarColegios ? <TrashIcon /> : <PlusCircleIcon />}
             {mostrarColegios ? "Quitar Visados" : "Agregar Visados"}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMostrarBomberos((visible) => {
-                if (visible) {
-                  setCostos((prev) => ({
-                    ...prev,
-                    bomberos: "",
-                  }));
-                }
-                return !visible;
-              });
-            }}
-            className={`adicionales-toggle-btn-${mostrarBomberos ? "ocultar" : "mostrar"}`}
-            aria-expanded={mostrarBomberos}
-          >
-            {mostrarBomberos ? <TrashIcon /> : <PlusCircleIcon />}
-            {mostrarBomberos ? "Quitar Bomberos" : "Agregar Bomberos"}
           </button>
           <button
             type="button"
@@ -139,30 +118,6 @@ export default function CalculoAdicionales({
               <CalculatorIcon size={18} className="btn-icon" />
               Calcular Solo Visados
             </button>
-          </section>
-          <hr />
-        </>
-      ) : null}
-      {mostrarBomberos ? (
-        <>
-          <section className="bomberos-section">
-            <h5>Bomberos</h5>
-            <label htmlFor="bomberos">Costo del Tramite</label>
-            <input
-              id="bomberos"
-              type="number"
-              min="0"
-              step="any"
-              inputMode="decimal"
-              placeholder="$000,00"
-              value={costos.bomberos}
-              onChange={(e) =>
-                setCostos({
-                  ...costos,
-                  bomberos: e.target.value,
-                })
-              }
-            />
           </section>
           <hr />
         </>

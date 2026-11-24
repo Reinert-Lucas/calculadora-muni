@@ -33,11 +33,10 @@ describe("calcularTotal", () => {
       {
         colegioArquitectos: 2000,
         honorarios: 3000,
-        bomberos: 4000,
       },
     );
-    expect(r.TotalAdicionales).toBe(9000);
-    expect(r.TotalGeneral).toBe(80500);
+    expect(r.TotalAdicionales).toBe(5000);
+    expect(r.TotalGeneral).toBe(76500);
   });
 
   it("mantiene los límites de los tramos", () => {
