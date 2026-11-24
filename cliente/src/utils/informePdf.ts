@@ -308,10 +308,15 @@ export async function generarInformePdf(
       startY: y,
       body: [
         ...(r.CostosAdicionales.colegio1 > 0
-          ? [["Colegio 1", pesos(r.CostosAdicionales.colegio1)]]
+          ? [["Consejo de Ingeniería", pesos(r.CostosAdicionales.colegio1)]]
           : []),
         ...(r.CostosAdicionales.colegio2 > 0
-          ? [["Colegio 2", pesos(r.CostosAdicionales.colegio2)]]
+          ? [
+              [
+                "Colegio de Arquitectos de la Provincia de Misiones",
+                pesos(r.CostosAdicionales.colegio2),
+              ],
+            ]
           : []),
         ...(r.CostosAdicionales.honorarios > 0
           ? [["Honorarios", pesos(r.CostosAdicionales.honorarios)]]
