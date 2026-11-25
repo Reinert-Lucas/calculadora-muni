@@ -60,8 +60,9 @@ function ResultadosVisadosDetalle({
         <Info size={18} /> Este simulador es estimativo de las tareas de visado
         de las Instalaciones Complementarias conforme al Decreto N°320. No se
         contemplan gastos menores correspondientes al registro de la tarea
-        profesional que puede gestionarse en las plataformas de Autogestión de
-        CAM y CPIM
+        profesional que puede gestionarse en la plataforma de Autogestión del
+        Colegio de Arquitectos de la Provincia de Misiones o consultarse por
+        medios habilitados al CPIM
       </h6>
     </div>
   );
