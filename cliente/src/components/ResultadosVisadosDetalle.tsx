@@ -13,7 +13,7 @@ function ResultadosVisadosDetalle({
         Resultado Visados
       </h1>
       <p className="text-center text-muted">
-        Colegio de Arquitectos de la Provincia de Misiones
+        Colegio de Arquitectos de la Provincia de Misiones y Consejo Profesional de Ingeniería de Misiones
       </p>
       <p className="text-center fw-bold text-success total-general">
         {formatoMoneda(resultados.TotalVisados)}

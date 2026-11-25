@@ -251,7 +251,7 @@ export async function generarInformePdf(
         .setFontSize(10)
         .setTextColor(...TEXTO);
       doc.text(
-        "Visados - Colegio de Arquitectos de la Provincia de Misiones",
+        "Visados - Colegio de Arquitectos de la Provincia de Misiones y Consejo Profesional de Ingeniería de Misiones",
         MARGEN,
         y + 2,
       );

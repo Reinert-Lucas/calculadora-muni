@@ -50,7 +50,7 @@ export default function CalculoAdicionales({
         <>
           <section className="colegios-section">
             <h4>Visados</h4>
-            <h5>Colegio de Arquitectos de la Provincia de Misiones</h5>
+            <h5>Colegio de Arquitectos de la Provincia de Misiones y Consejo Profesional de Ingeniería de Misiones</h5>
             <p className="text-muted fst-italic">
               Fórmula:{" "}
               <strong>Factor × UT de Visados: {formatoMoneda(utCapm)}</strong>

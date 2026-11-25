@@ -270,7 +270,7 @@ function ResultadosDetalle({
                     {resultados.DetalleVisados.length > 0 && (
                       <>
                         <h6 className="fw-bold mb-2">
-                          Visados - Colegio de Arquitectos de la Provincia de Misiones
+                          Visados - Colegio de Arquitectos de la Provincia de Misiones y Consejo Profesional de Ingeniería de Misiones
                         </h6>
                         <div className="table-responsive tabla-fdu-responsive mb-3">
                           <table className="table tabla-fdu-resultados">
