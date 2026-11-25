@@ -54,10 +54,10 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
   }
 
   // Si no se eligió ningún visado, vale 0.
-  function totalVisadosArquitectos() {
-    if (!mostrarColegios) return 0;
+    function obtenerVisados(): ResultadoVisados | null {
+    if (!mostrarColegios) return null;
     const hayAlguno = Object.values(visados).some((v) => v !== "");
-    return hayAlguno ? calcularVisados(visados, utCapm).TotalVisados : 0;
+    return hayAlguno ? calcularVisados(visados, utCapm) : null;
   }
 
   // Calcular SOLO visados (se ve por separado, como el FDU)
@@ -87,6 +87,7 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
     try {
       setResultadosFDU(null);
       setResultadosVisados(null);
+            const resultadoVisados = obtenerVisados();
       const resultado = calcularTotal(
         obras.map((o) => ({
           id: o.id,
@@ -94,16 +95,17 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
           estado: aNumero(o.estado),
         })),
         {
-          // Si el panel FDU está oculto, no se suma
+          // Si el panel FDU est? oculto, no se suma
           sup_4: mostrarFdu ? Number(fdu.sup_4) || 0 : 0,
           sup_8: mostrarFdu ? Number(fdu.sup_8) || 0 : 0,
           sup_12: mostrarFdu ? Number(fdu.sup_12) || 0 : 0,
         },
         utMuni,
         {
-          // Costos extra, si estan ocultos, no se suman
-          colegioArquitectos: mostrarColegios ? totalVisadosArquitectos() : 0,
+          // Costos extra, si est?n ocultos, no se suman
+          colegioArquitectos: resultadoVisados?.TotalVisados ?? 0,
         },
+        resultadoVisados?.DetalleVisados ?? [],
       );
       setResultados(resultado);
       setCatMsg(
@@ -175,7 +177,8 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
           setResultados={setResultados}
           onCalcularTotal={calcularTotal}
           obras={obras}
-          totalVisadosArquitectos={totalVisadosArquitectos()}
+          totalVisadosArquitectos={obtenerVisados()?.TotalVisados ?? 0}
+          detalleVisadosArquitectos={obtenerVisados()?.DetalleVisados ?? []}
         />
         <hr />
         <CalculoAdicionales

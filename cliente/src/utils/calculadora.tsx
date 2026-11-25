@@ -50,6 +50,7 @@ export function calcularTotal(
   costosAdicionales: CostosAdicionales = {
     colegioArquitectos: 0,
   },
+  detalleVisados: ResultadoVisados["DetalleVisados"] = [],
 ): Resultado {
   const totalM2 = obras.reduce((acc, o) => acc + o.metros_cuadrados, 0);
   validar(obras, fdu);
@@ -111,6 +112,7 @@ export function calcularTotal(
     TotalFDU,
     TotalAdicionales,
     CostosAdicionales: costosAdicionales,
+    DetalleVisados: detalleVisados,
     TotalM2: totalM2,
     CategoriaDeterminada: tramo.etiqueta,
     EstadoObras,

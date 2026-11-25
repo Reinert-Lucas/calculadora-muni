@@ -13,6 +13,7 @@ export default function CalculoFDU({
   onSoloFdu,
   onCalcularTotal,
   totalVisadosArquitectos,
+  detalleVisadosArquitectos,
 }: CalculoFDUProps) {
   return (
     <>
@@ -87,6 +88,7 @@ export default function CalculoFDU({
                     {
                       colegioArquitectos: totalVisadosArquitectos || 0,
                     },
+                    detalleVisadosArquitectos,
                   );
                   setTimeout(() => {
                     const resultadosSection =

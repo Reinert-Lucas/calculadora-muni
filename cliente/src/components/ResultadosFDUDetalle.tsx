@@ -2,7 +2,6 @@ import type { ResultadoSoloFDU } from "../utils/types";
 import { Info, Download } from "lucide-react";
 import { formatoMoneda, formatoNumero } from "../utils/formato";
 import { useState } from "react";
-import LogoIcon from "../imgs/gop-icon.png";
 
 function ResultadosFDUDetalle({
   resultados,
@@ -18,7 +17,7 @@ function ResultadosFDUDetalle({
     try {
       // import dinámico: jsPDF no pesa en la carga inicial de la página
       const { generarInformePdfSoloFdu } = await import("../utils/informePdf");
-      await generarInformePdfSoloFdu(resultados, utMuni, LogoIcon);
+      await generarInformePdfSoloFdu(resultados, utMuni);
     } catch {
       alert("No se pudo generar el PDF. Intentá nuevamente.");
     } finally {

@@ -204,6 +204,13 @@
     gap: 1rem;
 }
 
+.visados-btns {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
 .detalle-fdu,
 .detalle-obra,
 .detalle-costos-adicionales {
@@ -651,6 +658,10 @@
         justify-content: flex-start;
         align-items: center;
         gap: 1rem;
+    }
+
+    .visados-btns {
+        justify-content: stretch;
     }
 
     .fdu-btns button,

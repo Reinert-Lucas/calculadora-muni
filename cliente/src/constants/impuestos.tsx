@@ -11,7 +11,7 @@ export const categorias = [
   { nombre: "Antirreg. - concluida detectada", porcentaje: 6 },
   { nombre: "Antirreg. - pv de obra concluida", porcentaje: 5 },
   { nombre: "Cuerpo cerrado sobre linea municipal", porcentaje: 9 },
-  { nombre: "Balcones", porcentaje: 6 },
+  { nombre: "Balcones", porcentaje: 0.9 },
   { nombre: "Marquesinas y/o aleros", porcentaje: 4 },
 ] as const;
 

@@ -7,11 +7,9 @@ import {
   Download,
   Grid,
   Info,
-  Layers2Icon,
   PlusCircleIcon,
   Ruler,
 } from "lucide-react";
-import LogoIcon from "../imgs/gop-icon.png";
 import { formatoMoneda, formatoNumero } from "../utils/formato";
 import { useState } from "react";
 
@@ -32,7 +30,7 @@ function ResultadosDetalle({
     try {
       // import dinámico: jsPDF no pesa en la carga inicial de la página
       const { generarInformePdf } = await import("../utils/informePdf");
-      await generarInformePdf(resultados, utMuni, LogoIcon);
+      await generarInformePdf(resultados, utMuni);
     } catch {
       alert("No se pudo generar el PDF. Intentá nuevamente.");
     } finally {
@@ -123,11 +121,11 @@ function ResultadosDetalle({
         </section>
 
         <ul className="lista-obras">
-          {resultados.EstadoObras.map((obra, index) => (
+          {resultados.EstadoObras.map((obra) => (
             <li key={obra.id} className="detalle-obra">
               <span className="obra-pill">
                 {" "}
-                <Layers2Icon size={18} /> Obra <strong>#{index + 1}</strong>
+                <Building size={18} /> Estado: <strong>{obra.estado}</strong>
               </span>
               <span className="obra-pill">
                 {" "}
@@ -137,10 +135,6 @@ function ResultadosDetalle({
               <span className="obra-pill">
                 {" "}
                 <Grid size={18} /> Categoría: <strong>{obra.categoria}</strong>
-              </span>
-              <span className="obra-pill">
-                {" "}
-                <Building size={18} /> Estado: <strong>{obra.estado}</strong>
               </span>
 
               <div className="obra-importe">
@@ -273,47 +267,68 @@ function ResultadosDetalle({
                   data-bs-parent={"total-adicional"}
                 >
                   <div className="accordion-body">
-                    <div className="table-responsive tabla-movil-responsive">
-                      <table className="table tabla-movil-detalle">
-                        <thead className="visually-hidden">
-                          <tr>
-                            <th>Concepto</th>
-                            <th>Importe</th>
-                          </tr>
-                        </thead>
-                        <tbody className="tabla-res">
-                          {resultados.CostosAdicionales.colegioArquitectos >
-                            0 && (
-                            <tr>
-                              <td data-label="Concepto">
-                                Visados - Colegio de Arquitectos de la
-                                Provincia de Misiones
-                              </td>
-                              <td data-label="Importe">
-                                {formatoMoneda(
-                                  resultados.CostosAdicionales
-                                    .colegioArquitectos,
-                                )}
-                              </td>
-                            </tr>
-                          )}
-                          <tr className="adicionales-foot">
-                            <td data-label="Concepto">
-                              <strong>Total adicional</strong>
-                            </td>
-                            <td data-label="Importe">
-                              <strong className="text-success">
-                                {formatoMoneda(resultados.TotalAdicionales)}
-                              </strong>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                    {resultados.DetalleVisados.length > 0 && (
+                      <>
+                        <h6 className="fw-bold mb-2">
+                          Visados - Colegio de Arquitectos de la Provincia de Misiones
+                        </h6>
+                        <div className="table-responsive tabla-fdu-responsive mb-3">
+                          <table className="table tabla-fdu-resultados">
+                            <thead>
+                              <tr>
+                                <th>Instalación</th>
+                                <th>Unidades</th>
+                                <th>Factor</th>
+                                <th>UT</th>
+                                <th>Subtotal</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {resultados.DetalleVisados.map((d) => (
+                                <tr key={d.clave}>
+                                  <td data-label="Instalaci?n">{d.nombre}</td>
+                                  <td data-label="Unidades">{d.unidades}</td>
+                                  <td data-label="Factor">
+                                    {formatoNumero(d.factor)}
+                                  </td>
+                                  <td data-label="UT">{formatoMoneda(d.ut)}</td>
+                                  <td data-label="Subtotal">
+                                    {formatoMoneda(d.subtotal)}
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr className="tabla-fdu-total">
+                                <td colSpan={5} className="text-end">
+                                  <strong>
+                                    Total visados:{" "}
+                                    <span className="text-success">
+                                      {formatoMoneda(
+                                        resultados.CostosAdicionales
+                                          .colegioArquitectos,
+                                      )}
+                                    </span>
+                                  </strong>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
+            {resultados.DetalleVisados.length > 0 && (
+              <h6 className="text-center text-muted p-2 fw-light disclaimer">
+                <Info size={18} /> Este simulador es estimativo de las tareas de
+                visado de las Instalaciones Complementarias conforme a la
+                Ordenanza XVIII - N°320. No se contemplan gastos menores
+                correspondientes al registro de la tarea profesional que puede
+                gestionarse en las plataformas de Autogesti?n del Colegio de
+                Arquitectos o consultar por medios habilitados al CPIM
+              </h6>
+            )}
           </section>
         ) : (
           <section className="detalle-costos-adicionales">

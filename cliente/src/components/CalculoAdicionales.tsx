@@ -85,14 +85,16 @@ export default function CalculoAdicionales({
               Se suma al Total General al presionar "Calcular total", o podés
               verlo por separado.
             </span>
-            <button
-              type="button"
-              className="fdu-sbmt mt-2"
-              onClick={onSoloVisados}
-            >
-              <CalculatorIcon size={18} className="btn-icon" />
-              Calcular Solo Visados
-            </button>
+            <div className="visados-btns">
+              <button
+                type="button"
+                className="fdu-sbmt"
+                onClick={onSoloVisados}
+              >
+                <CalculatorIcon size={18} className="btn-icon" />
+                Calcular Solo Visados
+              </button>
+            </div>
           </section>
           <hr />
         </>

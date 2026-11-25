@@ -68,12 +68,6 @@ select {
     overflow-wrap: anywhere;
 }
 
-.logo-gop {
-    width: 2em;
-    height: 2em;
-    margin: 0 0.5rem 0 0;
-}
-
 .titulo h6 {
     font-size: 1em;
     line-height: 1.1;

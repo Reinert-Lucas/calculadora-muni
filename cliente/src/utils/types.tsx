@@ -39,6 +39,7 @@ export type Resultado = {
   TotalFDU: number;
   TotalAdicionales: number;
   CostosAdicionales: CostosAdicionales;
+  DetalleVisados: DetalleVisado[];
   TotalM2: number;
   CategoriaDeterminada: string;
   EstadoObras: DetalleObra[];
@@ -102,8 +103,10 @@ export interface CalculoFDUProps {
     fdu: FDU,
     utMuni: number,
     costosAdicionales?: CostosAdicionales,
+    detalleVisados?: DetalleVisado[],
   ) => Resultado;
   totalVisadosArquitectos: number;
+  detalleVisadosArquitectos: DetalleVisado[];
 }
 
 export interface CalculoAdicionalesProps {

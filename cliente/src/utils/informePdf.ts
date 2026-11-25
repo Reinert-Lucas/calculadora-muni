@@ -26,21 +26,9 @@ const nfM2 = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
 const pesos = (n: number) => `$${nf.format(n)}`;
 const m2 = (n: number) => `${nfM2.format(n)} m²`;
 
-// Convierte una imagen importada por Vite (URL) a data URL para jsPDF
-async function cargarImagen(url: string): Promise<string> {
-  const blob = await (await fetch(url)).blob();
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-}
-
 export async function generarInformePdf(
   r: Resultado,
   utMuni: number,
-  logoUrl?: string,
 ) {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ancho = doc.internal.pageSize.getWidth();
@@ -100,20 +88,13 @@ export async function generarInformePdf(
   };
 
   // ---------- Encabezado ----------
-  if (logoUrl) {
-    try {
-      doc.addImage(await cargarImagen(logoUrl), "PNG", MARGEN, y - 8, 12, 12);
-    } catch {
-      /* si el logo falla, el informe se genera igual */
-    }
-  }
   doc
     .setFont("helvetica", "normal")
     .setFontSize(17)
     .setTextColor(...TEXTO);
-  doc.text("Informe de Cálculo de Derechos Municipales", MARGEN + 16, y);
+  doc.text("Informe de Cálculo de Derechos Municipales", MARGEN, y);
   doc.setFontSize(10).setTextColor(...VERDE);
-  doc.text("Municipalidad de Posadas", MARGEN + 16, y + 6);
+  doc.text("Municipalidad de Posadas", MARGEN, y + 6);
   y += 11;
   doc.setDrawColor(...VERDE_LINEA).setLineWidth(0.7);
   doc.line(MARGEN, y, ancho - MARGEN, y);
@@ -211,52 +192,13 @@ export async function generarInformePdf(
     });
     y = ultimaY() + 8;
   });
-  // for (const o of r.EstadoObras) {
-  //   asegurarEspacio(60);
-  //   doc
-  //     .setFont("helvetica", "bold")
-  //     .setFontSize(11)
-  //     .setTextColor(...TEXTO);
-  //   doc.text(`Estado de obra #${o.id}`, MARGEN, y);
-  //   y += 6;
-  //   doc.setFont("helvetica", "normal").setFontSize(10);
-  //   doc.text(
-  //     `Superficie: ${m2(o.superficie)} - Categoría: ${o.categoria} - Estado: ${o.estado}`,
-  //     MARGEN,
-  //     y,
-  //     { maxWidth: anchoUtil },
-  //   );
-  //   y += 5;
-
-  //   autoTable(doc, {
-  //     ...base,
-  //     startY: y,
-  //     body: [
-  //       ["Valor m² de la categoría", nf.format(o.valorM2)],
-  //       ["UT vigente (2026)", nf.format(o.ut)],
-  //       ["Monto (valor m² × UT)", pesos(o.monto)],
-  //       ["Subtotal (monto × superficie)", pesos(o.subtotal)],
-  //       [
-  //         `Aplicación por estado (${nfM2.format(o.porcentaje)}%)`,
-  //         pesos(o.importe),
-  //       ],
-  //     ],
-  //     columnStyles: {
-  //       0: {
-  //         fontStyle: "bold",
-  //         fillColor: FONDO,
-  //         cellWidth: anchoUtil / 2,
-  //       },
-  //     },
-  //     didParseCell: (d) => {
-  //       // La última fila (el importe de la sección) va resaltada
-  //       if (d.section === "body" && d.row.index === 4 && d.column.index === 1) {
-  //         d.cell.styles.fontStyle = "bold";
-  //       }
-  //     },
-  //   });
-  //   y = ultimaY() + 8;
-  // }
+  asegurarEspacio(14);
+  doc
+    .setFont("helvetica", "normal")
+    .setFontSize(7.5)
+    .setTextColor(...GRIS);
+  doc.text(LEYENDA, MARGEN, y, { maxWidth: anchoUtil });
+  y += 10;
   separador();
 
   // ---------- FDU ----------
@@ -303,32 +245,62 @@ export async function generarInformePdf(
 
   if (r.TotalAdicionales > 0) {
     subtitulo("Costos adicionales incluidos");
-    autoTable(doc, {
-      ...base,
-      startY: y,
-      body: [
-        ...(r.CostosAdicionales.colegioArquitectos > 0
-          ? [
-              [
-                "Visados - Colegio de Arquitectos de la Provincia de Misiones",
-                pesos(r.CostosAdicionales.colegioArquitectos),
-              ],
-            ]
-          : []),
-        [
-          {
-            content: "TOTAL ADICIONAL",
-            styles: { fontStyle: "bold" },
-          },
-          {
-            content: pesos(r.TotalAdicionales),
-            styles: { fontStyle: "bold", halign: "right" },
-          },
+    if (r.DetalleVisados.length > 0) {
+      doc
+        .setFont("helvetica", "bold")
+        .setFontSize(10)
+        .setTextColor(...TEXTO);
+      doc.text(
+        "Visados - Colegio de Arquitectos de la Provincia de Misiones",
+        MARGEN,
+        y + 2,
+      );
+      y += 6;
+      autoTable(doc, {
+        ...base,
+        startY: y,
+        head: [["Instalación", "Unidades", "Factor", "UT", "Subtotal"]],
+        body: r.DetalleVisados.map((d) => [
+          d.nombre,
+          d.unidades,
+          nf.format(d.factor),
+          pesos(d.ut),
+          pesos(d.subtotal),
+        ]),
+        foot: [
+          [
+            {
+              content: "TOTAL VISADOS",
+              colSpan: 4,
+              styles: { halign: "right" },
+            },
+            { content: pesos(r.CostosAdicionales.colegioArquitectos), styles: { halign: "right" } },
+          ],
         ],
-      ],
-      columnStyles: { 0: { cellWidth: anchoUtil / 2 } },
-    });
-    y = ultimaY() + 10;
+        showFoot: "lastPage",
+        columnStyles: { 4: { halign: "right" } },
+        didParseCell: (d) => {
+          if (d.section === "head" && d.column.index === 4)
+            d.cell.styles.halign = "right";
+        },
+      });
+      y = ultimaY() + 6;
+    }
+    if (r.DetalleVisados.length > 0) {
+      asegurarEspacio(14);
+      doc
+        .setFont("helvetica", "normal")
+        .setFontSize(7.5)
+        .setTextColor(...GRIS);
+      doc.text(
+        "Este simulador es estimativo de las tareas de visado de las Instalaciones Complementarias conforme a la Ordenanza XVIII - N° 320. No se contemplan gastos menores correspondientes al registro de la tarea profesional que puede gestionarse en las plataformas de Autogestión del Colegio de Arquitectos o consultar por medios habilitados al CPIM",
+        MARGEN,
+        y,
+        { maxWidth: anchoUtil },
+      );
+      y += 10;
+    }
+    y += 4;
   }
 
   // ---------- Total general ----------
@@ -348,28 +320,10 @@ export async function generarInformePdf(
     dateStyle: "short",
     timeStyle: "short",
   });
-  doc
-    .setFont("helvetica", "normal")
-    .setFontSize(9)
-    .setTextColor(...GRIS);
-  doc.text(
-    `Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`,
-    MARGEN,
-    y,
-  );
-  y += 8;
+  const aclaracionPie =
+    "EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.";
 
-  doc
-    .setFont("helvetica", "normal", "bold")
-    .setFontSize(9)
-    .setTextColor(...GRIS);
-  doc.text(
-    `EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`,
-    MARGEN,
-    y,
-  );
-
-  // ---------- Pie de página en todas las hojas ----------
+  // ---------- Pie de p?gina en todas las hojas ----------
   const paginas = doc.getNumberOfPages();
   for (let i = 1; i <= paginas; i++) {
     doc.setPage(i);
@@ -377,13 +331,14 @@ export async function generarInformePdf(
     doc.line(MARGEN, alto - 22, ancho - MARGEN, alto - 22);
     doc
       .setFont("helvetica", "normal")
-      .setFontSize(7.5)
+      .setFontSize(7)
       .setTextColor(...GRIS);
-    doc.text(LEYENDA, ancho / 2, alto - 18, {
+    doc.text(aclaracionPie, ancho / 2, alto - 17, {
       align: "center",
       maxWidth: anchoUtil,
     });
     doc.setFontSize(8);
+    doc.text(`Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`, MARGEN, alto - 8);
     doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, {
       align: "right",
     });
@@ -396,7 +351,6 @@ export async function generarInformePdf(
 export async function generarInformePdfSoloFdu(
   r: ResultadoSoloFDU,
   utMuni: number,
-  logoUrl?: string,
 ) {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ancho = doc.internal.pageSize.getWidth();
@@ -449,20 +403,13 @@ export async function generarInformePdfSoloFdu(
   };
 
   // ---------- Encabezado ----------
-  if (logoUrl) {
-    try {
-      doc.addImage(await cargarImagen(logoUrl), "PNG", MARGEN, y - 8, 12, 12);
-    } catch {
-      /* si el logo falla, el informe se genera igual */
-    }
-  }
   doc
     .setFont("helvetica", "normal")
     .setFontSize(17)
     .setTextColor(...TEXTO);
-  doc.text("Informe de Cálculo de Derechos Municipales", MARGEN + 16, y);
+  doc.text("Informe de Cálculo de Derechos Municipales", MARGEN, y);
   doc.setFontSize(10).setTextColor(...VERDE);
-  doc.text("Municipalidad de Posadas", MARGEN + 16, y + 6);
+  doc.text("Municipalidad de Posadas", MARGEN, y + 6);
   y += 11;
   doc.setDrawColor(...VERDE_LINEA).setLineWidth(0.7);
   doc.line(MARGEN, y, ancho - MARGEN, y);
@@ -527,28 +474,10 @@ export async function generarInformePdfSoloFdu(
     dateStyle: "short",
     timeStyle: "short",
   });
-  doc
-    .setFont("helvetica", "normal")
-    .setFontSize(9)
-    .setTextColor(...GRIS);
-  doc.text(
-    `Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`,
-    MARGEN,
-    y,
-  );
-  y += 8;
+  const aclaracionPie =
+    "EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.";
 
-  doc
-    .setFont("helvetica", "normal", "bold")
-    .setFontSize(9)
-    .setTextColor(...GRIS);
-  doc.text(
-    `EL PRESENTE INFORME ES ORIENTATIVO Y NO UNA LIQUIDACION OFICIAL. REVISE LA NORMATIVA VIGENTE.`,
-    MARGEN,
-    y,
-  );
-
-  // ---------- Pie de página en todas las hojas ----------
+  // ---------- Pie de p?gina en todas las hojas ----------
   const paginas = doc.getNumberOfPages();
   for (let i = 1; i <= paginas; i++) {
     doc.setPage(i);
@@ -556,13 +485,14 @@ export async function generarInformePdfSoloFdu(
     doc.line(MARGEN, alto - 22, ancho - MARGEN, alto - 22);
     doc
       .setFont("helvetica", "normal")
-      .setFontSize(7.5)
+      .setFontSize(7)
       .setTextColor(...GRIS);
-    doc.text(LEYENDA, ancho / 2, alto - 18, {
+    doc.text(aclaracionPie, ancho / 2, alto - 17, {
       align: "center",
       maxWidth: anchoUtil,
     });
     doc.setFontSize(8);
+    doc.text(`Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`, MARGEN, alto - 8);
     doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, {
       align: "right",
     });
