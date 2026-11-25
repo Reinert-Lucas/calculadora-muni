@@ -57,8 +57,11 @@ function ResultadosVisadosDetalle({
         </div>
       </section>
       <h6 className="text-center text-muted p-2 fw-light disclaimer">
-        <Info size={18} /> Este resultado corresponde únicamente al visado del
-        Colegio de Arquitectos. Cálculo estimativo.
+        <Info size={18} /> Este simulador es estimativo de las tareas de visado
+        de las Instalaciones Complementarias conforme al Decreto N°320. No se
+        contemplan gastos menores correspondientes al registro de la tarea
+        profesional que puede gestionarse en las plataformas de Autogestión de
+        CAM y CPIM
       </h6>
     </div>
   );
