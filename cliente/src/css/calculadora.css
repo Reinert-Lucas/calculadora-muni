@@ -395,8 +395,7 @@
     background-color: #c0392b;
 }
 
-.colegios-section,
-.honorarios-section {
+.colegios-section {
     animation: aparecer 450ms ease-out both;
 }
 

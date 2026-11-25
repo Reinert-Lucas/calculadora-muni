@@ -1,4 +1,4 @@
-import {
+﻿import {
   CalculatorIcon,
   ClipboardCheckIcon,
   PlusCircleIcon,
@@ -11,13 +11,9 @@ import { formatoMoneda } from "../utils/formato";
 export default function CalculoAdicionales({
   setMostrarColegios,
   setVisados,
-  setCostos,
   setResultadosVisados,
-  setMostrarHonorarios,
   onSoloVisados,
-  mostrarHonorarios,
   mostrarColegios,
-  costos,
   utCapm,
   visados,
 }: CalculoAdicionalesProps) {
@@ -28,9 +24,7 @@ export default function CalculoAdicionales({
           <ClipboardCheckIcon />
           Costos Adicionales
         </h4>
-        <p className="text-muted fst-italic">
-          Agregar costo de: Visados y Honorarios
-        </p>
+        <p className="text-muted fst-italic">Agregar costo de: Visados</p>
         <section className="adicionales-btns-section">
           <button
             type="button"
@@ -48,25 +42,6 @@ export default function CalculoAdicionales({
           >
             {mostrarColegios ? <TrashIcon /> : <PlusCircleIcon />}
             {mostrarColegios ? "Quitar Visados" : "Agregar Visados"}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMostrarHonorarios((visible) => {
-                if (visible) {
-                  setCostos((prev) => ({
-                    ...prev,
-                    honorarios: "",
-                  }));
-                }
-                return !visible;
-              });
-            }}
-            className={`adicionales-toggle-btn-${mostrarHonorarios ? "ocultar" : "mostrar"}`}
-            aria-expanded={mostrarHonorarios}
-          >
-            {mostrarHonorarios ? <TrashIcon /> : <PlusCircleIcon />}
-            {mostrarHonorarios ? "Quitar Honorarios" : "Agregar Honorarios"}
           </button>
         </section>
       </section>
@@ -118,30 +93,6 @@ export default function CalculoAdicionales({
               <CalculatorIcon size={18} className="btn-icon" />
               Calcular Solo Visados
             </button>
-          </section>
-          <hr />
-        </>
-      ) : null}
-      {mostrarHonorarios ? (
-        <>
-          <section className="honorarios-section">
-            <h5>Honorarios del Profesional a Cargo</h5>
-            <label htmlFor="honorarios">Honorarios</label>
-            <input
-              id="honorarios"
-              type="number"
-              min="0"
-              step="any"
-              inputMode="decimal"
-              placeholder="$000,00"
-              value={costos.honorarios}
-              onChange={(e) =>
-                setCostos({
-                  ...costos,
-                  honorarios: e.target.value,
-                })
-              }
-            />
           </section>
           <hr />
         </>

@@ -315,9 +315,6 @@ export async function generarInformePdf(
               ],
             ]
           : []),
-        ...(r.CostosAdicionales.honorarios > 0
-          ? [["Honorarios", pesos(r.CostosAdicionales.honorarios)]]
-          : []),
         [
           {
             content: "TOTAL ADICIONAL",

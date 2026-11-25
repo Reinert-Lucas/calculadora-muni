@@ -297,18 +297,6 @@ function ResultadosDetalle({
                               </td>
                             </tr>
                           )}
-                          {resultados.CostosAdicionales.honorarios > 0 && (
-                            <tr>
-                              <td data-label="Concepto">
-                                Honorarios del Profesional
-                              </td>
-                              <td data-label="Importe">
-                                {formatoMoneda(
-                                  resultados.CostosAdicionales.honorarios,
-                                )}
-                              </td>
-                            </tr>
-                          )}
                           <tr className="adicionales-foot">
                             <td data-label="Concepto">
                               <strong>Total adicional</strong>

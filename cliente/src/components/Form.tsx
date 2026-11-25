@@ -22,19 +22,13 @@ import CalculoSimple from "./CalculoSimple";
 import CalculoFDU from "./CalculoFDU";
 import CalculoAdicionales from "./CalculoAdicionales";
 
-const COSTOS_INICIALES = {
-  honorarios: "",
-};
-
 function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
   const [obras, setObras] = useState<ObraForm[]>([
     { id: 1, metros_cuadrados: "", estado: "" },
   ]);
   const [fdu, setFdu] = useState(FDU_INICIAL);
-  const [costos, setCostos] = useState(COSTOS_INICIALES);
   const [mostrarFdu, setMostrarFdu] = useState(false);
   const [mostrarColegios, setMostrarColegios] = useState(false);
-  const [mostrarHonorarios, setMostrarHonorarios] = useState(false);
   const [resultados, setResultados] = useState<Resultado | null>(null);
   const [resultadosFDU, setResultadosFDU] = useState<ResultadoSoloFDU | null>(
     null,
@@ -49,11 +43,9 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
   function limpiarTodo() {
     setObras([{ id: 1, metros_cuadrados: "", estado: "" }]);
     setFdu(FDU_INICIAL);
-    setCostos(COSTOS_INICIALES);
     setVisados(VISADOS_INICIAL);
     setMostrarFdu(false);
     setMostrarColegios(false);
-    setMostrarHonorarios(false);
     setResultadosVisados(null);
     setResultados(null);
     setResultadosFDU(null);
@@ -111,7 +103,6 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
         {
           // Costos extra, si estan ocultos, no se suman
           colegioArquitectos: mostrarColegios ? totalVisadosArquitectos() : 0,
-          honorarios: mostrarHonorarios ? Number(costos.honorarios) || 0 : 0,
         },
       );
       setResultados(resultado);
@@ -183,19 +174,14 @@ function Form({ utMuni, utCapm }: { utMuni: number; utCapm: number }) {
           setMostrarFdu={setMostrarFdu}
           setResultados={setResultados}
           onCalcularTotal={calcularTotal}
-          costos={costos}
           obras={obras}
           totalVisadosArquitectos={totalVisadosArquitectos()}
         />
         <hr />
         <CalculoAdicionales
-          costos={costos}
           mostrarColegios={mostrarColegios}
-          mostrarHonorarios={mostrarHonorarios}
           onSoloVisados={soloVisados}
-          setCostos={setCostos}
           setMostrarColegios={setMostrarColegios}
-          setMostrarHonorarios={setMostrarHonorarios}
           setResultadosVisados={setResultadosVisados}
           setVisados={setVisados}
           utCapm={utCapm}

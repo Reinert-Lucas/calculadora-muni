@@ -7,7 +7,6 @@ export default function CalculoFDU({
   fdu,
   obras,
   utMuni,
-  costos,
   setFdu,
   setMostrarFdu,
   setResultados,
@@ -87,7 +86,6 @@ export default function CalculoFDU({
                     utMuni,
                     {
                       colegioArquitectos: totalVisadosArquitectos || 0,
-                      honorarios: Number(costos.honorarios) || 0,
                     },
                   );
                   setTimeout(() => {

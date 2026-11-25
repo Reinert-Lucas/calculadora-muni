@@ -32,11 +32,10 @@ describe("calcularTotal", () => {
       UT_MUNI,
       {
         colegioArquitectos: 2000,
-        honorarios: 3000,
       },
     );
-    expect(r.TotalAdicionales).toBe(5000);
-    expect(r.TotalGeneral).toBe(76500);
+    expect(r.TotalAdicionales).toBe(2000);
+    expect(r.TotalGeneral).toBe(73500);
   });
 
   it("mantiene los límites de los tramos", () => {
