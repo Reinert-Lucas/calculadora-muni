@@ -13,7 +13,7 @@ const TEXTO: RGB = [33, 37, 41];
 const GRIS: RGB = [108, 117, 125];
 
 const LEYENDA =
-  "El presente informe es estimativo, no incluye costos menores referidos a los Tributos 231 " +
+  "El presente informe es referencial, no cosntituye una liquidación oficial. No incluye costos menores referidos a los Tributos 231 " +
   "(Inspecciones y demoliciones) y Tributo 233 (Derechos de Oficina). Los valores están sujetos " +
   "al valor de la UT (Unidad Tributaria) vigente sujeto a actualización.";
 
@@ -26,10 +26,7 @@ const nfM2 = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
 const pesos = (n: number) => `$${nf.format(n)}`;
 const m2 = (n: number) => `${nfM2.format(n)} m²`;
 
-export async function generarInformePdf(
-  r: Resultado,
-  utMuni: number,
-) {
+export async function generarInformePdf(r: Resultado, utMuni: number) {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const ancho = doc.internal.pageSize.getWidth();
   const alto = doc.internal.pageSize.getHeight();
@@ -284,7 +281,10 @@ export async function generarInformePdf(
               colSpan: 4,
               styles: { halign: "right" },
             },
-            { content: pesos(r.CostosAdicionales.colegioArquitectos), styles: { halign: "right" } },
+            {
+              content: pesos(r.CostosAdicionales.colegioArquitectos),
+              styles: { halign: "right" },
+            },
           ],
         ],
         showFoot: "lastPage",
@@ -303,7 +303,7 @@ export async function generarInformePdf(
         .setFontSize(7.5)
         .setTextColor(...GRIS);
       doc.text(
-        "Este simulador es estimativo de las tareas de visado de las Instalaciones Complementarias conforme a la Ordenanza XVIII - N° 320. No se contemplan gastos menores correspondientes al registro de la tarea profesional que puede gestionarse en las plataformas de Autogestión del Colegio de Arquitectos o consultar por medios habilitados al CPIM",
+        "Este simulador es referencial de las tareas de visado de las Instalaciones Complementarias conforme a la Ordenanza XVIII - N° 320. No constitutye una liquidacion oficial. No se contemplan gastos menores correspondientes al registro de la tarea profesional que puede gestionarse en las plataformas de Autogestión del Colegio de Arquitectos o consultar por medios habilitados al CPIM",
         MARGEN,
         y,
         { maxWidth: anchoUtil },
@@ -348,7 +348,11 @@ export async function generarInformePdf(
       maxWidth: anchoUtil,
     });
     doc.setFontSize(8);
-    doc.text(`Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`, MARGEN, alto - 8);
+    doc.text(
+      `Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`,
+      MARGEN,
+      alto - 8,
+    );
     doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, {
       align: "right",
     });
@@ -502,7 +506,11 @@ export async function generarInformePdfSoloFdu(
       maxWidth: anchoUtil,
     });
     doc.setFontSize(8);
-    doc.text(`Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`, MARGEN, alto - 8);
+    doc.text(
+      `Emitido: ${emitido}  |  UT (${new Date().getFullYear()}): ${nf.format(utMuni)}`,
+      MARGEN,
+      alto - 8,
+    );
     doc.text(`Página ${i} de ${paginas}`, ancho - MARGEN, alto - 8, {
       align: "right",
     });
