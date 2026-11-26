@@ -25,6 +25,24 @@ export function obtenerTramo(m2: number) {
   return TRAMOS.find((t) => t.contiene(m2)) ?? TRAMOS[TRAMOS.length - 1];
 }
 
+function calcularResultadosFDU(fdu: FDU, utMuni: number) {
+  const superficieTotal = Object.values(fdu).reduce((total, superficie) => total + superficie, 0);
+  const tramo = obtenerTramo(superficieTotal);
+
+  return FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
+    const superficie = fdu[clave];
+    const valorMxUt = superficie > 0 ? tramo.coef * utMuni : 0;
+    return {
+      clave,
+      superficie,
+      fdu: etiqueta,
+      categoria: tramo.etiqueta,
+      valorMxUt,
+      subtotal: redondear(superficie * porcentaje * valorMxUt),
+    };
+  });
+}
+
 function validar(obras: Obra[], fdu: FDU) {
   if (obras.length === 0)
     throw new ErrorCalculo("Cargá al menos una obra o tramo de FDU.");
@@ -85,20 +103,7 @@ export function calcularTotal(
     };
   });
 
-  // En FDU cada tramo calcula su coeficiente con su propia superficie
-  const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
-    const superficie = fdu[clave];
-    const t = obtenerTramo(superficie);
-    const valorMxUt = superficie > 0 ? t.coef * utMuni : 0;
-    return {
-      clave,
-      superficie,
-      fdu: etiqueta,
-      categoria: t.etiqueta,
-      valorMxUt,
-      subtotal: redondear(superficie * porcentaje * valorMxUt),
-    };
-  });
+  const ResultadosFDU = calcularResultadosFDU(fdu, utMuni);
 
   const TotalBase = redondear(EstadoObras.reduce((a, o) => a + o.importe, 0));
   const TotalFDU = redondear(ResultadosFDU.reduce((a, f) => a + f.subtotal, 0));
@@ -127,20 +132,7 @@ export function calcularSoloFDU(fdu: FDU, utMuni: number) {
   if (supFdu.some((s) => !Number.isFinite(s) || s < 0))
     throw new ErrorCalculo("Las superficies FDU deben ser números positivos.");
 
-  // En FDU cada tramo calcula su coeficiente con su propia superficie
-  const ResultadosFDU = FDU_TRAMOS.map(({ clave, porcentaje, etiqueta }) => {
-    const superficie = fdu[clave];
-    const t = obtenerTramo(superficie);
-    const valorMxUt = superficie > 0 ? t.coef * utMuni : 0;
-    return {
-      clave,
-      superficie,
-      fdu: etiqueta,
-      categoria: t.etiqueta,
-      valorMxUt,
-      subtotal: redondear(superficie * porcentaje * valorMxUt),
-    };
-  });
+  const ResultadosFDU = calcularResultadosFDU(fdu, utMuni);
 
   const TotalFDU = redondear(ResultadosFDU.reduce((a, f) => a + f.subtotal, 0));
 

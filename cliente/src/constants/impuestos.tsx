@@ -11,7 +11,7 @@ export const categorias = [
   { nombre: "Antirreg. - concluida detectada", porcentaje: 6 },
   { nombre: "Antirreg. - pv de obra concluida", porcentaje: 5 },
   { nombre: "Cuerpo cerrado sobre linea municipal", porcentaje: 9 },
-  { nombre: "Balcones", porcentaje: 0.9 },
+  { nombre: "Balcones", porcentaje: 6 },
   { nombre: "Marquesinas y/o aleros", porcentaje: 4 },
 ] as const;
 
@@ -78,7 +78,7 @@ export const VISADOS: readonly {
       { desde: 500, hasta: 750, factor: 65 },
       { desde: 750, hasta: 1000, factor: 75 },
       { desde: 1000, hasta: 2000, factor: 85 },
-      { desde: 2000, hasta: 3500, factor: 95 }
+      { desde: 2000, hasta: 3500, factor: 95 },
     ],
   },
   {
@@ -94,7 +94,7 @@ export const VISADOS: readonly {
       { desde: 200, hasta: 300, factor: 55 },
       { desde: 300, hasta: 500, factor: 65 },
       { desde: 500, hasta: 750, factor: 75 },
-      { desde: 750, hasta: 1000, factor: 85 }
+      { desde: 750, hasta: 1000, factor: 85 },
     ],
   },
   {

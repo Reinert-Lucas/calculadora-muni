@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { calcularTotal, calcularVisados, ErrorCalculo } from "./calculadora";
+import {
+  calcularSoloFDU,
+  calcularTotal,
+  calcularVisados,
+  ErrorCalculo,
+} from "./calculadora";
 
 const fduVacio = { sup_4: 0, sup_8: 0, sup_12: 0 };
 const UT_MUNI = 1430;
@@ -23,6 +28,35 @@ describe("calcularTotal", () => {
     );
     expect(r.TotalFDU).toBe(57200);
     expect(r.TotalGeneral).toBe(128700);
+  });
+
+  it("usa un coeficiente común calculado con la superficie total del FDU", () => {
+    const r = calcularTotal(
+      [{ id: 1, metros_cuadrados: 100, estado: 0 }],
+      { sup_4: 50, sup_8: 50, sup_12: 0 },
+      UT_MUNI,
+    );
+
+    expect(r.ResultadosFDU.map(({ valorMxUt }) => valorMxUt)).toEqual([
+      100 * UT_MUNI,
+      100 * UT_MUNI,
+      0,
+    ]);
+    expect(r.TotalFDU).toBe(858000);
+  });
+
+  it("usa el mismo coeficiente común al calcular solo FDU", () => {
+    const r = calcularSoloFDU(
+      { sup_4: 50, sup_8: 50, sup_12: 0 },
+      UT_MUNI,
+    );
+
+    expect(r.ResultadosFDU.map(({ valorMxUt }) => valorMxUt)).toEqual([
+      100 * UT_MUNI,
+      100 * UT_MUNI,
+      0,
+    ]);
+    expect(r.TotalFDU).toBe(858000);
   });
 
   it("suma los costos adicionales al total general", () => {
