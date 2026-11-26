@@ -192,6 +192,16 @@ export async function generarInformePdf(
     });
     y = ultimaY() + 8;
   });
+  if (r.EstadoObras.length > 0) {
+    asegurarEspacio(14);
+    doc
+      .setFont("helvetica", "bold")
+      .setFontSize(11)
+      .setTextColor(...TEXTO);
+    doc.text("Total de Derechos de Construcción", MARGEN, y);
+    doc.text(pesos(r.TotalBase), ancho - MARGEN, y, { align: "right" });
+    y += 8;
+  }
   asegurarEspacio(14);
   doc
     .setFont("helvetica", "normal")
